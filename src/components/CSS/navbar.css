@@ -1,0 +1,53 @@
+/* 1. Navbar container: center content and add a dark, textured background */
+.navbar {
+  background: linear-gradient(135deg,#f19c41, #7f492a );
+  position: fixed;
+  width: 100%;
+  padding: 1rem 0;
+  display: flex;
+  justify-content: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* 2. Remove default list styles and lay out items in a row with spacing */
+.navbar-list {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+}
+
+/* 3. Ensure each list item has no extra margins */
+.navbar-list li {
+  margin: 0;
+}
+
+/* 4. Style the links as fantasy panels */
+.navbar-list li a {
+  display: block;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #7f5a2a, #b8936b);
+  color: #f8f4e3;
+  text-decoration: none;
+  font-family: "Cinzel", serif;      /* Consider importing from Google Fonts */
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 2px solid #f8f4e3;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+/* 5. Hover effect: reverse gradient and lift the panel */
+.navbar-list li a:hover {
+  background: linear-gradient(135deg, #b8936b, #7f5a2a);
+  transform: translateY(-2px);
+}
+
+/* 6. Active state: press effect */
+.navbar-list li a:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) inset;
+}

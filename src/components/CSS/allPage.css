@@ -1,0 +1,24 @@
+
+
+
+/* 1. Import medieval-style font */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap');
+
+
+.pageComponent {
+    padding-top: 80px;
+}
+
+/* 2. Core title styling */
+.pageTitle {
+font-family: 'Cinzel', serif;
+  font-size: 5rem;
+  color: #ddb122; /* rich gold tone */
+  
+  /* subtle emboss and shine */
+  text-shadow:
+    2px 2px 3px rgba(0, 0, 0, 0.6),   /* deep shadow */
+    0 -1px 1px rgba(255, 255, 255, 0.5); /* light highlight */
+  
+  margin: 1rem 0;
+}
