@@ -1,8 +1,8 @@
 import { CharacterFulltype, SkillDisplayed, PassiveType } from "../../types/character";
 
 export  function calculateRemainingCharPoint (character: CharacterFulltype) : number {
-  
-    const totalPoints = 90 + character.General.Level * (character.General.Level + 1) / 2;
+
+    const totalPoints = Math.floor(90 + character.General.Level * (character.General.Level + 1) / 4);
 
     // Object.value transform character.Characteristics into an array of object [{Base: 10, Equipment: 2, Passive: 0, Temporary: 0, Total: 12, Modifier: 1}, ...]
     // then .reduce({acc,stat}) run a loop on the table, acc is initiated as 0 and its values is kept, while stat is the current element of the array being processed
