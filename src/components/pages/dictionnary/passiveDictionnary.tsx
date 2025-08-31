@@ -56,7 +56,7 @@ const PassiveSkillDisplayList: React.FC<Props> = ({ passives }) => {
   };
 
   useEffect(() => {
-  const transformed = passives.map(transformPassiveToDic);
+  const transformed = passives.map(transformPassiveToDic).filter(passive => passive.Name !== "None");
   setPassiveListDisplayed(transformed);
   }, [passives]);
 
