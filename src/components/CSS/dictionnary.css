@@ -26,13 +26,6 @@
   margin-bottom: 20px;     /* Space between select and content */
 }
 
-.select-button {
-  padding: 12px 24px;
-  font-size: 1rem;
-  min-width: 150px;
-}
-
-
 .item-card {
   background: linear-gradient(180deg, var(--parchment) 0%, var(--parchment-deep) 100%);
   border: 4px double var(--accent-gold-deep); /* thicker, deeper gold */

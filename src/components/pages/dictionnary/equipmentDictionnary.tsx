@@ -36,9 +36,7 @@ const EquipmentDisplayList: React.FC<Props> = ({ equipment }) => {
 
   const initialState = equipment.filter(item => item.Name !== "None");
 
-  const [equipmentToBeDisplayed, setEquipmentToBeDisplayed] = useState(initialState);
-
-  console.log("Equipment to display:", equipmentToBeDisplayed);
+  const [equipmentToBeDisplayed, setEquipmentToBeDisplayed] = useState<EquipmentDisplayed[]>(initialState);
 
   const filterEquipmentByName = (name: string) => {
     const filtered = equipment.filter(item => item.Name.toLowerCase().includes(name.toLowerCase()));
@@ -69,6 +67,11 @@ const EquipmentDisplayList: React.FC<Props> = ({ equipment }) => {
     const filtered = initialState.filter(item => item.Subtype === type);
     setEquipmentToBeDisplayed(filtered);
   };
+
+  useEffect(() => {
+    const transformed = equipment.filter(item => item.Name !== "None")
+    setEquipmentToBeDisplayed(transformed);
+  }, [equipment]);
 
 
   return (

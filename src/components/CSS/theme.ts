@@ -31,8 +31,8 @@ const theme = createTheme({
         },
         // large variant
         sizeLarge: {
-          padding: '8px 12px',
-          fontSize: '1.2rem',
+          padding: '10px 14px',
+          fontSize: '1.4rem',
           marginLeft: '12px',
           marginRight: '12px'
         }

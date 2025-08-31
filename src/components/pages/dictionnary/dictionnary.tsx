@@ -61,6 +61,7 @@ export const DictionnaryPage = ( ) => {
         <div className="dictionnary-page">
             <div className="select-bar">
             <Button
+                size="large"
                 variant={selectedDisplay === "equipment" ? "contained" : "outlined"}
                 onClick={changeToEquipment}
                 sx={{ marginRight: 2 }}
@@ -69,6 +70,7 @@ export const DictionnaryPage = ( ) => {
                 Equipment
             </Button>
             <Button
+                size="large"
                 variant={selectedDisplay === "passive" ? "contained" : "outlined"}
                 onClick={changeToPassive}
                 className="select-button"
