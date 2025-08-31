@@ -1,30 +1,29 @@
-import { CharacterFulltype, CharacterBasetype, EquipmentType, WeaponBaseType, PassiveType, SkillBaseType, EquipmentDisplayed, PassiveDisplayed } from "../../types/character";
+import { CharacterFulltype, CharacterBasetype, EquipmentType, WeaponBaseType, PassiveType, SkillBaseType, EquipmentDisplayed, PassiveDisplayed, SkillDisplayed } from "../../types/character";
 import {Characteristic, BonusKey, WeaponCategory, Element} from "../../types/stringLists";
 
-import { fetchCharacter, fetchEquipment, fetchPassive, fetchWeapon, fetchSkill } from "../APIHelpers";
+import { fetchCharacter, fetchPassive, fetchItem, fetchSkill } from "../APIHelpers";
 
 export async function calculateFullCharacter(base: CharacterBasetype): Promise<CharacterFulltype | any> { 
 
     console.log("Calculating full character for base:", base);
 
-    const allEquipments: EquipmentType[] = []
-    allEquipments.push(await fetchEquipment(base.equipmentArmorID));
-    allEquipments.push(await fetchEquipment(base.equipmentBootsID));
-    allEquipments.push(await fetchEquipment(base.equipmentBeltID));
-    allEquipments.push(await fetchEquipment(base.equipmentGauntletID));
-    allEquipments.push(await fetchEquipment(base.equipmentHelmetID));
-    allEquipments.push(await fetchEquipment(base.equipmentPantsID));
-    allEquipments.push(await fetchEquipment(base.equipmentRing1ID));
-    allEquipments.push(await fetchEquipment(base.equipmentRing2ID));
-    allEquipments.push(await fetchEquipment(base.equipmentNecklaceID));
-    allEquipments.push(await fetchEquipment(base.equipmentShieldID));
-
-    //console.log("Fetched all equipments:", allEquipments);
+    const allEquipments = {
+            Helmet: (await fetchItem("equipment", base.equipmentHelmetID)),
+            Armor: (await fetchItem("equipment", base.equipmentArmorID)),
+            Pants: (await fetchItem("equipment", base.equipmentPantsID)),
+            Belt: (await fetchItem("equipment", base.equipmentBeltID)),
+            Gauntlet: (await fetchItem("equipment", base.equipmentGauntletID)),
+            Boots: (await fetchItem("equipment", base.equipmentBootsID)),
+            Ring1: (await fetchItem("equipment", base.equipmentRing1ID)),
+            Ring2: (await fetchItem("equipment", base.equipmentRing2ID)),
+            Necklace: (await fetchItem("equipment", base.equipmentNecklaceID)),
+            Shield: (await fetchItem("equipment", base.equipmentShieldID)),
+    }
 
     const allWeapons : WeaponBaseType[] = []
-    allWeapons.push(await fetchWeapon(base.Weapon1ID));
-    allWeapons.push(await fetchWeapon(base.Weapon2ID));
-    allWeapons.push(await fetchWeapon(base.Weapon3ID));
+    allWeapons.push(await fetchItem("weapon", base.Weapon1ID));
+    allWeapons.push(await fetchItem("weapon", base.Weapon2ID));
+    allWeapons.push(await fetchItem("weapon", base.Weapon3ID));
 
     const allPassive : PassiveType[] = []
     allPassive.push(await fetchPassive(base.passive1ID));
@@ -45,18 +44,17 @@ export async function calculateFullCharacter(base: CharacterBasetype): Promise<C
 
 
     const fullCharacteristics : CharacterFulltype['Characteristics']= {
-            Strength: calculateCharacteristicBonus('Strength', base.Strength, allEquipments, allWeapons, allPassive),
-            Intelligence: calculateCharacteristicBonus('Intelligence', base.Intelligence, allEquipments, allWeapons, allPassive),
-            Constitution: calculateCharacteristicBonus('Constitution', base.Constitution, allEquipments, allWeapons, allPassive),
-            Charisma: calculateCharacteristicBonus('Charisma', base.Charisma, allEquipments, allWeapons, allPassive),
-            Dexterity: calculateCharacteristicBonus('Dexterity', base.Dexterity, allEquipments , allWeapons, allPassive),
-            Agility: calculateCharacteristicBonus('Agility', base.Agility, allEquipments, allWeapons, allPassive),
-            Perception: calculateCharacteristicBonus('Perception', base.Perception, allEquipments, allWeapons, allPassive),
-            Power: calculateCharacteristicBonus('Power', base.Power, allEquipments, allWeapons, allPassive),
+            Strength: calculateCharacteristicBonus('Strength', base.Strength, Object.values(allEquipments), allWeapons, allPassive),
+            Intelligence: calculateCharacteristicBonus('Intelligence', base.Intelligence, Object.values(allEquipments), allWeapons, allPassive),
+            Constitution: calculateCharacteristicBonus('Constitution', base.Constitution, Object.values(allEquipments), allWeapons, allPassive),
+            Charisma: calculateCharacteristicBonus('Charisma', base.Charisma, Object.values(allEquipments), allWeapons, allPassive),
+            Dexterity: calculateCharacteristicBonus('Dexterity', base.Dexterity, Object.values(allEquipments) , allWeapons, allPassive),
+            Agility: calculateCharacteristicBonus('Agility', base.Agility, Object.values(allEquipments), allWeapons, allPassive),
+            Perception: calculateCharacteristicBonus('Perception', base.Perception, Object.values(allEquipments), allWeapons, allPassive),
+            Power: calculateCharacteristicBonus('Power', base.Power, Object.values(allEquipments), allWeapons, allPassive),
     }
 
-    console.log("Calculated all characteristics:", fullCharacteristics);
-
+    const weaponsFull = calculateWeaponFull(allWeapons, fullCharacteristics, Object.values(allEquipments), allPassive);
 
 
     const fullCharacter : CharacterFulltype  = {
@@ -66,57 +64,57 @@ export async function calculateFullCharacter(base: CharacterBasetype): Promise<C
             XpPoint: base.XpPoint,
             Level: findCharacterLevel(base.XpPoint).level,
             XpToNextLevel: findCharacterLevel(base.XpPoint).xpNeeded,
-            HitPoint: 10 + calculateFlatBonus('HitPoint', base.Stealth, allEquipments, allWeapons, allPassive),
-            Mana: calculateFlatBonus('Mana', base.Medecine, allEquipments, allWeapons, allPassive),
+            HitPoint: calculateMaxHP(base, fullCharacteristics, Object.values(allEquipments), allWeapons, allPassive),
+            Mana: calculateMaxMana(base, fullCharacteristics, Object.values(allEquipments), allWeapons, allPassive),
             CurrentHPLose: base.currentHPLose,
             CurrentManaLose: base.currentManaLose,
             CurrentMoney: base.currentMoney
         },
 
         Defenses: {
-          DefenseRange: 20 + calculateFlatBonus('DefenseRange', 0, allEquipments, allWeapons, allPassive) + Math.floor(fullCharacteristics.Agility.Modifier/2 + fullCharacteristics.Perception.Modifier/2),
-          DefenseMelee: 20 + calculateFlatBonus('DefenseMelee', 0, allEquipments, allWeapons, allPassive)+ Math.floor(fullCharacteristics.Dexterity.Modifier/2 + fullCharacteristics.Perception.Modifier/2),
-          ResPhysical: calculateFlatBonus('ResPhysical', 0, allEquipments, allWeapons, allPassive),
-          ResChi: calculateFlatBonus('ResChi', 0, allEquipments, allWeapons, allPassive),
-          ResFire: calculateFlatBonus('ResFire', 0, allEquipments, allWeapons, allPassive),
-          ResLightning: calculateFlatBonus('ResLightning', 0, allEquipments, allWeapons, allPassive),
-          ResMental: calculateFlatBonus('ResMental', 0, allEquipments, allWeapons, allPassive),
-          ResIce: calculateFlatBonus('ResIce', 0, allEquipments, allWeapons, allPassive),
+          DefenseRange: 20 + calculateFlatBonus('DefenseRange', 0, Object.values(allEquipments), allWeapons, allPassive) + Math.floor(fullCharacteristics.Agility.Modifier/2 + fullCharacteristics.Perception.Modifier/2),
+          DefenseMelee: 20 + calculateFlatBonus('DefenseMelee', 0, Object.values(allEquipments), allWeapons, allPassive)+ Math.floor(fullCharacteristics.Dexterity.Modifier/2 + fullCharacteristics.Perception.Modifier/2),
+          ResPhysical: calculateFlatBonus('ResPhysical', 0, Object.values(allEquipments), allWeapons, allPassive) + Math.floor(fullCharacteristics.Constitution.Modifier/2),
+          ResChi: calculateFlatBonus('ResChi', 0, Object.values(allEquipments), allWeapons, allPassive),
+          ResFire: calculateFlatBonus('ResFire', 0, Object.values(allEquipments), allWeapons, allPassive),
+          ResLightning: calculateFlatBonus('ResLightning', 0, Object.values(allEquipments), allWeapons, allPassive),
+          ResMental: calculateFlatBonus('ResMental', 0, Object.values(allEquipments), allWeapons, allPassive) + Math.floor(fullCharacteristics.Charisma.Modifier/2),
+          ResIce: calculateFlatBonus('ResIce', 0, Object.values(allEquipments), allWeapons, allPassive),
         },
 
         Characteristics: fullCharacteristics,
 
         Knowledge: {
-            Stealth: calculateFlatBonus('Stealth', base.Stealth, allEquipments, allWeapons, allPassive),
-            Medecine: calculateFlatBonus('Medecine', base.Medecine, allEquipments, allWeapons, allPassive),
-            Forge: calculateFlatBonus('Forge', base.Forge, allEquipments, allWeapons, allPassive),
-            Magic: calculateFlatBonus('Magic', base.Magic, allEquipments, allWeapons, allPassive),
-            Demonic: calculateFlatBonus('Demonic', base.Demonic, allEquipments, allWeapons, allPassive),
-            Cooking: calculateFlatBonus('Cooking', base.Cooking, allEquipments, allWeapons , allPassive),
-            Nature: calculateFlatBonus('Nature', base.Nature, allEquipments, allWeapons, allPassive),
+            Stealth: calculateFlatBonus('Stealth', base.Stealth, Object.values(allEquipments), allWeapons, allPassive),
+            Medecine: calculateFlatBonus('Medecine', base.Medecine, Object.values(allEquipments), allWeapons, allPassive),
+            Forge: calculateFlatBonus('Forge', base.Forge, Object.values(allEquipments), allWeapons, allPassive),
+            Magic: calculateFlatBonus('Magic', base.Magic, Object.values(allEquipments), allWeapons, allPassive),
+            Demonic: calculateFlatBonus('Demonic', base.Demonic, Object.values(allEquipments), allWeapons, allPassive),
+            Cooking: calculateFlatBonus('Cooking', base.Cooking, Object.values(allEquipments), allWeapons , allPassive),
+            Nature: calculateFlatBonus('Nature', base.Nature, Object.values(allEquipments), allWeapons, allPassive),
         }, 
-        Weapon1: calculateWeaponFull(allWeapons[0], fullCharacteristics, allEquipments, allPassive),
-        Weapon2: calculateWeaponFull(allWeapons[1], fullCharacteristics, allEquipments, allPassive),
-        Weapon3: calculateWeaponFull(allWeapons[2], fullCharacteristics, allEquipments, allPassive),
+        Weapon1: weaponsFull[0],
+        Weapon2: weaponsFull[1],
+        Weapon3: weaponsFull[2],
 
-        Skill1: calculateSkillFull(allSkills[0], fullCharacteristics, allEquipments, allPassive),
-        Skill2: calculateSkillFull(allSkills[1], fullCharacteristics, allEquipments, allPassive),
-        Skill3: calculateSkillFull(allSkills[2], fullCharacteristics, allEquipments, allPassive),
-        Skill4: calculateSkillFull(allSkills[3], fullCharacteristics, allEquipments, allPassive),
-        Skill5: calculateSkillFull(allSkills[4], fullCharacteristics, allEquipments, allPassive),
-        Skill6: calculateSkillFull(allSkills[5], fullCharacteristics, allEquipments, allPassive),
+        Skill1: calculateSkillFull(allSkills[0], fullCharacteristics, Object.values(allEquipments), allPassive),
+        Skill2: calculateSkillFull(allSkills[1], fullCharacteristics, Object.values(allEquipments), allPassive),
+        Skill3: calculateSkillFull(allSkills[2], fullCharacteristics, Object.values(allEquipments), allPassive),
+        Skill4: calculateSkillFull(allSkills[3], fullCharacteristics, Object.values(allEquipments), allPassive),
+        Skill5: calculateSkillFull(allSkills[4], fullCharacteristics, Object.values(allEquipments), allPassive),
+        Skill6: calculateSkillFull(allSkills[5], fullCharacteristics, Object.values(allEquipments), allPassive),
 
         Equipment: {
-            Helmet: transformEquipment(allEquipments[0]),
-            Armor: transformEquipment(allEquipments[1]),
-            Pants: transformEquipment(allEquipments[2]),
-            Belt: transformEquipment(allEquipments[3]),
-            Gauntlet: transformEquipment(allEquipments[4]),
-            Boots: transformEquipment(allEquipments[5]),
-            Ring1: transformEquipment(allEquipments[6]),
-            Ring2: transformEquipment(allEquipments[7]),
-            Necklace: transformEquipment(allEquipments[8]),
-            Shield: transformEquipment(allEquipments[9]),
+            Helmet: transformEquipment(allEquipments.Helmet),
+            Armor: transformEquipment(allEquipments.Armor),
+            // Pants: transformEquipment(allEquipments.Pants),
+            Belt: transformEquipment(allEquipments.Belt),
+            Gauntlet: transformEquipment(allEquipments.Gauntlet),
+            Boots: transformEquipment(allEquipments.Boots),
+            Ring1: transformEquipment(allEquipments.Ring1),
+            Ring2: transformEquipment(allEquipments.Ring2),
+            Necklace: transformEquipment(allEquipments.Necklace),
+            Shield: transformEquipment(allEquipments.Shield),
         },
 
         Passive : {
@@ -126,6 +124,8 @@ export async function calculateFullCharacter(base: CharacterBasetype): Promise<C
             passive4: allPassive[3],
         }       
     }
+
+    console.log("Full character calculated:", fullCharacter);
 
     return fullCharacter
 
@@ -179,8 +179,12 @@ function calculateFlatBonus (bonusKey :BonusKey, basecharacter: number, equipmen
     return (basecharacter + equipmentBonus + passiveBonus)
 }
 
-function calculateWeaponFull(weapon: WeaponBaseType, fullCharacteristics: CharacterFulltype['Characteristics'], equipments : EquipmentType[], passives: PassiveType[]) : CharacterFulltype['Weapon1'] {
+function calculateWeaponFull(weapons: WeaponBaseType[], fullCharacteristics: CharacterFulltype['Characteristics'], equipments : EquipmentType[], passives: PassiveType[]) : CharacterFulltype['Weapon1'][] {
+  
+    let weaponsFull: CharacterFulltype['Weapon1'][] = [];
 
+    for (let i = 0; i < weapons.length; i++) {
+    const weapon = weapons[i];
     const weaponBonus = findWeaponBonus(weapon.Type, equipments, passives);
 
     let minDam = weapon.BaseMinDam + (fullCharacteristics[weapon.StatDam1].Modifier + fullCharacteristics[weapon.StatDam2].Modifier + weaponBonus.DamBonus)*weapon.MinDamRatio/2;
@@ -188,7 +192,16 @@ function calculateWeaponFull(weapon: WeaponBaseType, fullCharacteristics: Charac
     
     let precision = weapon.BasePrecision + (fullCharacteristics[weapon.StatPrecision1].Modifier + fullCharacteristics[weapon.StatPrecision2].Modifier)*weapon.PrecisionRatio/2 + weaponBonus.PrecisionBonus;
 
+    if (i === 0 && weapons[1].id !== 1 && weapons[0].id !== 1) {
+      precision -= 4;
+    }
+
+    if (i === 1 && weapons[0].id !== 1 && weapons[1].id !== 1) {
+      precision -= 4;
+    }
+
     const weaponFull : CharacterFulltype['Weapon1']= {
+        id: weapon.id,
         Name: weapon.Name,
         type: weapon.Type,
         subtype: weapon.Subtype,
@@ -199,7 +212,9 @@ function calculateWeaponFull(weapon: WeaponBaseType, fullCharacteristics: Charac
         critical: weapon.CriticScore,
         OtherEffects: weapon.OtherEffects,
     }
-    return weaponFull
+    weaponsFull.push(weaponFull);
+  }
+    return weaponsFull
 }
 
 function calculateSkillFull(skill: SkillBaseType, fullCharacteristics: CharacterFulltype['Characteristics'], equipments : EquipmentType[], passives: PassiveType[]) : CharacterFulltype['Skill1'] {
@@ -211,13 +226,18 @@ function calculateSkillFull(skill: SkillBaseType, fullCharacteristics: Character
     let maxDam = skill.BaseMaxDam + (fullCharacteristics[skill.StatDam1].Modifier + fullCharacteristics[skill.StatDam2].Modifier + elementBonus)*skill.MaxDamRatio/2;
 
     let precision = skill.BasePrecision + (fullCharacteristics[skill.StatPrecision1].Modifier + fullCharacteristics[skill.StatPrecision2].Modifier)*skill.PrecisionRatio/2;
-    
-    const skillFull : CharacterFulltype['Skill1']= {
+
+  const manacostTest = (skill.ManaCost + fullCharacteristics[skill.StatDam1].Modifier + fullCharacteristics[skill.StatDam2].Modifier)*skill.ManaCostRatio/2;
+
+
+    const skillFull : SkillDisplayed= {
 
         name: skill.Name,
         type: skill.Type,
+        Id: skill.id,
+        skillLevel: skill.SkillLevel,
         element: skill.Element,
-        manaCost: Math.floor ((skill.ManaCost + fullCharacteristics[skill.StatDam1].Modifier + fullCharacteristics[skill.StatDam2].Modifier)/2),
+        manaCost: Math.floor (skill.ManaCost+(fullCharacteristics[skill.StatDam1].Modifier + fullCharacteristics[skill.StatDam2].Modifier)*skill.ManaCostRatio/2),
         minDamage: Math.floor(minDam),
         maxDamage: Math.floor(maxDam),
         precision: Math.floor(precision),
@@ -298,7 +318,7 @@ function findCharacterLevel (xpPoint: number): {level: number, xpNeeded: number}
     }
 }  
 
-function transformEquipment(equipment: EquipmentType): EquipmentDisplayed {
+export function transformEquipment(equipment: EquipmentType): EquipmentDisplayed {
   // 1. Extract the two groups of stats
   const defensiveStats = {
     DefenseRange: equipment.DefenseRange,
@@ -343,6 +363,7 @@ function transformEquipment(equipment: EquipmentType): EquipmentDisplayed {
     if (typeof rawVal !== 'number') continue;
     // skip the stats we've already grouped
     if (key === 'id') continue;
+    if (key === 'Value') continue;
     if (
       defensiveKeys.has(key as any) ||
       characteristicKeys.has(key as any)
@@ -364,7 +385,9 @@ function transformEquipment(equipment: EquipmentType): EquipmentDisplayed {
 
   return {
     ID : equipment.id,
+    Subtype: equipment.Subtype,
     Name: equipment.Name,
+    Value: equipment.Value,
 
     DefensiveStats: defensiveStats,
     Characteristics: characteristics,
@@ -402,31 +425,39 @@ export function transformPassive(passive: PassiveType): PassiveDisplayed {
   const negatives: string[] = [];
 
   for (const [key, rawVal] of Object.entries(passive)) {
+
+    let toBePutInText = true
     // skip non-numbers and the Name / OtherEffect
-    if (typeof rawVal !== 'number') continue;
+    // if (typeof rawVal !== 'number') toBePutInText = false;
     // skip the stats we've already grouped
-    if (key === 'id' ) continue;
-    if (key === 'LevelRequiered') continue;
-    if (
-      characteristicKeys.has(key as any)
-    ) {
-      continue;
+    if (key === 'id' ) toBePutInText = false;
+    if (key === 'LevelRequired') toBePutInText = false;
+    if (key === 'OtherEffect') toBePutInText = false;
+    if (key === 'ParentPassive') toBePutInText = false;
+    if (key === 'PassiveLevel') toBePutInText = false;
+    if (key === 'Value') toBePutInText = false;
+    if (characteristicKeys.has(key as any)) {
+      toBePutInText = false;
     }
 
     // we have a “bonus” field
     const val = rawVal as number;
     const formatted = `${key}: ${val >= 0 ? '+' + val : val}`;
 
-    if (val > 0) {
-      positives.push(formatted);
-    } else if (val < 0) {
-      negatives.push(formatted);
+    if (toBePutInText) {
+      if (val > 0) {
+        positives.push(formatted);
+      } else if (val < 0) {
+        negatives.push(formatted);
+      }
     }
     // zero would be omitted
   }
 
   return {
     Name: passive.Name,
+    Id: passive.id,
+    PassiveLevel: passive.PassiveLevel,
 
     Characteristics: characteristics,
 
@@ -434,4 +465,25 @@ export function transformPassive(passive: PassiveType): PassiveDisplayed {
     negativeBonus: negatives.join(', '),
   }
 
+}
+
+function calculateMaxHP(base: CharacterBasetype, fullCharacteristics: CharacterFulltype['Characteristics'], equipments : EquipmentType[], weapons: WeaponBaseType[], passives: PassiveType[]): number {
+  return (
+    10 
+    + fullCharacteristics.Constitution.Modifier * 4 
+    + fullCharacteristics.Strength.Modifier 
+    + findCharacterLevel(base.XpPoint).level * 2
+    + calculateFlatBonus('HitPoint', 0, equipments, weapons, passives)
+  );
+}
+
+function calculateMaxMana(base: CharacterBasetype, fullCharacteristics: CharacterFulltype['Characteristics'], equipments : EquipmentType[], weapons: WeaponBaseType[], passives: PassiveType[]): number {
+  return (
+    6
+    + fullCharacteristics.Power.Modifier * 6 
+    + fullCharacteristics.Intelligence.Modifier 
+    + fullCharacteristics.Constitution.Modifier
+    + findCharacterLevel(base.XpPoint).level * 2
+    + calculateFlatBonus('Mana', 0, equipments, weapons, passives)
+  );
 }

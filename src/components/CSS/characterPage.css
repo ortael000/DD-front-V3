@@ -13,6 +13,7 @@
   --gap: 1.5rem;
 }
 
+
 /* Wrapper */
 .character-section {
   background-color: var(--parchment);
@@ -29,12 +30,12 @@
 
 /* Name */
 .general-title {
+  display: flex;
   margin-bottom: 10px;
   font-size: 2.4rem;
   color: var(--wood-dark);
   text-shadow: 1px 1px 0 var(--shadow);
   border-bottom: 2px solid var(--wood-dark);
-  display: inline-block;
   padding-bottom: 0.25rem;
 }
 
@@ -103,6 +104,7 @@
   margin-bottom: 0.2rem;
 }
 
+
 .stat-value {
   font-size: 2.0rem;
   font-weight: bold;
@@ -124,15 +126,23 @@
   font-size: 1.4rem;
   padding: 4px 6px; /* Adds vertical and horizontal spacing */
   text-align: center;
-  vertical-align: middle
+  vertical-align: middle;
+  color: var(--text-primary);
 }
 
 .general-table td {
   border-bottom: 2px solid var(--wood-dark);
+
 }
 
 .general-table th {
   border-bottom: 5px solid var(--wood-dark);
+}
+
+.general-table th.label-cell,
+.general-table td.label-cell {
+  /* override the global td { text-align: center } */
+  text-align: left;
 }
 
 .general-table td.small-text-cell {
@@ -187,4 +197,17 @@
   width: 40px;
   height: 40px;
   margin-right: 0.5rem;
+}
+
+.remaining-points {
+  display: flex;
+  flex-direction: column; /* stack children vertically */
+  align-items: center; /* align to the left */
+  gap: 0.25rem;            /* space between items */
+  font-size: 0.9rem;
+  margin: 5px;
+}
+
+.remaining-points-value {
+  font-size: 2.2rem;
 }

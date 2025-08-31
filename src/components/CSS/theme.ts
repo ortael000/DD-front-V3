@@ -41,8 +41,21 @@ const theme = createTheme({
         variant: 'contained',
         color: 'primary'
       }
-    }
+    },
+    MuiSelect: {
+      styleOverrides: {
+        select: {
+          fontFamily: "Cinzel, Cormorant Garamond, Georgia, serif",
+          fontSize: "1rem",
+          color: "#2b2520",
+          backgroundColor: "rgba(255, 255, 255, 0.8)",
+          borderRadius: "6px",
+          padding: "0.5rem",
+          border: "1px solid #b0893f",
+          boxShadow: "inset 0 0 0 1px rgba(176, 137, 63, 0.3)"
+        }
+      }
   }
-});
+}});
 
 export default theme;

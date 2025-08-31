@@ -74,6 +74,7 @@ export type dataBaseCall =
   | 'inventory'
   
   export type equipmentType = 
+  | 'All'
   | 'Armor'
   | 'Boots'
   | 'Belt'
@@ -83,3 +84,7 @@ export type dataBaseCall =
   | 'Ring'
   | 'Necklace'
   | 'Shield'
+
+  export type objectSubtype = WeaponCategory | equipmentType
+
+  export type ObjectMainType = "weapon" | "equipment" | "accessory"

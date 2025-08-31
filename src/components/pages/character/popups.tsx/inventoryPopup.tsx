@@ -10,13 +10,15 @@ import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 
-import { fetchAllEquipment, fetchAllWeapons } from '../../../helpers/APIHelpers';
+import { fetchAllEquipment, fetchAllWeapons } from '../../../../helpers/APIHelpers';
+import { filterSelectionListByType, filterInventoryByName, addOneItemToInventory } from '../../../../helpers/calculateCharacterData/inventoryManagement';
+import TextField from '@mui/material/TextField';
 
-import { InventoryItem } from '../../../types/character';
+import { InventoryItem } from '../../../../types/character';
 
 export default function PopupSelectItemButton({
   label = 'Choose',
-  onConfirm = (item : InventoryItem) => {},
+  UpdateInventory = () => {},
   buttonProps = {},
   currentInventory = [] as InventoryItem[],
   CharacterID = 1 as number
@@ -27,24 +29,22 @@ export default function PopupSelectItemButton({
   const defaultItem: InventoryItem = {
     CharacterID: CharacterID,
     ObjectType: "weapon",
+    ObjectSubType: "Fist",
     ObjectID: 0,
     Name: "none",
     Quantity: 0
   };
 
   const [selected, setSelected] = useState<InventoryItem>(defaultItem);
-  const [BaseList, setBaseList] = useState<{ObjectType: "weapon" | "equipment" | "accesory", ObjectID: number, Name: string}[]>([]);
-  const [selectionList, setSelectionList] = useState<{ObjectType: "weapon" | "equipment" | "accesory", ObjectID: number, Name: string}[]>([]);
-  
+  const [BaseList, setBaseList] = useState<InventoryItem[]>([]);
+  const [selectionList, setSelectionList] = useState<InventoryItem[]>([]);
+  const [searchText, setSearchText] = useState('');
+
   const [typeFilters, setTypeFilters] = useState({
     weapon: false,
     equipment: false,
     accesory: false
   });
-
-  const filterSelectionListByType = (typeFilters : {weapon: boolean, equipment: boolean, accesory: boolean}) => {
-    return BaseList.filter(item => typeFilters[item.ObjectType]);
-  };
 
   // Open the dialog
   const handleOpen = () => {
@@ -54,19 +54,28 @@ export default function PopupSelectItemButton({
       const equipment = await fetchAllEquipment();
 
       const weaponInventoryList = weapons.map(item => ({
+        CharacterID: CharacterID,
         ObjectType: "weapon",
+        ObjectSubType: item.Subtype,
         ObjectID: item.id,
-        Name: item.Name
+        Name: item.Name,
+        Quantity: 1,
       }));
 
       const equipmentInventoryList = equipment.map(item => ({
+        CharacterID: CharacterID,
         ObjectType: "equipment",
+        ObjectSubType: item.Subtype,
         ObjectID: item.id,
-        Name: item.Name
+        Name: item.Name,
+        Quantity: 1
       }));
 
       const combinedList = [...weaponInventoryList, ...equipmentInventoryList];
-      setBaseList(combinedList as {ObjectType: "weapon" | "equipment" | "accesory", ObjectID: number, Name: string}[]);
+
+      console.log("Combined inventory list:", combinedList);
+
+      setBaseList(combinedList as InventoryItem[]);
     };
     fetchData();
   };
@@ -78,7 +87,7 @@ export default function PopupSelectItemButton({
   };
 
   // Update state when user picks a different MenuItem
-  const handleChange = (event : any ) => {
+  const handleItemPickChange = (event : any ) => {
 
     const compositeKey = event.target.value ;
     const [selectedType, idStr] = compositeKey.split("-")
@@ -86,45 +95,58 @@ export default function PopupSelectItemButton({
 
     const objectID = parseInt(idStr, 10);
 
-    const selectItem : {ObjectType: "weapon" | "equipment" | "accesory", ObjectID: number, Name: string} | undefined = selectionList.find(item => item.ObjectID === objectID && item.ObjectType === selectedType);
-    console.log("Selected item:", selectItem);
-    if (!selectItem) {
+    const selectedItem : InventoryItem | undefined = selectionList.find(item => item.ObjectID === objectID && item.ObjectType === selectedType);
+    console.log("Selected item:", selectedItem);
+    if (!selectedItem) {
         console.log("No item selected");
       setSelected(defaultItem);
     } else {
 
-        const currentQuantity = currentInventory.find(item => item.ObjectID === selectItem.ObjectID)?.Quantity || 0;
+        const currentQuantity = currentInventory.find(item => item.ObjectID === selectedItem.ObjectID)?.Quantity || 0;
         
-        const selectedItem = {
+        const selectedItemUpdate = {
             CharacterID: CharacterID,
-            ObjectType: selectItem.ObjectType,
-            ObjectID: selectItem.ObjectID,
-            Name: selectItem.Name,
+            ObjectType: selectedItem.ObjectType,
+            ObjectSubType: selectedItem.ObjectSubType,
+            ObjectID: selectedItem.ObjectID,
+            Name: selectedItem.Name,
             Quantity: currentQuantity + 1
         }
-      setSelected(selectedItem);
+        console.log("Updating selected item:", selectedItemUpdate);
+      setSelected(selectedItemUpdate);
     }
+  };
+
+  const handleTextFilterChange = (textSearched: string) => {
+
+    const filteredList1 = filterSelectionListByType(BaseList, typeFilters);
+    const filteredList2 = filterInventoryByName(filteredList1, textSearched);
+    setSelectionList(filteredList2);
   };
 
   const handleTypeFilterChange = (type: "weapon" | "equipment" | "accesory") => {
 
     let typeFiltersCopy = { ...typeFilters };
+
     if (typeFilters[type]) {
       typeFiltersCopy[type] = false;
     } else {
       typeFiltersCopy[type] = true;
     }
+    const newSelectionList = filterSelectionListByType(BaseList, typeFiltersCopy);
+
     setTypeFilters(typeFiltersCopy);
-    const newSelectionList = filterSelectionListByType(typeFiltersCopy)
     setSelectionList(newSelectionList);
   };
 
   // Call the parent callback with the selected value, then close
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     if (!selected) {
         console.error("No item selected");
     } else {
-        onConfirm(selected);
+      console.log("About to call addOneItemToInventory with:", selected, "with objectType:", selected.ObjectType);
+      await addOneItemToInventory(selected.CharacterID, selected.ObjectType, selected.ObjectID);
+      UpdateInventory();
     }
     handleClose();
   };
@@ -142,7 +164,8 @@ export default function PopupSelectItemButton({
 
         <DialogContent>
 
-          <div className="type-filters">
+          
+          <div className="type-filters">  {/* Filters for inventory items */}
             <Button 
                onClick={() => handleTypeFilterChange("weapon")}
                    sx={{
@@ -178,6 +201,20 @@ export default function PopupSelectItemButton({
               Accessories
             </Button>
           </div>
+
+          <TextField
+            fullWidth
+            margin="dense"
+            label="Search items"
+            variant="outlined"
+            value={searchText}
+            onChange={(e) => {
+              const value = e.target.value;
+              setSearchText(value);
+              handleTextFilterChange(value);
+            }}
+          />
+
           {/* Full-width form control for proper layout */}
           <FormControl fullWidth margin="dense">
             {/* Accessible label for the Select */}
@@ -187,9 +224,9 @@ export default function PopupSelectItemButton({
             <Select
               labelId="popup-select-label"
               id="popup-select"
-              value="none"
+              value={selected ? `${selected.ObjectType}-${selected.ObjectID}` : "none"}
               label="Choose"
-              onChange={handleChange}
+              onChange={handleItemPickChange}
             >
               {/* Map each option into a MenuItem */}
               {selectionList.map((opt) => (
@@ -197,7 +234,7 @@ export default function PopupSelectItemButton({
                   {opt.Name}
                 </MenuItem>
               ))}
-              <MenuItem value="none">
+               <MenuItem value="none">
                 <em>None</em>
               </MenuItem>
             </Select>

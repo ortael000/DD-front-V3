@@ -1,0 +1,180 @@
+/* Stronger double border with contrast and medieval accents */
+:root {
+  --parchment: #f4efdc;
+  --aged-paper: #e0cfa0;
+  --wood-dark: #5c4422;
+  --wood-light: #8b6d3c;
+  --text-primary: #3e2f1c;
+  --text-secondary: #6b4f2c;
+  --shadow: rgba(0, 0, 0, 0.3);
+  --font-medieval: 'Cinzel', cursive;
+  --gap: 1.5rem;
+}
+
+.dictionnary-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Optional: center horizontally */
+  padding-top: 80px;   /* Push content down a bit from the top */
+}
+
+.select-bar {
+  background-color: #f4efdc;
+  width: 100%;
+  display: flex;
+  justify-content: center; /* Optional: center horizontally */
+  margin-bottom: 20px;     /* Space between select and content */
+}
+
+.select-button {
+  padding: 12px 24px;
+  font-size: 1rem;
+  min-width: 150px;
+}
+
+
+.item-card {
+  background: linear-gradient(180deg, var(--parchment) 0%, var(--parchment-deep) 100%);
+  border: 4px double var(--accent-gold-deep); /* thicker, deeper gold */
+  border-radius: 12px;
+  padding: 1rem 1.1rem;
+  box-shadow:
+    0 10px 24px rgba(0, 0, 0, 0.22),
+    0 4px 10px rgba(0, 0, 0, 0.14),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.18); /* subtle inner rim */
+  position: relative;
+  overflow: hidden;
+  transition: transform 120ms ease, box-shadow 120ms ease, border-color 200ms ease;
+  margin-top: 6px;
+  justify-content: center;
+}
+
+/* Ornate inner frame and corner flourishes */
+.item-card::before {
+  content: "";
+  position: absolute;
+  inset: 10px;
+  border: 1px solid rgba(176, 137, 63, 0.55);
+  border-radius: 8px;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.06);
+  pointer-events: none;
+}
+
+/* Decorative corner glyphs for medieval vibe */
+.item-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(10px 10px at 12px 12px, rgba(176,137,63,0.45) 0, rgba(176,137,63,0.45) 35%, transparent 36%) no-repeat,
+    radial-gradient(10px 10px at calc(100% - 12px) 12px, rgba(176,137,63,0.45) 0, rgba(176,137,63,0.45) 35%, transparent 36%) no-repeat,
+    radial-gradient(10px 10px at 12px calc(100% - 12px), rgba(176,137,63,0.45) 0, rgba(176,137,63,0.45) 35%, transparent 36%) no-repeat,
+    radial-gradient(10px 10px at calc(100% - 12px) calc(100% - 12px), rgba(176,137,63,0.45) 0, rgba(176,137,63,0.45) 35%, transparent 36%) no-repeat;
+}
+
+/* Hover enriches contrast */
+.item-card:hover {
+  transform: translateY(-2px);
+  border-color: #6c5322; /* darker, aged gold */
+  box-shadow:
+    0 12px 28px rgba(0,0,0,0.26),
+    0 6px 14px rgba(0,0,0,0.16),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.22);
+}
+
+/* Title row unchanged in layout */
+.item-title {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.6rem;
+  border-bottom: 2px solid rgba(176, 137, 63, 0.35);
+}
+
+/* Highlighted equipment name (not white) */
+.item-title h3 {
+  margin: 0;
+  font-size: 1.35rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #2b2520;                 /* deep ink */
+  text-shadow:
+    0 1px 0 rgba(255,255,255,0.4), /* slight emboss top */
+    0 2px 2px rgba(0,0,0,0.12);    /* subtle depth */
+  position: relative;
+  font-weight: 800;
+}
+
+/* Subtle gilded underline for the name */
+.item-title h3::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 72px;
+  height: 3px;
+  background: linear-gradient(90deg, rgba(176,137,63,0.1), rgba(176,137,63,0.85), rgba(176,137,63,0.1));
+  border-radius: 2px;
+}
+
+/* Type badge keeps its small-caps look */
+.item-title p {
+  margin: 0;
+  font-size: 1.2rem;
+color: var(--text-primary);
+  font-variant: small-caps;
+  letter-spacing: 0.03em;
+  background: rgba(176, 137, 63, 0.12);
+  border: 1px solid rgba(176, 137, 63, 0.35);
+  padding: 0.15rem 0.5rem;
+  border-radius: 6px;
+}
+
+.general-table {
+  margin: 0 auto;
+  display: table;
+  max-width: 100%;
+  width: fit-content;
+}
+
+.item-type-value {
+  display: flex;
+  flex-direction: row;
+  gap: 0.25rem;
+}
+
+.additionalEffects{
+    margin-top: 8px;
+}
+
+.positive-bonus {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+}
+
+.negative-bonus {
+  font-size: 1.2rem;
+  color: rgb(150, 68, 68);
+}
+
+.filter-input {
+  font-family: "Cinzel", "Cormorant Garamond", Georgia, serif;
+  font-size: 1rem;
+  padding: 0.5rem 0.75rem;
+  border: 2px solid #b0893f;
+  border-radius: 8px;
+  background-color: #fdfaf3;
+  color: #2b2520;
+  box-shadow: inset 0 0 0 1px rgba(176, 137, 63, 0.2);
+  min-width: 220px;
+}
+
+.filters {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 1rem;
+}

@@ -1,5 +1,6 @@
-import { dataBaseCall } from '../types/stringLists'
-import { InventoryItem, WeaponBaseType, EquipmentType } from '../types/character';
+import { dataBaseCall, Characteristic } from '../types/stringLists'
+import { InventoryItem, WeaponBaseType, EquipmentType, CharacterBasetype, PassiveType, SkillBaseType } from '../types/character';
+import { ObjectMainType } from '../types/stringLists';
 
 
 export async function fetchCharacter(id: number | string) {
@@ -17,29 +18,14 @@ const res = await fetch(`http://localhost:3000/character/${id}`)
   return raw
 }
 
-export async function fetchWeapon (id: number | string) {
-  
+export async function fetchItem (type: ObjectMainType, id: number | string) {
+
   const path = process.env.backEndAdress || 'http://localhost:3000';
-  
-const res = await fetch(`http://localhost:3000/weapon/${id}`)
+
+  const res = await fetch(`${path}/${type}/${id}`);
 
   if (!res.ok) {
-    throw new Error(`Failed to fetch weapon ${id}: ${res.status} ${res.statusText}`)
-  }
-
-  // parse the raw JSON
-    const raw = await res.json()
-  return raw
-}
-
-export async function fetchEquipment (id: number | string) {
-  
-  const path = process.env.backEndAdress || 'http://localhost:3000';
-  
-const res = await fetch(`http://localhost:3000/equipment/${id}`)
-
-  if (!res.ok) {
-    throw new Error(`Failed to fetch equipment ${id}: ${res.status} ${res.statusText}`)
+    throw new Error(`Failed to fetch ${type} ${id}: ${res.status} ${res.statusText}`)
   }
 
   // parse the raw JSON
@@ -104,10 +90,13 @@ export async function fetchInventory(characterID: number | string) {
 
   // parse the raw JSON
   const raw = await res.json();
-  return raw;
+  const inventory = Array.isArray(raw) ? raw : [];
+
+  console.log(`Fetched inventory for character ${characterID}:`, inventory);
+  return inventory;
 }
 
-export async function updateInventory (inventoryUpdate : InventoryItem) {
+export async function updateInventoryDB (inventoryUpdate : InventoryItem) {
 
   console.log("Updating inventory with:", inventoryUpdate);
 
@@ -154,4 +143,64 @@ const res = await fetch(`http://localhost:3000/equipments/all`)
   // parse the raw JSON
     const raw = await res.json()
   return raw
+}
+
+export async function fetchAllPassive () : Promise<PassiveType[]> {
+
+  const path = process.env.backEndAdress || 'http://localhost:3000';
+
+  const res = await fetch(`${path}/passives/all`);
+
+  if (!res.ok) {
+    throw new Error(`Failed to fetch all passives: ${res.status} ${res.statusText}`);
+  }
+
+  // parse the raw JSON
+  const raw = await res.json();
+  return raw;
+}
+
+export async function fetchAllSkills () : Promise<SkillBaseType[]> {
+
+  const path = process.env.backEndAdress || 'http://localhost:3000';
+
+  const res = await fetch(`${path}/skills/all`);
+
+  if (!res.ok) {
+    throw new Error(`Failed to fetch all skills: ${res.status} ${res.statusText}`);
+  }
+
+  // parse the raw JSON
+  const raw = await res.json();
+  return raw;
+}
+
+export async function updateCharacterDB (charID: number, charKey: keyof CharacterBasetype, newValue: number): Promise<any> {
+
+  console.log("Updating character:", charID, charKey, newValue);
+
+  const path = process.env.backEndAdress || 'http://localhost:3000';
+
+  const requestBody = {
+    id: charID,
+    charKey: charKey,
+    value: newValue
+  };
+
+  return fetch(`${path}/characterupdate`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(requestBody)
+  })
+    .then(res => {
+    if (!res.ok) {
+        throw new Error(`Server error: ${res.status}`);
+      }
+      // If there's no content, don't try to parse it
+      if (res.status === 204) {
+        return null;
+      }
+      return res.json();
+    });
+
 }

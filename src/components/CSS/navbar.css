@@ -7,6 +7,7 @@
   display: flex;
   justify-content: center;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  z-index: 1000; /* ensures it's above other content */
 }
 
 /* 2. Remove default list styles and lay out items in a row with spacing */

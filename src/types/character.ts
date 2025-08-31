@@ -1,10 +1,11 @@
-import {Characteristic,equipmentType, BonusKey, WeaponHand, WeaponCategory, Element} from "./stringLists";
+import {Characteristic,equipmentType, objectSubtype, BonusKey, WeaponHand, WeaponCategory, Element, ObjectMainType} from "./stringLists";
 
 
 export interface EquipmentType {
   
   id: number;
-  type: equipmentType;
+  Subtype: equipmentType;
+  Value: number;
 
   // Characteristics
   Strength: number;
@@ -98,10 +99,13 @@ export interface WeaponBaseType {
 export interface SkillBaseType {
   id: number;
   Name: string;
-  Type: string;         
-  Element : Element;    
+  Type: string;
+  Element : Element;
   ManaCost: number;
   ManaCostRatio: number;
+  ParentSkill: number;
+  SkillLevel: number;
+  RequiredPassive: number;
 
   // Base stats
   BaseMinDam: number;
@@ -129,8 +133,9 @@ export interface SkillBaseType {
 export interface PassiveType {
   id: number;
   Name: string;
-  LevelRequiered: number;
-  Restriction: string;
+  LevelRequired: number;
+  ParentPassive: number;
+  PassiveLevel: number;
 
   // Characteristics
   Strength: number;
@@ -345,6 +350,7 @@ export interface CharacterFulltype {
   };
 
   Weapon1: {
+    id: number;
     Name: string;
     type: string;
     subtype: string;
@@ -357,6 +363,7 @@ export interface CharacterFulltype {
   };
 
   Weapon2: {
+    id: number;
     Name: string;
     type: string;
     subtype: string;
@@ -369,6 +376,7 @@ export interface CharacterFulltype {
   };
 
   Weapon3: {
+    id: number;
     Name: string;
     type: string;
     subtype: string;
@@ -383,7 +391,7 @@ export interface CharacterFulltype {
   Equipment: {
     Helmet: EquipmentDisplayed,
     Armor: EquipmentDisplayed, 
-    Pants: EquipmentDisplayed,
+    // Pants: EquipmentDisplayed,
     Belt: EquipmentDisplayed,
     Gauntlet: EquipmentDisplayed,
     Boots: EquipmentDisplayed,
@@ -393,77 +401,17 @@ export interface CharacterFulltype {
     Shield: EquipmentDisplayed
   };
 
-  Skill1: {
-    name: string;
-    type: string;
-    element: Element;
-    manaCost: number;
-    minDamage: number;
-    maxDamage: number;
-    precision: number;
-    critical: number;
-    additionalEffect: string;
-  };
+  Skill1: SkillDisplayed
 
-  Skill2: {
-    name: string;
-    type: string;
-    element: Element;
-    manaCost: number;
-    minDamage: number;
-    maxDamage: number;
-    precision: number;
-    critical: number;
-    additionalEffect: string;
-  };
+  Skill2: SkillDisplayed
 
-  Skill3: {
-    name: string;
-    type: string;
-    element: Element;
-    manaCost: number;
-    minDamage: number;
-    maxDamage: number;
-    precision: number;
-    critical: number;
-    additionalEffect: string;
-  };
+  Skill3: SkillDisplayed
 
-  Skill4: {
-    name: string;
-    type: string;
-    element: Element;
-    manaCost: number;
-    minDamage: number;
-    maxDamage: number;
-    precision: number;
-    critical: number;
-    additionalEffect: string;
-  };
+  Skill4: SkillDisplayed
 
-  Skill5: {
-    name: string;
-    type: string;
-    element: Element;
-    manaCost: number;
-    minDamage: number;
-    maxDamage: number;
-    precision: number;
-    critical: number;
-    additionalEffect: string;
-  };
+  Skill5: SkillDisplayed
 
-  Skill6: {
-    name: string;
-    type: string;
-    element: Element;
-    manaCost: number;
-    minDamage: number;
-    maxDamage: number;
-    precision: number;
-    critical: number;
-    additionalEffect: string;
-  };
+  Skill6: SkillDisplayed;
 
   Passive: {
     passive1: PassiveType;
@@ -475,7 +423,9 @@ export interface CharacterFulltype {
 
 export interface EquipmentDisplayed {
   ID: number;
+  Subtype: equipmentType;
   Name: string;
+  Value: number;
 
   DefensiveStats : {
     DefenseRange: number;
@@ -501,7 +451,9 @@ export interface EquipmentDisplayed {
 
 export interface PassiveDisplayed {
   Name: string;
-
+  Id: number;
+  
+  PassiveLevel: number;
   Characteristics: {
     Strength: number;
     Intelligence: number;
@@ -518,9 +470,24 @@ export interface PassiveDisplayed {
 
 }
 
+export interface SkillDisplayed {
+  name: string;
+  Id: number;
+  skillLevel: number;
+  type: string;
+  element: Element;
+  manaCost: number;
+  minDamage: number;
+  maxDamage: number;
+  precision: number;
+  critical: number;
+  additionalEffect: string;
+}
+
 export interface InventoryItem {
   CharacterID: number;
-  ObjectType: "weapon" | "equipment" | "accesory";
+  ObjectType: ObjectMainType;
+  ObjectSubType: objectSubtype;
   ObjectID: number;
   Name: string ;
   Quantity: number;

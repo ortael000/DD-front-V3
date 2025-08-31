@@ -1,10 +1,11 @@
-import { CharacterFulltype, CharacterBasetype, PassiveType, EquipmentDisplayed } from "../types/character";
+import { CharacterFulltype, CharacterBasetype, PassiveType, EquipmentDisplayed, SkillDisplayed, PassiveDisplayed } from "../types/character";
 
 const emptyPassive : PassiveType = {
   id: 1,
   Name: "none",
-  LevelRequiered: 1,
-  Restriction: "none",
+  LevelRequired: 1,
+  ParentPassive: 1,
+  PassiveLevel: 1,
 
   // Characteristics
   Strength: 0,
@@ -60,27 +61,32 @@ const emptyPassive : PassiveType = {
   // Miscellaneous
   OtherEffect: "None",
   OtherEffectValue: 0,
-  }
+}
 
-const emptySkill : CharacterFulltype['Skill1'] = { 
+const emptySkill : SkillDisplayed = { 
   name: 'none',
   type: 'Melee', 
+  Id: 1,
+  skillLevel: 1,
   element: 'Physical', 
   manaCost : 0, 
   minDamage: 0, 
   maxDamage: 0, 
   precision: 0, 
   critical: 0,
-  additionalEffect: ''}
+  additionalEffect: ''
+}
 
-const emptyEquipment : EquipmentDisplayed = {
-      ID: 0,
-      Name: "none",
+export const emptyEquipment : EquipmentDisplayed = {
+  ID: 1,
+  Subtype: "All",
+  Name: "None",
+  Value: 0,
 
-    DefensiveStats : {
-      DefenseRange: 0,
-      DefenseMelee: 0,
-      ResPhysical: 0
+  DefensiveStats : {
+    DefenseRange: 0,
+    DefenseMelee: 0,
+    ResPhysical: 0
   },
 
     Characteristics: {
@@ -94,15 +100,15 @@ const emptyEquipment : EquipmentDisplayed = {
       Power: 0,
     },
 
-  positiveBonus : "none",  // all the other positive bonus provided by the equipment
-  negativeBonus : "none",  // all the other negative bonus provided by the equipment
+  positiveBonus : "",  // all the other positive bonus provided by the equipment
+  negativeBonus : "",  // all the other negative bonus provided by the equipment
 
   }
 
 export const initialCharacterFull: CharacterFulltype = {
   General: {
-    Id: 1,
-    Name: '',
+    Id: 0,
+    Name: 'Select a character',
     XpPoint: 0,
     Level: 1,
     XpToNextLevel: 0,
@@ -125,9 +131,9 @@ export const initialCharacterFull: CharacterFulltype = {
   },
 
   Characteristics: {
-    Strength: {Base: 10, Equipment: 0, Passive: 0, Temporary: 0, Total: 10, Modifier: 0},
-    Intelligence: {Base: 10, Equipment: 0, Passive: 0, Temporary: 0, Total: 10, Modifier: 0},
-    Constitution: {Base: 10, Equipment: 0, Passive: 0, Temporary: 0, Total: 10, Modifier: 0},
+    Strength: {Base: 12, Equipment: 0, Passive: 0, Temporary: 0, Total: 10, Modifier: 0},
+    Intelligence: {Base: 12, Equipment: 0, Passive: 0, Temporary: 0, Total: 10, Modifier: 0},
+    Constitution: {Base: 12, Equipment: 0, Passive: 0, Temporary: 0, Total: 10, Modifier: 0},
     Charisma: {Base: 10, Equipment: 0, Passive: 0 , Temporary: 0, Total: 10, Modifier: 0},
     Dexterity: {Base: 10, Equipment: 0, Passive: 0, Temporary: 0, Total: 10, Modifier: 0},
     Agility: {Base: 10, Equipment: 0, Passive: 0, Temporary: 0, Total: 10, Modifier: 0},
@@ -145,14 +151,14 @@ export const initialCharacterFull: CharacterFulltype = {
     Nature: 0,
   },
 
-  Weapon1: { Name: "Fist", type: "Fist", subtype: "Melee", element: "Physical", minDamage: 1, maxDamage: 4, precision: 100, critical: 0, OtherEffects: "" }, 
-  Weapon2: { Name: "Fist", type: "Fist", subtype: "Melee", element: "Physical", minDamage: 1, maxDamage: 4, precision: 100, critical: 0, OtherEffects: "" },
-  Weapon3: { Name: "Fist", type: "Fist", subtype: "Melee", element: "Physical", minDamage: 1, maxDamage: 4, precision: 100, critical: 0, OtherEffects: "" },
+  Weapon1: { Name: "Fist", id: 1, type: "Fist", subtype: "Melee", element: "Physical", minDamage: 1, maxDamage: 4, precision: 100, critical: 0, OtherEffects: "" }, 
+  Weapon2: { Name: "Fist", id: 2, type: "Fist", subtype: "Melee", element: "Physical", minDamage: 1, maxDamage: 4, precision: 100, critical: 0, OtherEffects: "" },
+  Weapon3: { Name: "Fist", id: 3, type: "Fist", subtype: "Melee", element: "Physical", minDamage: 1, maxDamage: 4, precision: 100, critical: 0, OtherEffects: "" },
 
   Equipment: {
     Helmet: emptyEquipment,
     Armor: emptyEquipment,
-    Pants: emptyEquipment,
+    // Pants: emptyEquipment,
     Belt: emptyEquipment,
     Gauntlet: emptyEquipment,
     Boots: emptyEquipment,
@@ -183,9 +189,9 @@ export const initialCharacterBase: CharacterBasetype = {
   Name: "select a character",
   XpPoint: 0,
 
-  Strength: 10,
-  Intelligence: 10,
-  Constitution: 10,
+  Strength: 12,
+  Intelligence: 12,
+  Constitution: 12,
   Charisma: 10,
   Dexterity: 10,
   Agility: 10,
@@ -230,3 +236,17 @@ export const initialCharacterBase: CharacterBasetype = {
  currentManaLose: 0,
  currentMoney: 0
 }
+
+export const equipmentTypeList = [
+  'All',
+  'Armor',
+  'Boots',
+  'Belt',
+  'Gauntlet',
+  'Helmet',
+  'Pants',
+  'Ring',
+  'Necklace',
+  'Shield'
+]
+

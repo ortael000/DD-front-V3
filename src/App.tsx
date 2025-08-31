@@ -7,8 +7,9 @@ import './components/CSS/navbar.css';
 
 
 import HomePage from './components/pages/homePage';
-import CharacterPage from './components/pages/characterPage';
+import CharacterPage from './components/pages/character/mainCharacterPage';
 import BestiaryPage from './components/pages/bestiaryPage';
+import { DictionnaryPage } from './components/pages/dictionnary/dictionnary';
 import Navbar from './components/navBar/navbar';
 
 
@@ -21,7 +22,7 @@ function App() {
           <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/character" element={<CharacterPage />} />
-        <Route path="/bestiary" element={<BestiaryPage />} />
+        <Route path="/dictionnary" element={<DictionnaryPage />} />
           </Routes>
         </header>
       </BrowserRouter>
