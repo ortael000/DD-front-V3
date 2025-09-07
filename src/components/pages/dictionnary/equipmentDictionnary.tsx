@@ -7,6 +7,10 @@ import { ElementIcons, attackIcons, generalIcons, skillIcons, characteristicsIco
 
 import { equipmentTypeList } from '../../../data/initiateObject';
 
+
+
+import MoneyDisplay from '../character/smallComponent/money';
+
 interface Props {
   equipment: EquipmentDisplayed[];
 }
@@ -132,7 +136,7 @@ const EquipmentDisplayList: React.FC<Props> = ({ equipment }) => {
               <h3>{item.Name}</h3>
               <div className="item-type-value">
                 <p>{item.Subtype}</p>
-                <p>Value: {item.Value}</p>
+                <MoneyDisplay money={item.Value}/>
               </div>
              
             </div>

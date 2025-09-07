@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 
 // import functions
-import { fetchCharacter } from '../../../helpers/APIHelpers';
+import { fetchCharacter } from '../../../helpers/dataBase&API/characterAPI';
 import { calculateFullCharacter } from '../../../helpers/calculateCharacterData/characterPageHelper';
 
 // import types
@@ -10,6 +10,7 @@ import { CharacterBasetype, CharacterFulltype } from '../../../types/character';
 
 // import objects
 import { initialCharacterBase, initialCharacterFull } from '../../../data/initiateObject';
+import MoneyDisplay from './smallComponent/money';
 
 import hitpointIcon  from '../../../assets/generalIcons/hitpoint.png'; // Import the icon to ensure it's included in the build
 import manaIcone from '../../../assets/generalIcons/mana.png'; // Import the mana icon
@@ -95,20 +96,7 @@ export default function CharacterGeneral({ character }: Props) {
             </div>
         </div>
 
-        <div className="stat-row money-row">
-          <div className="stat-item">
-            <img src =  {goldCoin} className="Coin-icon" />
-            <div className="stat-value gold">{gold}</div>
-          </div>
-          <div className="stat-item">
-            <img src =  {silverCoin} className="Coin-icon" />
-            <div className="stat-value silver">{silver}</div>
-          </div>
-          <div className="stat-item">
-            <img src =  {copperCoin} className="Coin-icon" />
-            <div className="stat-value copper">{copper}</div>
-          </div>
-        </div>
+        <MoneyDisplay money={General.CurrentMoney}/>
       </div>
     </div>
   );

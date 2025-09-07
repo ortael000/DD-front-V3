@@ -3,9 +3,11 @@ import React, { useState, useEffect } from 'react';
 import { FormControl, InputLabel, Select, MenuItem, Button, Box } from '@mui/material';
 
 // import functions
-import { fetchCharacter, fetchInventory } from '../../../helpers/APIHelpers';
+import {fetchInventory } from '../../../helpers/dataBase&API/APIHelpers';
+import { fetchCharacter } from '../../../helpers/dataBase&API/characterAPI';
 import { calculateFullCharacter } from '../../../helpers/calculateCharacterData/characterPageHelper';
 import { UpdateItemToInventory } from '../../../helpers/calculateCharacterData/inventoryManagement';
+import { fetchAllCharacter } from '../../../helpers/dataBase&API/characterAPI';
 
 // import types
 import { CharacterBasetype, CharacterFulltype, InventoryItem } from '../../../types/character';
@@ -22,6 +24,7 @@ import CharacterSkill from './skills';
 import CharacterEquipment from './equipments';
 import CharacterPassives from './passives';
 import CharacterInventory from './inventory';
+import CreateCharacterButton from './popups.tsx/createCharacterPopUp';
 
 // import styles
 import '../../CSS/muiComponent.css';
@@ -32,15 +35,14 @@ interface characterProps {
   xpPoint: string;
 }
 
-const charactersList = [
-  { id: 1, name: 'Sal-Amesh the doom of Ryza' },
-  { id: 2, name: 'Kalypso of Bastaal' },
-];
 
 
-const CharacterPage = ( ) => {
+
+const CharacterPage = () => {
 
     const [selectedId, setSelectedId] = useState("1");
+    const [noCharacterLoaded, setNoCharacterLoaded] = useState(true);
+    const [characterIdList, setCharacterIdList] = useState<{id: number, Name: string}[]>([]);
     const [character, setCharacters] = useState<CharacterFulltype>(initialCharacterFull);
     const [inventory, setInventory] = useState<InventoryItem[]>([]);
 
@@ -51,6 +53,20 @@ const CharacterPage = ( ) => {
         setCharacters(fullCharacter);
     };
 
+    useEffect(() => {
+    const loadCharacterList = async () => {
+      const chars : CharacterBasetype[] = await fetchAllCharacter();
+      const newCharactersIDList = chars.map(char => ({
+        id: char.id,
+        Name: char.Name
+      }));
+      setCharacterIdList(newCharactersIDList);
+      console.log('fetched charList:', newCharactersIDList);
+      console.log ("is no character loaded?", noCharacterLoaded);
+    };
+    loadCharacterList();
+  }, []);
+
     const updateInventoryState = async () => {
         try {
           const inventoryData = await fetchInventory(selectedId);
@@ -59,12 +75,51 @@ const CharacterPage = ( ) => {
           console.error("Error fetching inventory:", error);
         }
       };
-
-    return (
+    return ( noCharacterLoaded ? (
         <div className="pageComponent main-character-page">
-            <h1 className ="pageTitle" >Main Character Page</h1>
-           <div className="selector-container">
-                <FormControl fullWidth margin="normal"
+          <h1 className ="pageTitle" >Main Character Page</h1>
+          <FormControl fullWidth margin="normal"
+              sx={{ minWidth: 200, maxWidth: 300 }}>
+              <InputLabel id="character-label">Select your character</InputLabel>
+                  <Select
+                  labelId="character-label"
+                  id="character-select"
+                  value={selectedId}
+                  label="Favorite Fruit"
+                  onChange={(e) => setSelectedId(e.target.value)}
+                  >
+                  {characterIdList.map((char) => (
+                      <MenuItem key={char.id} value={char.id}>
+                      {char.Name}
+                      </MenuItem>
+                  ))}
+                  </Select>
+              </FormControl>
+              
+              <Button
+                      //sx={{  backgroundColor: '#da9d4eff',color: '#ffffffff', fontWeight: 'bold' }}
+                      variant="contained"
+                      color="primary"
+                      onClick={async () => {
+                          await updateCharacter();
+                          await updateInventoryState();
+                          setNoCharacterLoaded(false);
+                      }}
+              >
+                      Load Character
+              </Button>
+                  
+                  <CreateCharacterButton onCreated={(payload) => {
+                      console.log("Character created:", payload);
+                  }} 
+                  setCharacterIdList={setCharacterIdList} 
+                  />
+        </div>
+      ) : (
+            <div className="pageComponent main-character-page">
+              <h1 className ="pageTitle" >Main Character Page</h1>
+               <div className="selector-container">
+                    <FormControl fullWidth margin="normal"
                     sx={{ minWidth: 200, maxWidth: 300 }}>
                     <InputLabel id="character-label">Select your character</InputLabel>
                     <Select
@@ -74,9 +129,9 @@ const CharacterPage = ( ) => {
                     label="Favorite Fruit"
                     onChange={(e) => setSelectedId(e.target.value)}
                     >
-                    {charactersList.map((char) => (
+                    {characterIdList.map((char) => (
                         <MenuItem key={char.id} value={char.id}>
-                        {char.name}
+                        {char.Name}
                         </MenuItem>
                     ))}
                     </Select>
@@ -101,8 +156,9 @@ const CharacterPage = ( ) => {
             <CharacterEquipment character={character} updateCharacter={updateCharacter} inventory={inventory} updateInventoryState={updateInventoryState} />
             <CharacterPassives character={character} updateCharacter={updateCharacter} />
             <CharacterInventory characterID={character.General.Id} inventory={inventory} updateInventoryState={updateInventoryState} />
-        </div>
-    );
+      </div>
+      )
+    )
 }
 
 export default CharacterPage;

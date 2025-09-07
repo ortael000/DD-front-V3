@@ -2,9 +2,10 @@
 import React, { useState, useEffect } from 'react';
 
 // import functions
-import { fetchCharacter } from '../../../helpers/APIHelpers';
+import { fetchCharacter } from '../../../helpers/dataBase&API/characterAPI';
 import { calculateFullCharacter, transformPassive } from '../../../helpers/calculateCharacterData/characterPageHelper';
 import { calculateRemainingPassivePoint } from '../../../helpers/calculateCharacterData/calculateRemainingPoint';
+import { resetCharPassive } from '../../../helpers/dataBase&API/resetCharacter';
 
 // import types
 import { CharacterBasetype, CharacterFulltype, EquipmentDisplayed, PassiveDisplayed } from '../../../types/character';
@@ -55,6 +56,7 @@ export default function CharacterPassives({ character, updateCharacter }: Props)
             </div>
           )}
           Passives
+          <button className="reset-button" onClick={async () => { await resetCharPassive(character.General.Id); updateCharacter(); }}>reset</button>
       </h2>
       <div className='tableContainer'> 
         

@@ -2,9 +2,10 @@
 import React, { useState, useEffect } from 'react';
 
 // import functions
-import { fetchCharacter } from '../../../helpers/APIHelpers';
+import { fetchCharacter } from '../../../helpers/dataBase&API/characterAPI';
 import { calculateFullCharacter } from '../../../helpers/calculateCharacterData/characterPageHelper';
 import { calculateRemainingSkillPoint } from '../../../helpers/calculateCharacterData/calculateRemainingPoint';
+import { resetCharSkills } from '../../../helpers/dataBase&API/resetCharacter';
 
 // import types
 import { CharacterBasetype, CharacterFulltype } from '../../../types/character';
@@ -55,6 +56,7 @@ export default function CharacterSkill({ character, updateCharacter }: Props) {
             </div>
           )}
           Skills
+          <button className="reset-button" onClick={async () => { await resetCharSkills(character.General.Id); updateCharacter(); }}>reset</button>
       </h2>
 
       <table className="general-table">
@@ -88,7 +90,7 @@ export default function CharacterSkill({ character, updateCharacter }: Props) {
               </td>                
               <td className="value-cell">{skill.object.name}</td>
               <td className="value-cell">{skill.object.type}</td>
-              <td className="value-cell"><img src={ElementIcons[skill.object.element]}  className="attack-icon" /></td>
+              <td className="value-cell"><img src={ElementIcons[skill.object.element as keyof typeof ElementIcons]}  className="attack-icon" /></td>
               <td className="value-cell">{skill.object.manaCost}</td>
               <td className="value-cell">{skill.object.minDamage}</td>
               <td className="value-cell">{skill.object.maxDamage}</td>

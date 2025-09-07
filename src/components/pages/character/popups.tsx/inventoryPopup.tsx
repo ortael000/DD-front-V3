@@ -10,7 +10,7 @@ import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 
-import { fetchAllEquipment, fetchAllWeapons } from '../../../../helpers/APIHelpers';
+import { fetchAllEquipment, fetchAllWeapons } from '../../../../helpers/dataBase&API/APIHelpers';
 import { filterSelectionListByType, filterInventoryByName, addOneItemToInventory } from '../../../../helpers/calculateCharacterData/inventoryManagement';
 import TextField from '@mui/material/TextField';
 

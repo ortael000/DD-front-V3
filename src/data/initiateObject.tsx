@@ -131,9 +131,9 @@ export const initialCharacterFull: CharacterFulltype = {
   },
 
   Characteristics: {
-    Strength: {Base: 12, Equipment: 0, Passive: 0, Temporary: 0, Total: 10, Modifier: 0},
-    Intelligence: {Base: 12, Equipment: 0, Passive: 0, Temporary: 0, Total: 10, Modifier: 0},
-    Constitution: {Base: 12, Equipment: 0, Passive: 0, Temporary: 0, Total: 10, Modifier: 0},
+    Strength: {Base: 10, Equipment: 0, Passive: 0, Temporary: 0, Total: 10, Modifier: 0},
+    Intelligence: {Base: 10, Equipment: 0, Passive: 0, Temporary: 0, Total: 10, Modifier: 0},
+    Constitution: {Base: 10, Equipment: 0, Passive: 0, Temporary: 0, Total: 10, Modifier: 0},
     Charisma: {Base: 10, Equipment: 0, Passive: 0 , Temporary: 0, Total: 10, Modifier: 0},
     Dexterity: {Base: 10, Equipment: 0, Passive: 0, Temporary: 0, Total: 10, Modifier: 0},
     Agility: {Base: 10, Equipment: 0, Passive: 0, Temporary: 0, Total: 10, Modifier: 0},
@@ -189,9 +189,9 @@ export const initialCharacterBase: CharacterBasetype = {
   Name: "select a character",
   XpPoint: 0,
 
-  Strength: 12,
-  Intelligence: 12,
-  Constitution: 12,
+  Strength: 10,
+  Intelligence: 10,
+  Constitution: 10,
   Charisma: 10,
   Dexterity: 10,
   Agility: 10,
@@ -204,6 +204,15 @@ export const initialCharacterBase: CharacterBasetype = {
   Demonic: 0,
   Cooking: 0,
   Nature: 0,
+
+  TempStrength: 0,
+  TempIntelligence: 0,
+  TempConstitution: 0,
+  TempCharisma: 0,
+  TempDexterity: 0,
+  TempAgility: 0,
+  TempPerception: 0,
+  TempPower: 0,
 
   Weapon1ID: 1,
   Weapon2ID: 1,
@@ -250,3 +259,28 @@ export const equipmentTypeList = [
   'Shield'
 ]
 
+export const weaponCategoryList = [
+  'None',
+  'Fist',
+  'Sword',
+  'Axe',
+  'Spear',
+  'Bow',
+  'Staff',
+  'Dagger',
+  'Hammer',
+  'Crossbow',
+  'Firearm',
+  'Mace',
+  'Throwing'
+];
+
+export const elementList = [
+  'None',
+  'Physical',
+  'Fire',
+  'Ice',
+  'Lightning',
+  'Mental',
+  'Chi'
+];

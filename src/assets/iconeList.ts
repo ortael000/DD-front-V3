@@ -83,6 +83,7 @@ export const characteristicsIcons = {
   Agility: AgilityIcone,
   Perception: PerceptionIcone,
   Power: PowerIcone,
+  None: ""
 }
 
 export const defenseIcons = {

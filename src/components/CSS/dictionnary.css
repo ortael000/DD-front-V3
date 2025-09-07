@@ -117,13 +117,14 @@
 .item-title p {
   margin: 0;
   font-size: 1.2rem;
-color: var(--text-primary);
+  color: var(--text-primary);
   font-variant: small-caps;
   letter-spacing: 0.03em;
   background: rgba(176, 137, 63, 0.12);
   border: 1px solid rgba(176, 137, 63, 0.35);
   padding: 0.15rem 0.5rem;
   border-radius: 6px;
+  text-align: center;
 }
 
 .general-table {
@@ -133,10 +134,16 @@ color: var(--text-primary);
   width: fit-content;
 }
 
-.item-type-value {
+.item-type-value .stat-row{
   display: flex;
   flex-direction: row;
   gap: 0.25rem;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0;
 }
 
 .additionalEffects{
@@ -149,9 +156,15 @@ color: var(--text-primary);
 }
 
 .negative-bonus {
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   color: rgb(150, 68, 68);
 }
+
+.other-effect {
+  font-size: 1.1rem;
+  color: var(--text-primary);
+  margin-top: 6px;
+} 
 
 .filter-input {
   font-family: "Cinzel", "Cormorant Garamond", Georgia, serif;
@@ -170,4 +183,19 @@ color: var(--text-primary);
   flex-direction: row;
   justify-content: center;
   gap: 1rem;
+}
+
+.bold-text {
+  font-weight: bold;
+}
+
+.small-text {
+  font-size: 0.95rem;
+  color: #5c6166;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
 }

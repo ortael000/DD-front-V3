@@ -1,9 +1,10 @@
-import { updateInventoryDB } from "../APIHelpers";
+import { updateInventoryDB } from "../dataBase&API/APIHelpers";
 
 import { CharacterFulltype, CharacterBasetype, EquipmentType, WeaponBaseType, PassiveType, SkillBaseType, EquipmentDisplayed, PassiveDisplayed, InventoryItem } from "../../types/character";
 import {Characteristic, BonusKey, WeaponCategory, Element, equipmentType, ObjectMainType} from "../../types/stringLists";
 
-import { fetchCharacter, fetchPassive, fetchSkill, fetchInventory, fetchItem } from "../APIHelpers";
+import { fetchPassive, fetchSkill, fetchInventory, fetchItem } from "../dataBase&API/APIHelpers";
+import { updateCharacterDB } from "../dataBase&API/characterAPI";
 
 export async function UpdateItemToInventory(item: InventoryItem): Promise<any> {
 

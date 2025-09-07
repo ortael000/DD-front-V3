@@ -1,7 +1,8 @@
 import { CharacterFulltype, CharacterBasetype, EquipmentType, WeaponBaseType, PassiveType, SkillBaseType, EquipmentDisplayed, PassiveDisplayed, SkillDisplayed } from "../../types/character";
 import {Characteristic, BonusKey, WeaponCategory, Element} from "../../types/stringLists";
 
-import { fetchCharacter, fetchPassive, fetchItem, fetchSkill } from "../APIHelpers";
+import { fetchPassive, fetchItem, fetchSkill } from "../dataBase&API/APIHelpers";
+import { updateCharacterDB } from "../dataBase&API/characterAPI";
 
 export async function calculateFullCharacter(base: CharacterBasetype): Promise<CharacterFulltype | any> { 
 
@@ -44,14 +45,14 @@ export async function calculateFullCharacter(base: CharacterBasetype): Promise<C
 
 
     const fullCharacteristics : CharacterFulltype['Characteristics']= {
-            Strength: calculateCharacteristicBonus('Strength', base.Strength, Object.values(allEquipments), allWeapons, allPassive),
-            Intelligence: calculateCharacteristicBonus('Intelligence', base.Intelligence, Object.values(allEquipments), allWeapons, allPassive),
-            Constitution: calculateCharacteristicBonus('Constitution', base.Constitution, Object.values(allEquipments), allWeapons, allPassive),
-            Charisma: calculateCharacteristicBonus('Charisma', base.Charisma, Object.values(allEquipments), allWeapons, allPassive),
-            Dexterity: calculateCharacteristicBonus('Dexterity', base.Dexterity, Object.values(allEquipments) , allWeapons, allPassive),
-            Agility: calculateCharacteristicBonus('Agility', base.Agility, Object.values(allEquipments), allWeapons, allPassive),
-            Perception: calculateCharacteristicBonus('Perception', base.Perception, Object.values(allEquipments), allWeapons, allPassive),
-            Power: calculateCharacteristicBonus('Power', base.Power, Object.values(allEquipments), allWeapons, allPassive),
+            Strength: calculateCharacteristicBonus('Strength', base.Strength, base.TempStrength, Object.values(allEquipments), allWeapons, allPassive),
+            Intelligence: calculateCharacteristicBonus('Intelligence', base.Intelligence, base.TempIntelligence, Object.values(allEquipments), allWeapons, allPassive),
+            Constitution: calculateCharacteristicBonus('Constitution', base.Constitution, base.TempConstitution, Object.values(allEquipments), allWeapons, allPassive),
+            Charisma: calculateCharacteristicBonus('Charisma', base.Charisma, base.TempCharisma, Object.values(allEquipments), allWeapons, allPassive),
+            Dexterity: calculateCharacteristicBonus('Dexterity', base.Dexterity, base.TempDexterity, Object.values(allEquipments) , allWeapons, allPassive),
+            Agility: calculateCharacteristicBonus('Agility', base.Agility, base.TempAgility, Object.values(allEquipments), allWeapons, allPassive),
+            Perception: calculateCharacteristicBonus('Perception', base.Perception, base.TempPerception, Object.values(allEquipments), allWeapons, allPassive),
+            Power: calculateCharacteristicBonus('Power', base.Power, base.TempPower, Object.values(allEquipments), allWeapons, allPassive),
     }
 
     const weaponsFull = calculateWeaponFull(allWeapons, fullCharacteristics, Object.values(allEquipments), allPassive);
@@ -131,7 +132,7 @@ export async function calculateFullCharacter(base: CharacterBasetype): Promise<C
 
 }
 
-function calculateCharacteristicBonus (charac : Characteristic, basecharacter: number, equipments : EquipmentType[], weapons: WeaponBaseType[], passives: PassiveType[]) {
+function calculateCharacteristicBonus (charac : Characteristic, basecharacter: number, temporary: number, equipments : EquipmentType[], weapons: WeaponBaseType[], passives: PassiveType[]) {
 
     let equipmentBonus = 0;
     let passiveBonus = 0;
@@ -153,9 +154,9 @@ function calculateCharacteristicBonus (charac : Characteristic, basecharacter: n
       Base: basecharacter,
       Equipment: equipmentBonus,
       Passive: passiveBonus,
-      Temporary: 0,
-      Total: basecharacter + equipmentBonus + passiveBonus,
-      Modifier: Math.floor((basecharacter + equipmentBonus + passiveBonus - 10) / 2)
+      Temporary: temporary,
+      Total: basecharacter + equipmentBonus + passiveBonus + temporary,
+      Modifier: Math.floor((basecharacter + equipmentBonus + passiveBonus + temporary - 10) / 2)
       };
 } 
 
@@ -221,13 +222,13 @@ function calculateSkillFull(skill: SkillBaseType, fullCharacteristics: Character
 
     const elementBonus = findElementBonus(skill.Element, equipments, passives);
 
-  
     let minDam = skill.BaseMinDam + (fullCharacteristics[skill.StatDam1].Modifier + fullCharacteristics[skill.StatDam2].Modifier + elementBonus)*skill.MinDamRatio/2;
     let maxDam = skill.BaseMaxDam + (fullCharacteristics[skill.StatDam1].Modifier + fullCharacteristics[skill.StatDam2].Modifier + elementBonus)*skill.MaxDamRatio/2;
 
     let precision = skill.BasePrecision + (fullCharacteristics[skill.StatPrecision1].Modifier + fullCharacteristics[skill.StatPrecision2].Modifier)*skill.PrecisionRatio/2;
 
-  const manacostTest = (skill.ManaCost + fullCharacteristics[skill.StatDam1].Modifier + fullCharacteristics[skill.StatDam2].Modifier)*skill.ManaCostRatio/2;
+
+     const manacostTest = (skill.ManaCost + (fullCharacteristics[skill.StatDam1].Modifier + fullCharacteristics[skill.StatDam2].Modifier)*skill.ManaCostRatio)/2;
 
 
     const skillFull : SkillDisplayed= {

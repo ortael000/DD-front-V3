@@ -30,6 +30,7 @@ const transformPassiveToDic = (passive: PassiveType) => {
     if (key === 'ParentPassive') toBePutInText = false;
     if (key === 'PassiveLevel') toBePutInText = false;
     if (key === 'Value') toBePutInText = false;
+    if (key === 'otherEffectValue') toBePutInText = false;
     if (displayedBonus.includes(key)) {
       toBePutInText = false;
     }
@@ -59,7 +60,7 @@ const transformPassiveToDic = (passive: PassiveType) => {
 
 
     if (toBePutInText) {
-      const val = rawVal as number;
+    const val = rawVal as number;
     const formatted = `${key}: ${val >= 0 ? '+' + val : val}`;
       if (val > 0) {
         positives.push(formatted);
@@ -68,6 +69,9 @@ const transformPassiveToDic = (passive: PassiveType) => {
       }
     }
   }
+
+
+  const formatted2 = (passive.OtherEffect == "0" ? '' : passive.OtherEffect) || '';
 
     const characteristics: Record<string, number> = {};
     for (const key of displayedBonus) {
@@ -84,6 +88,7 @@ const transformPassiveToDic = (passive: PassiveType) => {
 
     positiveBonus: positives.join(', '),
     negativeBonus: negatives.join(', '),
+    otherEffect: formatted2
   }
 
 };

@@ -10,7 +10,8 @@ import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 
-import { fetchAllEquipment, fetchAllWeapons, updateCharacterDB, fetchInventory, fetchItem } from '../../../../helpers/APIHelpers';
+import { fetchAllEquipment, fetchAllWeapons, fetchInventory, fetchItem } from '../../../../helpers/dataBase&API/APIHelpers';
+import { updateCharacterDB } from '../../../../helpers/dataBase&API/characterAPI';
 import { filterSelectionListByType, filterInventoryByName, filterEquipmentListBySubType, UpdateItemToInventory } from '../../../../helpers/calculateCharacterData/inventoryManagement';
 import { addOneItemToInventory, removeOneItemFromInventory } from '../../../../helpers/calculateCharacterData/inventoryManagement';
 import TextField from '@mui/material/TextField';
@@ -80,7 +81,7 @@ export default function PopupEquipWeaponButton({
     if (!selectedItem) {
         if (removeCurrentItem && currentWeaponId !== 1) {
             console.log("Removing current item:", characterKey);
-            await updateCharacterDB(CharacterID, characterKey, 1);
+            await updateCharacterDB(CharacterID, { [characterKey]: 1 });
             await addOneItemToInventory(CharacterID, "weapon", currentWeaponId);
         } else {
             console.log("No item selected, nothing to update.");
@@ -88,7 +89,7 @@ export default function PopupEquipWeaponButton({
     } else {
         //here i want to update with selected Item but with quantity * -1
         console.log("Updating character with item:", selectedItem, characterKey);
-        await updateCharacterDB(CharacterID, characterKey ,selectedItem.ObjectID)
+        await updateCharacterDB(CharacterID, { [characterKey]: selectedItem.ObjectID });
         await removeOneItemFromInventory(CharacterID, selectedItem.ObjectType, selectedItem.ObjectID);
 
         if (currentWeaponId !== 1) {

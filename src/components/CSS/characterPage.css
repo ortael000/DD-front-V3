@@ -28,6 +28,34 @@
   place-items: center;
 }
 
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  padding: 0 1rem;
+}
+
+.reset-button {
+  font-family: 'Cinzel', serif;
+  background-color: #d37637;
+  color: #fdf6e3;
+  border: 2px solid #b0893f;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  transition: background-color 0.3s ease;
+  height: fit-content;
+  margin-left: 1rem;
+}
+
+.reset-button:hover {
+  background-color: #8c5c3b;
+  cursor: pointer;
+}
+
 /* Name */
 .general-title {
   display: flex;
@@ -154,19 +182,6 @@
   font-family: 'Times New Roman', Times, serif;
 }
 
-/* Currency Colors */
-.gold {
-  color: #bfa85f;
-}
-
-.silver {
-  color: #c0c0c0;
-}
-
-.copper {
-  color: #b87333;
-}
-
 /* Responsive */
 @media (max-width: 480px) {
   .general-stats .stat-row {
@@ -211,3 +226,21 @@
 .remaining-points-value {
   font-size: 2.2rem;
 }
+
+
+
+.update-input {
+  background: url('https://www.transparenttextures.com/patterns/paper-fibers.png') repeat;
+  background-color: #fdf6e3;
+  border: 2px solid #8b5e3c;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #4b2e1e;
+  padding: 6px 10px;
+  box-shadow: inset 0 0 5px #d2b48c;
+  width: 50px;
+  height: 30px;
+  text-align: center;
+}
+

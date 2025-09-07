@@ -34,11 +34,13 @@ const charList = [
 const PassiveSkillDisplayList: React.FC<Props> = ({ passives }) => {
 
   const initialState = passives.map(transformPassiveToDic).filter(passive => passive.Name !== "None");
-  console.log("Initial transformed passives:", initialState);
 
   const [passiveListDisplayed, setPassiveListDisplayed] = useState(initialState);
 
-  console.log("Passives to display:", passiveListDisplayed);
+  useEffect(() => {
+    const transformed = passives.map(transformPassiveToDic).filter(passive => passive.Name !== "None");
+    setPassiveListDisplayed(transformed);
+  }, [passives]);
 
   const filterPassivesByName = (name: string) => {
     const filtered = passives.filter(passive => passive.Name.toLowerCase().includes(name.toLowerCase()));
@@ -132,6 +134,7 @@ const PassiveSkillDisplayList: React.FC<Props> = ({ passives }) => {
             <div className="additionalEffects">
               <div className="positive-bonus">{passive.positiveBonus}</div>
               <div className="negative-bonus">{passive.negativeBonus}</div>
+              <div className="other-effect">{passive.otherEffect}</div>
             </div>
           </div>
         ))}

@@ -97,6 +97,7 @@ export interface WeaponBaseType {
 }
 
 export interface SkillBaseType {
+  
   id: number;
   Name: string;
   Type: string;
@@ -206,6 +207,16 @@ export interface CharacterBasetype {
   Agility: number;
   Perception: number;
   Power: number;
+
+  TempStrength: number;
+  TempIntelligence: number;
+  TempConstitution: number;
+  TempCharisma: number;
+  TempDexterity: number;
+  TempAgility: number;
+  TempPerception: number;
+  TempPower: number;
+
   Stealth: number;
   Medecine: number;
   Forge: number;

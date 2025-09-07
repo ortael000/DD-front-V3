@@ -10,7 +10,8 @@ import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 
-import { fetchAllEquipment, fetchAllWeapons, updateCharacterDB, fetchInventory, fetchPassive, fetchItem, fetchAllPassive, fetchAllSkills } from '../../../../helpers/APIHelpers';
+import { fetchAllEquipment, fetchAllWeapons, fetchInventory, fetchPassive, fetchItem, fetchAllPassive, fetchAllSkills } from '../../../../helpers/dataBase&API/APIHelpers';
+import { updateCharacterDB } from '../../../../helpers/dataBase&API/characterAPI';
 import { filterSelectionListByType, filterInventoryByName, filterEquipmentListBySubType, UpdateItemToInventory } from '../../../../helpers/calculateCharacterData/inventoryManagement';
 import { addOneItemToInventory, removeOneItemFromInventory } from '../../../../helpers/calculateCharacterData/inventoryManagement';
 import TextField from '@mui/material/TextField';
@@ -85,7 +86,7 @@ export default function PopupUpdatePassive({
     } else {
         //here i want to update with selected Item but with quantity * -1
         console.log("Updating character with item:", selectedPassive, characterKey);
-        await updateCharacterDB(fullCharacter.General.Id, characterKey ,selectedPassive.id);
+        await updateCharacterDB(fullCharacter.General.Id, { [characterKey]: selectedPassive.id });
     }
     updateCharacter();
     handleClose();
