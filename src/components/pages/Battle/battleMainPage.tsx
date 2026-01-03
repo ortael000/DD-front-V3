@@ -43,6 +43,17 @@ export default function BattlePage() {
     });
   }, []);
 
+  const removeHP = useCallback((instanceId: string, damage: number) => {
+    setBattleParticipants((prev) => {
+      return prev.map((p) => {
+        if (p.instanceId === instanceId) {
+          const newHP = Math.max(0, p.currentHp - damage);
+          return { ...p, currentHp: newHP };
+        }
+        return p;
+      });
+    });
+  }, []);
 
 
   /* Title: load selection lists */
@@ -62,7 +73,7 @@ export default function BattlePage() {
       <div className="battle-setup-panel" style={{ border: '1px solid gray', padding: 12, marginBottom: 24 }}>
         <AddCharacterToBattle fetchFullCharacter={fetchFullCharacter} setBattleParticipants={setBattleParticipants} battleParticipants={battleParticipants} characterBaseList={charactersBase} />
         <AddEnemyToBattle setBattleParticipants={setBattleParticipants} enemyBaseList={ennemiesBase} />
-        <BattleParticipantsList battleParticipants={battleParticipants} onRemove={removeParticipant} removeMana={removeMana} />
+        <BattleParticipantsList battleParticipants={battleParticipants} onRemove={removeParticipant} removeMana={removeMana} removeHP={removeHP} />
         {/* Additional battle UI components would go here */}
       </div>
     </div>

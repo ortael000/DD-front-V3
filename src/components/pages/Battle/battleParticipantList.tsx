@@ -9,6 +9,7 @@ type Props = {
   battleParticipants: BattleEntity[];
   onRemove: (instanceId: string) => void;
   removeMana: (instanceId: string, manaCost: number) => void;
+  removeHP: (instanceId: string, damage: number) => void;
 };
 
 function clamp(n: number, min: number, max: number) {
@@ -102,7 +103,7 @@ function getEnemySkills(p: BattleEntity) {
   return list;
 }
 
-export default function BattleParticipantsList({ battleParticipants, onRemove, removeMana }: Props) {
+export default function BattleParticipantsList({ battleParticipants, onRemove, removeMana, removeHP }: Props) {
   if (!battleParticipants.length) {
     return <Typography className="bp-empty">No participants yet.</Typography>;
   }
