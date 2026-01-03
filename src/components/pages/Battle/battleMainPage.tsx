@@ -31,6 +31,19 @@ export default function BattlePage() {
     setBattleParticipants((prev) => prev.filter((p) => p.instanceId !== instanceId));
   }, []);
 
+  const removeMana = useCallback((instanceId: string, manaCost: number) => {
+    setBattleParticipants((prev) => {
+      return prev.map((p) => {
+        if (p.instanceId === instanceId) {
+          const newMana = Math.max(0, p.currentMana - manaCost);
+          return { ...p, currentMana: newMana };
+        }
+        return p;
+      });
+    });
+  }, []);
+
+
 
   /* Title: load selection lists */
   useEffect(() => {
@@ -49,7 +62,7 @@ export default function BattlePage() {
       <div className="battle-setup-panel" style={{ border: '1px solid gray', padding: 12, marginBottom: 24 }}>
         <AddCharacterToBattle fetchFullCharacter={fetchFullCharacter} setBattleParticipants={setBattleParticipants} battleParticipants={battleParticipants} characterBaseList={charactersBase} />
         <AddEnemyToBattle setBattleParticipants={setBattleParticipants} enemyBaseList={ennemiesBase} />
-        <BattleParticipantsList battleParticipants={battleParticipants} onRemove={removeParticipant} />
+        <BattleParticipantsList battleParticipants={battleParticipants} onRemove={removeParticipant} removeMana={removeMana} />
         {/* Additional battle UI components would go here */}
       </div>
     </div>

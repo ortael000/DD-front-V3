@@ -8,6 +8,7 @@ import EnemySkillAttackButton from "./ennemyAttackButton";
 type Props = {
   battleParticipants: BattleEntity[];
   onRemove: (instanceId: string) => void;
+  removeMana: (instanceId: string, manaCost: number) => void;
 };
 
 function clamp(n: number, min: number, max: number) {
@@ -66,7 +67,6 @@ function getEnemySkills(p: BattleEntity) {
 
   const e: any = (p as any).enemy;
 
-  console.log('enemy in getEnemySkills', e);
   const s1 = {
     SkillName: e?.Skill1Name,
     SkillCost: e?.Skill1Cost,
@@ -102,34 +102,33 @@ function getEnemySkills(p: BattleEntity) {
   return list;
 }
 
-export default function BattleParticipantsList({ battleParticipants, onRemove }: Props) {
+export default function BattleParticipantsList({ battleParticipants, onRemove, removeMana }: Props) {
   if (!battleParticipants.length) {
     return <Typography className="bp-empty">No participants yet.</Typography>;
   }
 
   return (
     <div className="bp-list">
-      {battleParticipants.map((p) => {
-        const hpPct = percent(p.currentHp, p.maxHp);
-        const manaPct = percent(p.currentMana, p.maxMana);
+      {battleParticipants.map((participant) => {
+        const hpPct = percent(participant.currentHp, participant.maxHp);
+        const manaPct = percent(participant.currentMana, participant.maxMana);
 
-        const sideClass = p.side === "character" ? "bp-hero" : "bp-enemy";
-        const nameClass = p.side === "character" ? "bp-name-hero" : "bp-name-enemy";
+        const sideClass = participant.side === "character" ? "bp-hero" : "bp-enemy";
+        const nameClass = participant.side === "character" ? "bp-name-hero" : "bp-name-enemy";
 
-        const def = getDefenses(p);
+        const def = getDefenses(participant);
 
-        const enemySkills = getEnemySkills(p);
-        console.log('enemySkills', enemySkills);
+        const enemySkills = getEnemySkills(participant);
 
         return (
-          <div key={p.instanceId} className={`bp-card ${sideClass}`}>
+          <div key={participant.instanceId} className={`bp-card ${sideClass}`}>
             <div className="bp-left">
               <div className="bp-topRow">
-                <button className="bp-removeBtn" onClick={() => onRemove(p.instanceId)}>
+                <button className="bp-removeBtn" onClick={() => onRemove(participant.instanceId)}>
                   -
                 </button>
 
-                <div className={`bp-name ${nameClass}`}>{p.name}</div>
+                <div className={`bp-name ${nameClass}`}>{participant.name}</div>
               </div>
 
               <div className="bp-defensesRow">
@@ -170,9 +169,9 @@ export default function BattleParticipantsList({ battleParticipants, onRemove }:
                 </div>
               </div>
 
-              {p.status ? <div className="bp-status">{p.status}</div> : null}
+              {participant.status ? <div className="bp-status">{participant.status}</div> : null}
 
-              {p.side === "enemy" ? (
+              {participant.side === "enemy" ? (
                 <div className="bp-attacksRow">
                   {enemySkills[0] ? (
                     <EnemySkillAttackButton
@@ -182,6 +181,9 @@ export default function BattleParticipantsList({ battleParticipants, onRemove }:
                       SkillMinDamage={enemySkills[0].SkillMinDamage}
                       SkillMaxDamage={enemySkills[0].SkillMaxDamage}
                       SkillOtherEffect={enemySkills[0].SkillOtherEffect}
+                      instanceId={participant.instanceId}
+                      currentMana={participant.currentMana}
+                      removeMana={removeMana}
                     />
                   ) : null}
 
@@ -193,6 +195,9 @@ export default function BattleParticipantsList({ battleParticipants, onRemove }:
                       SkillMinDamage={enemySkills[1].SkillMinDamage}
                       SkillMaxDamage={enemySkills[1].SkillMaxDamage}
                       SkillOtherEffect={enemySkills[1].SkillOtherEffect}
+                      instanceId={participant.instanceId}
+                      currentMana={participant.currentMana}
+                      removeMana={removeMana}
                     />
                   ) : null}
 
@@ -204,6 +209,9 @@ export default function BattleParticipantsList({ battleParticipants, onRemove }:
                       SkillMinDamage={enemySkills[2].SkillMinDamage}
                       SkillMaxDamage={enemySkills[2].SkillMaxDamage}
                       SkillOtherEffect={enemySkills[2].SkillOtherEffect}
+                      instanceId={participant.instanceId}
+                      currentMana={participant.currentMana}
+                      removeMana={removeMana}
                     />
                   ) : null}
                 </div>
@@ -212,7 +220,7 @@ export default function BattleParticipantsList({ battleParticipants, onRemove }:
 
             <div className="bp-mid">
               <div className="bp-init-label">Init</div>
-              <div className="bp-init-value">{p.initiative ?? "—"}</div>
+              <div className="bp-init-value">{participant.initiative ?? "—"}</div>
             </div>
 
             <div className="bp-right">
@@ -220,7 +228,7 @@ export default function BattleParticipantsList({ battleParticipants, onRemove }:
                 <div className="bp-barHeader">
                   <span className="bp-barTitle">HP</span>
                   <span className="bp-barValue">
-                    {p.currentHp}/{p.maxHp}
+                    {participant.currentHp}/{participant.maxHp}
                   </span>
                 </div>
                 <LinearProgress className="bp-bar" variant="determinate" value={hpPct} color={hpBarColor(hpPct)} />
@@ -230,7 +238,7 @@ export default function BattleParticipantsList({ battleParticipants, onRemove }:
                 <div className="bp-barHeader">
                   <span className="bp-barTitle">Mana</span>
                   <span className="bp-barValue">
-                    {p.currentMana}/{p.maxMana}
+                    {participant.currentMana}/{participant.maxMana}
                   </span>
                 </div>
                 <LinearProgress
@@ -238,7 +246,7 @@ export default function BattleParticipantsList({ battleParticipants, onRemove }:
                   variant="determinate"
                   value={manaPct}
                   color="info"
-                  sx={{ opacity: p.maxMana > 0 ? 1 : 0.35 }}
+                  sx={{ opacity: participant.maxMana > 0 ? 1 : 0.35 }}
                 />
               </div>
             </div>

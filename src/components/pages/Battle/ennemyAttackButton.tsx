@@ -9,6 +9,9 @@ interface Props {
     SkillMinDamage: number;
     SkillMaxDamage: number;
     SkillOtherEffect: string;
+    instanceId: string;
+    currentMana: number;
+    removeMana: (instanceId: string, manaCost: number) => void;
 }
 
 function rollD20() {
@@ -20,8 +23,7 @@ function rollBetween(min: number, max: number) {
   const high = Math.max(min, max);
   return Math.floor(Math.random() * (high - low + 1)) + low;
 }
-export default function EnemySkillAttackButton({ SkillName, SkillCost, SkillTouchChance, SkillMinDamage, SkillMaxDamage, SkillOtherEffect }: Props) {
-
+export default function EnemySkillAttackButton({ SkillName, SkillCost, SkillTouchChance, SkillMinDamage, SkillMaxDamage, SkillOtherEffect, instanceId, currentMana, removeMana }: Props) {
 
 
   const [open, setOpen] = useState(false);
@@ -33,6 +35,12 @@ export default function EnemySkillAttackButton({ SkillName, SkillCost, SkillTouc
   const [damage, setDamage] = useState(0);
 
   const rollAttack = () => {
+
+    if (currentMana < SkillCost) {
+      alert("Not enough mana!");
+      return;
+    }
+
     const a = rollD20();
     const b = rollD20();
 
@@ -44,6 +52,7 @@ export default function EnemySkillAttackButton({ SkillName, SkillCost, SkillTouc
     setHitTotal(totalHit);
     setDamage(dmg);
 
+    removeMana(instanceId, SkillCost);
     setOpen(true);
   };
 
@@ -59,7 +68,7 @@ export default function EnemySkillAttackButton({ SkillName, SkillCost, SkillTouc
         className="bp-enemyAttackBtn"
         onClick={rollAttack}
       >
-        {SkillName}
+        {SkillName} ( {SkillCost} )
       </Button>
 
       <Dialog open={open} onClose={() => setOpen(false)} maxWidth="xs" fullWidth>
