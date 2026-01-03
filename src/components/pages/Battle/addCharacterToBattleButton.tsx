@@ -8,12 +8,12 @@ import { cpSync } from "fs";
 
 interface Props {
   fetchFullCharacter: (id: number | string) => Promise<CharacterFulltype>;
-  updateSelectedCharater: React.Dispatch<React.SetStateAction<BattleEntity[]>>;
+  setBattleParticipants: React.Dispatch<React.SetStateAction<BattleEntity[]>>;
   battleParticipants: BattleEntity[];
   characterBaseList: CharacterBasetype[];
 }
 
-export default function AddCharacterToBattle({fetchFullCharacter, updateSelectedCharater, battleParticipants, characterBaseList }: Props) {
+export default function AddCharacterToBattle({fetchFullCharacter, setBattleParticipants, battleParticipants, characterBaseList }: Props) {
   
     console.log(characterBaseList)
     const [selectedId, setSelectedId] = useState<string>("");
@@ -42,7 +42,7 @@ export default function AddCharacterToBattle({fetchFullCharacter, updateSelected
             status: "",
             };
 
-            updateSelectedCharater(battleParticipants => [...battleParticipants, entity]);
+            setBattleParticipants(battleParticipants => [...battleParticipants, entity]);
 
             console.log("Added character to battle:", battleParticipants);
     } else {

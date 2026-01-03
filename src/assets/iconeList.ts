@@ -36,9 +36,6 @@ import ResLightningIcon from './defenseIcons/ResLightning.png'; // Import the De
 import  ResMentalIcon from './defenseIcons/ResMental.png'; // Import the Defense Range icon
 import  ResIceIcon from './defenseIcons/ResIce.png'; // Import the Defense Range icon
 
-
-
-
 export const ElementIcons = {
   Chi: ChiIcon,
   Ice: IceIcon,

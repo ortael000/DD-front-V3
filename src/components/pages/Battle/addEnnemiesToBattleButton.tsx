@@ -6,11 +6,11 @@ import type { BattleEntity } from "../../../types/battleType";
 import { raceList } from "../../../data/initiateObject";
 
 interface Props {
-  updateSelectedEnemy: React.Dispatch<React.SetStateAction<BattleEntity[]>>;
+  setBattleParticipants: React.Dispatch<React.SetStateAction<BattleEntity[]>>;
   enemyBaseList: Ennemy[];
 }
 
-export default function AddEnemyToBattle({ updateSelectedEnemy, enemyBaseList }: Props) {
+export default function AddEnemyToBattle({ setBattleParticipants, enemyBaseList }: Props) {
   
   const [selectedRace, setSelectedRace] = useState<string>("");
   const [selectedEnemyId, setSelectedEnemyId] = useState<string>("");
@@ -50,7 +50,8 @@ export default function AddEnemyToBattle({ updateSelectedEnemy, enemyBaseList }:
       status: "",
     };
 
-    updateSelectedEnemy((prev) => [...prev, entity]);
+    setBattleParticipants((prev) => [...prev, entity]);
+    console.log("Added enemy to battle:", entity);
   };
 
   return (

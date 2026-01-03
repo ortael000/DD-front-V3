@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { useCallback } from "react";
 import { Button, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 
 
@@ -26,6 +27,10 @@ export default function BattlePage() {
   // selected participant in the battle
   const [battleParticipants, setBattleParticipants] = useState<BattleEntity[] >([]);
 
+  const removeParticipant = useCallback((instanceId: string) => {
+    setBattleParticipants((prev) => prev.filter((p) => p.instanceId !== instanceId));
+  }, []);
+
 
   /* Title: load selection lists */
   useEffect(() => {
@@ -42,9 +47,9 @@ export default function BattlePage() {
   return (<div>
       <h2>Battle Main Page</h2>
       <div className="battle-setup-panel" style={{ border: '1px solid gray', padding: 12, marginBottom: 24 }}>
-        <AddCharacterToBattle fetchFullCharacter={fetchFullCharacter} updateSelectedCharater={setBattleParticipants} battleParticipants={battleParticipants} characterBaseList={charactersBase} />
-        <AddEnemyToBattle updateSelectedEnemy={setBattleParticipants} enemyBaseList={ennemiesBase} />
-        <BattleParticipantsList battleParticipants={battleParticipants} />
+        <AddCharacterToBattle fetchFullCharacter={fetchFullCharacter} setBattleParticipants={setBattleParticipants} battleParticipants={battleParticipants} characterBaseList={charactersBase} />
+        <AddEnemyToBattle setBattleParticipants={setBattleParticipants} enemyBaseList={ennemiesBase} />
+        <BattleParticipantsList battleParticipants={battleParticipants} onRemove={removeParticipant} />
         {/* Additional battle UI components would go here */}
       </div>
     </div>
