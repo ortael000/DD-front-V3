@@ -24,7 +24,7 @@ export async function fetchPassive (id: number | string) {
 
   const path = process.env.backEndAdress || 'http://localhost:3000';
   
-const res = await fetch(`http://localhost:3000/passive/${id}`)
+const res = await fetch(`${path}/passive/${id}`)
 
   if (!res.ok) {
     throw new Error(`Failed to fetch passive ${id}: ${res.status} ${res.statusText}`)
@@ -39,7 +39,7 @@ export async function fetchSkill (id: number | string) {
 
   const path = process.env.backEndAdress || 'http://localhost:3000';
   
-const res = await fetch(`http://localhost:3000/skill/${id}`)
+const res = await fetch(`${path}/skill/${id}`)
 
   if (!res.ok) {
     throw new Error(`Failed to fetch skill ${id}: ${res.status} ${res.statusText}`)
@@ -106,7 +106,7 @@ export async function fetchAllWeapons () : Promise<WeaponBaseType[]> {
 
   const path = process.env.backEndAdress || 'http://localhost:3000';
   
-const res = await fetch(`http://localhost:3000/weapons/all`)
+const res = await fetch(`${path}/weapons/all`)
 
   if (!res.ok) {
     throw new Error(`Failed to fetch all weapons: ${res.status} ${res.statusText}`)
@@ -121,7 +121,7 @@ export async function fetchAllEquipment () : Promise<EquipmentType[]> {
 
   const path = process.env.backEndAdress || 'http://localhost:3000';
   
-const res = await fetch(`http://localhost:3000/equipments/all`)
+const res = await fetch(`${path}/equipments/all`)
 
   if (!res.ok) {
     throw new Error(`Failed to fetch all equipments: ${res.status} ${res.statusText}`)
