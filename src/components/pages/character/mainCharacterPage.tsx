@@ -7,7 +7,7 @@ import {fetchInventory } from '../../../helpers/dataBase&API/APIHelpers';
 import { fetchCharacter } from '../../../helpers/dataBase&API/characterAPI';
 import { calculateFullCharacter } from '../../../helpers/calculateCharacterData/characterPageHelper';
 import { UpdateItemToInventory } from '../../../helpers/calculateCharacterData/inventoryManagement';
-import { fetchAllCharacter } from '../../../helpers/dataBase&API/characterAPI';
+import { fetchAllCharacter, fetchFullCharacter } from '../../../helpers/dataBase&API/characterAPI';
 
 // import types
 import { CharacterBasetype, CharacterFulltype, InventoryItem } from '../../../types/character';
@@ -47,9 +47,7 @@ const CharacterPage = () => {
     const [inventory, setInventory] = useState<InventoryItem[]>([]);
 
     const updateCharacter = async () => {
-
-        const currentCharacter = await fetchCharacter(selectedId);
-        const fullCharacter = await calculateFullCharacter(currentCharacter);
+        const fullCharacter = await fetchFullCharacter(selectedId);
         setCharacters(fullCharacter);
     };
 

@@ -11,17 +11,19 @@ import { fetchAllPassive } from '../../../helpers/dataBase&API/APIHelpers';
 import { Element, WeaponCategory } from '../../../types/stringLists';
 
 //import list
-import { elementList, weaponCategoryList, equipmentTypeList } from '../../../data/initiateObject';
+import { elementList, weaponCategoryList, equipmentTypeList, knowledgeList } from '../../../data/initiateObject';
+
+// import functions
+import { findChildSkills } from '../../../helpers/calculateCharacterData/findChildSkill&Passive';
 
 
 interface Props {
   skills: SkillBaseType[];
-  passives: PassiveType[];
 }
 
-const SkillDisplayList: React.FC<Props> = ({ skills, passives }) => {
+const SkillDisplayList: React.FC<Props> = ({ skills }) => {
 
-  const initialState = skills.filter(item => item.Name !== "None");
+  const initialState = skills.filter(item => item.Name !== "None" && item.SkillLevel === 1);
 
   const [skillToBeDisplayed, setSkillsToBeDisplayed] = useState<SkillBaseType[]>(initialState);
 
@@ -41,8 +43,28 @@ const SkillDisplayList: React.FC<Props> = ({ skills, passives }) => {
     setSkillsToBeDisplayed(filtered);
   };
 
+  const filterSkillsByKnowledge = (knowledge: string) => {
+    const filtered = skills.filter(item => {
+      const know = item.RequiredKnowledge ;
+      if (know === knowledge && item.KnowledgeLevel > 0 && item.SkillLevel === 1) {
+        return true;
+      }
+      return false;
+    });
+    setSkillsToBeDisplayed(filtered);
+  };
+
+  const filterByParent = (parentId: number) => {
+      const childSkills = findChildSkills(parentId , skills);
+      console.log("childSkills", childSkills);
+      const childSkillsToDisplay = childSkills.map(skillId => (skills.find(s => s.id === skillId) as SkillBaseType));
+      console.log("childSkillsToDisplay", childSkillsToDisplay);
+
+      setSkillsToBeDisplayed(childSkillsToDisplay);
+  };
+
   useEffect(() => {
-    const transformed = skills.filter(item => item.Name !== "None")
+    const transformed = skills.filter(item => (item.Name !== "None" && item.SkillLevel === 1));
     setSkillsToBeDisplayed(transformed);
   }, [skills]);
 
@@ -74,16 +96,41 @@ const SkillDisplayList: React.FC<Props> = ({ skills, passives }) => {
           </Select>
         </FormControl>
 
+        {/* input to filter passive by knowledge needed (selection list from knowledgeList) */}
+        <FormControl sx={{ minWidth: 200 }}>
+          <InputLabel id="char-select-label">Knowledge</InputLabel>
+          <Select
+            labelId="char-select-label"
+            onChange={(e) => filterSkillsByKnowledge(e.target.value)}
+            defaultValue=""
+          >
+            {knowledgeList.map((know) => (
+              <MenuItem key={know} value={know}>
+                {know}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
       </div>
           <div className="equipment-list">
       {skillToBeDisplayed.map((skill) => {
         return (
           <div key={skill.id} className="item-card">
+            {skill.SkillLevel === 1 && (
+              <button onClick={() => filterByParent(skill.id)} className="child-display-button"> Display childs </button>
+            )}
             <div className="item-title">
               <h3>{skill.Name}</h3>
               <div className="row">
                 <p>Parent: {skills.find(p => p.id === skill.ParentSkill)?.Name}</p>
-                <p>Required: {passives.find(p => p.id === skill.RequiredPassive)?.Name}</p>
+                {skill.KnowledgeLevel > 0 ? (
+                  <p>
+                    Required: {skill.RequiredKnowledge}:{skill.KnowledgeLevel} (Level {skill.SkillLevel})
+                  </p>
+                ) : (
+                  <p>(Level {skill.SkillLevel})</p>
+                )}
               </div>
              
             </div>
@@ -92,6 +139,7 @@ const SkillDisplayList: React.FC<Props> = ({ skills, passives }) => {
                 <tr>
                   <th className="value-cell">Damage Type</th>
                   <th className="value-cell"><img src={attackIcons.range}  className="attack-icon" /> </th>
+                  <th className="value-cell"><img src={generalIcons.mana}  className="attack-icon" /> </th>
                   <th className="value-cell"><img src={attackIcons.minDamage}  className="attack-icon" /> </th>
                   <th className="value-cell"><img src={attackIcons.maxDamage}  className="attack-icon" /> </th>
                   <th className="value-cell"><img src={attackIcons.precision}  className="attack-icon" /> </th>
@@ -105,6 +153,7 @@ const SkillDisplayList: React.FC<Props> = ({ skills, passives }) => {
                 <tr>
                   <td className="value-cell"><img src={ElementIcons[skill.Element as keyof typeof ElementIcons]}  className="attack-icon" /></td>
                   <td className="value-cell">{skill.Type} </td>
+                  <td className="value-cell mana-cost">{skill.ManaCost} </td>
                   <td className="value-cell">
                     <div className="bold-text"> {skill.BaseMinDam} </div>
                     <div className="small-text"> X {skill.MinDamRatio} </div>
@@ -116,9 +165,9 @@ const SkillDisplayList: React.FC<Props> = ({ skills, passives }) => {
                   <td className="value-cell">
                      <div className="bold-text"> {skill.BasePrecision} </div>
                      <div className="small-text"> X {skill.PrecisionRatio} </div>
-                    </td>
+                 </td>
                   <td className="value-cell">{skill.CriticScore}</td>
-                  <td className="value-cell">
+                  <td className="value-cell"> </td>
                   <td className="value-cell">
                     {(skill.MinDamRatio !== 0 && skill.MaxDamRatio !== 0) && (
                       <>
@@ -126,8 +175,6 @@ const SkillDisplayList: React.FC<Props> = ({ skills, passives }) => {
                         {skill.StatDam2 && (<img src={characteristicsIcons[skill.StatDam2 as keyof typeof characteristicsIcons]} className="attack-icon"/>)}
                       </>
                     )}
-                  </td>
-
                   </td>
                   <td className="value-cell">
                     {(skill.PrecisionRatio !== 0) && (

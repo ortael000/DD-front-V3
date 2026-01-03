@@ -26,16 +26,7 @@ export default function PopupSelectItemButton({
   // Controls whether the Dialog is visible
   const [open, setOpen] = useState(false);
 
-  const defaultItem: InventoryItem = {
-    CharacterID: CharacterID,
-    ObjectType: "weapon",
-    ObjectSubType: "Fist",
-    ObjectID: 0,
-    Name: "none",
-    Quantity: 0
-  };
-
-  const [selected, setSelected] = useState<InventoryItem>(defaultItem);
+  const [selected, setSelected] = useState<InventoryItem | null>(null);
   const [BaseList, setBaseList] = useState<InventoryItem[]>([]);
   const [selectionList, setSelectionList] = useState<InventoryItem[]>([]);
   const [searchText, setSearchText] = useState('');
@@ -81,10 +72,10 @@ export default function PopupSelectItemButton({
   };
 
   // Close the dialog and reset selection
-  const handleClose = () => {
-    setOpen(false);
-    setSelected(defaultItem);
-  };
+const handleClose = () => {
+  setOpen(false);
+  setSelected(null);
+};
 
   // Update state when user picks a different MenuItem
   const handleItemPickChange = (event : any ) => {
@@ -99,7 +90,7 @@ export default function PopupSelectItemButton({
     console.log("Selected item:", selectedItem);
     if (!selectedItem) {
         console.log("No item selected");
-      setSelected(defaultItem);
+      setSelected(null);
     } else {
 
         const currentQuantity = currentInventory.find(item => item.ObjectID === selectedItem.ObjectID)?.Quantity || 0;

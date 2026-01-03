@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FormControl, InputLabel, Select, MenuItem, Button, Box } from '@mui/material';
 
 import { WeaponBaseType } from '../../../types/character';
+import { WeaponFilters } from '../../../types/dictionnaryFilter';
 
 import { ElementIcons, attackIcons, generalIcons, skillIcons, characteristicsIcons, defenseIcons } from '../../../assets/iconeList';
 
@@ -17,36 +18,45 @@ interface Props {
   weapons: WeaponBaseType[];
 }
 
+const handList = ['All', 'OneHand', 'TwoHands'];
+
 const WeaponDisplayList: React.FC<Props> = ({ weapons }) => {
 
 
   const initialState = weapons.filter(item => item.Name !== "None");
 
   const [weaponsToBeDisplayed, setWeaponsToBeDisplayed] = useState<WeaponBaseType[]>(initialState);
+  const [currentFilters, setCurrentFilters] = useState<WeaponFilters>({
+    name: "",
+    hand: "All",
+    subType: "None",
+    element: "All",
+  });
 
-  const filterWeaponsByName = (name: string) => {
-    const filtered = weapons.filter(item => item.Name.toLowerCase().includes(name.toLowerCase()));
-    setWeaponsToBeDisplayed(filtered);
-  };
+  const filterEquipmentInDictionnary = (filterKey: keyof WeaponFilters, filterValue: string) => {
 
-  const filterWeaponsByElement = (element: string) => {
-    const filtered = weapons.filter(item => {
-      const elem = item.Element ;
-      if (elem === element) {
-        return true;
-      }
-      return false;
-    });
-    setWeaponsToBeDisplayed(filtered);
-  };
+    console.log("filtering equipment by", filterKey, filterValue);
+    console.log("current filters before update", currentFilters);
+    console.log("initial state", initialState);
+  
+    const newFilters = { ...currentFilters, [filterKey]: filterValue };
+    setCurrentFilters(newFilters);
 
-  const filterWeaponsByType = (type: string) => {
-    if (type === "None") {
-      setWeaponsToBeDisplayed(initialState);
-    } else {
-      const filtered = initialState.filter(item => item.Subtype === type);
-      setWeaponsToBeDisplayed(filtered);
-    }
+    let filteredList = initialState;
+
+    filteredList = filteredList.filter(item => item.Name.toLowerCase().includes(newFilters.name.toLowerCase()));
+
+    filteredList = newFilters.subType === "None" ? filteredList : filteredList.filter(item => item.Subtype === newFilters.subType);
+
+    filteredList = newFilters.element === "All" ? filteredList : filteredList.filter(item => item.Element === newFilters.element);
+
+    filteredList = newFilters.hand === "All" ? filteredList : filteredList.filter(item => item.Hand === newFilters.hand);
+
+    console.log("after all filters", filteredList);
+
+
+
+    setWeaponsToBeDisplayed(filteredList);
   };
 
   useEffect(() => {
@@ -62,16 +72,16 @@ const WeaponDisplayList: React.FC<Props> = ({ weapons }) => {
         <input
           type="text"
           placeholder="Filter by name..."
-          onChange={(e) => filterWeaponsByName(e.target.value)}
+          onChange={(e) => filterEquipmentInDictionnary("name", e.target.value)}
           className="filter-input"
         />
 
         {/* input to filter passive by characteristic (selection list from charList) */}
         <FormControl sx={{ minWidth: 200 }}>
-          <InputLabel id="char-select-label">Characteristic</InputLabel>
+          <InputLabel id="char-select-label">Element</InputLabel>
           <Select
             labelId="char-select-label"
-            onChange={(e) => filterWeaponsByElement(e.target.value)}
+            onChange={(e) => filterEquipmentInDictionnary("element", e.target.value)}
             defaultValue=""
           >
             {elementList.map((elem) => (
@@ -86,7 +96,22 @@ const WeaponDisplayList: React.FC<Props> = ({ weapons }) => {
           <InputLabel id="char-select-label">Type</InputLabel>
           <Select
             labelId="char-select-label"
-            onChange={(e) => filterWeaponsByType(e.target.value)}
+            onChange={(e) => filterEquipmentInDictionnary("hand", e.target.value)}
+            defaultValue=""
+          >
+            {handList.map((char) => (
+              <MenuItem key={char} value={char}>
+                {char}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
+        <FormControl sx={{ minWidth: 200 }}>
+          <InputLabel id="char-select-label">Category</InputLabel>
+          <Select
+            labelId="char-select-label"
+            onChange={(e) => filterEquipmentInDictionnary("subType", e.target.value)}
             defaultValue=""
           >
             {weaponCategoryList.map((char) => (
@@ -105,7 +130,7 @@ const WeaponDisplayList: React.FC<Props> = ({ weapons }) => {
             <div className="item-title">
               <h3>{weapon.Name}</h3>
               <div className="item-type-value">
-                <p>{weapon.Subtype}</p>
+                <p>{weapon.Hand + "-" + weapon.Subtype} </p>
               </div>
              
             </div>

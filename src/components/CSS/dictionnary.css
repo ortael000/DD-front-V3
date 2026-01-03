@@ -199,3 +199,72 @@
   flex-direction: row;
   gap: 0.5rem;
 }
+
+.child-display-button {
+  font-family: 'Cinzel', serif;
+  background-color: #ddc38b;
+  color: #24221e;
+  border: 2px solid #75443c;
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-weight: bold;
+  text-transform: uppercase;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  transition: background-color 0.3s ease;
+  height: fit-content;
+  margin-left: 1rem;
+}
+
+
+.Main-ennemies-values {
+  display: flex;
+  flex-direction: row;
+  align-items: center;  
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.hitpoint-value, .mana-value {
+  font-size: 2rem;
+  margin-left: 2px;
+  margin-right: 20px;
+  text-align: right;
+  flex-grow: 1;
+}
+
+.hitpoint-value {
+  color: #c0392b; /* Deep red for hit points */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.mana-value {
+  color: #2980b9; /* Deep blue for mana */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.description-section {
+  background: #fdf5e6; /* light parchment color */
+  background-image: radial-gradient(#f8ecd1 5%, transparent 6%),
+                    radial-gradient(#f8ecd1 5%, transparent 6%);
+  background-size: 60px 60px;
+  background-position: 0 0, 30px 30px;
+  border: 2px solid #b8860b; /* golden-brown edge */
+  border-radius: 12px;
+  padding: 1.2rem;
+  margin-top: 0.8rem;
+  margin-bottom: 1rem;
+  color: #3b2f2f; /* dark brown ink color */
+  font-family: 'IM Fell English', serif;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  text-align: justify;
+  box-shadow:
+    inset 0 0 10px rgba(139, 69, 19, 0.3),
+    0 4px 10px rgba(0, 0, 0, 0.25);
+  position: relative;
+}
+
+.spacer {
+  height: 16px; /* Adjust height as needed */
+}
+

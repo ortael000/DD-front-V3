@@ -14,6 +14,9 @@ const Navbar: React.FC = () => {
                 <li>
                     <Link to="/dictionnary">Dictionnary</Link>
                 </li>
+                <li>
+                    <Link to="/battle">Battle</Link>
+                </li>
             </ul>
         </nav>
     );

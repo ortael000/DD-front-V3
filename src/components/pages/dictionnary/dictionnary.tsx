@@ -2,7 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { FormControl, InputLabel, Select, MenuItem, Button, Box } from '@mui/material';
 import { EquipmentDisplayed, PassiveDisplayed, PassiveType, SkillBaseType, WeaponBaseType } from '../../../types/character';
-import { fetchAllEquipment, fetchAllPassive, fetchAllSkills, fetchAllWeapons } from '../../../helpers/dataBase&API/APIHelpers';
+import { Ennemy } from '../../../types/ennemy';
+import { fetchAllEquipment, fetchAllPassive, fetchAllSkills, fetchAllWeapons, fetchAllEnnemies } from '../../../helpers/dataBase&API/APIHelpers';
 
 import { transformPassive, transformEquipment } from '../../../helpers/calculateCharacterData/characterPageHelper';
 
@@ -10,8 +11,10 @@ import PassiveDisplayList from './passiveDictionnary';
 import EquipmentDisplayList from './equipmentDictionnary';
 import WeaponDisplayList from './weaponDictionnary';
 import SkillsDisplayList from './skillDictionnary';
+import BestiaryDisplayed from './bestiaryDictionnary';
 
 import '../../CSS/dictionnary.css'
+import passives from '../character/passives';
 
 export const DictionnaryPage = ( ) => {
 
@@ -20,6 +23,7 @@ export const DictionnaryPage = ( ) => {
     const [passiveData, setPassiveData] = useState<PassiveType[]>([]);
     const [weaponsData, setWeaponsData] = useState<WeaponBaseType[]>([]);
     const [skillsData, setSkillsData] = useState<SkillBaseType[]>([]);
+    const [ennemiesData, setEnnemiesData] = useState<Ennemy[]>([]);
 
     const changeToPassive = async () => {
         setSelectedDisplay("passive");
@@ -43,9 +47,13 @@ export const DictionnaryPage = ( ) => {
     const changeToSkills = async () => {
         setSelectedDisplay("skills");
         const data = await fetchAllSkills();
-        const passives = await fetchAllPassive();
         setSkillsData(data);
-        setPassiveData(passives);
+    };
+
+    const changeToEnnemies = async () => {
+        setSelectedDisplay("ennemies");
+        const ennemies = await fetchAllEnnemies();
+        setEnnemiesData(ennemies);
     };
 
     const returnedComponent = () => {
@@ -56,8 +64,12 @@ export const DictionnaryPage = ( ) => {
         }
         else if (selectedDisplay === "weapons") {
             return <WeaponDisplayList weapons={weaponsData as WeaponBaseType[]} />;
-        } else if (selectedDisplay === "skills") {
-            return <SkillsDisplayList skills={skillsData as SkillBaseType[]} passives={passiveData as PassiveType[]} />;
+        } 
+        else if (selectedDisplay === "skills") {
+            return <SkillsDisplayList skills={skillsData as SkillBaseType[]} />;
+        }
+        else if (selectedDisplay === "ennemies") {
+            return <BestiaryDisplayed ennemies={ennemiesData as Ennemy[]} />;
         }
     };
     return (
@@ -95,6 +107,14 @@ export const DictionnaryPage = ( ) => {
                 className="select-button"
             >
                 Skills
+            </Button>
+            <Button
+                size="large"
+                variant={selectedDisplay === "ennemies" ? "contained" : "outlined"}
+                onClick={changeToEnnemies}
+                className="select-button"
+            >
+                Ennemies
             </Button>
             </div>
             {returnedComponent()}

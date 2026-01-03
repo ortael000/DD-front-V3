@@ -57,6 +57,7 @@ const emptyPassive : PassiveType = {
   Cooking: 0,
   Forge: 0,
   Stealth: 0,
+  Martial: 0,
 
   // Miscellaneous
   OtherEffect: "None",
@@ -149,6 +150,7 @@ export const initialCharacterFull: CharacterFulltype = {
     Demonic: 0,
     Cooking: 0,
     Nature: 0,
+    Martial: 0,
   },
 
   Weapon1: { Name: "Fist", id: 1, type: "Fist", subtype: "Melee", element: "Physical", minDamage: 1, maxDamage: 4, precision: 100, critical: 0, OtherEffects: "" }, 
@@ -204,6 +206,7 @@ export const initialCharacterBase: CharacterBasetype = {
   Demonic: 0,
   Cooking: 0,
   Nature: 0,
+  Martial: 0,
 
   TempStrength: 0,
   TempIntelligence: 0,
@@ -276,11 +279,23 @@ export const weaponCategoryList = [
 ];
 
 export const elementList = [
-  'None',
+  'All',
   'Physical',
   'Fire',
   'Ice',
   'Lightning',
   'Mental',
   'Chi'
+];
+
+export const knowledgeList = [
+  'None',
+  'Nature',
+  'Magic',
+  'Demonic',
+  'Medecine',
+  'Cooking',
+  'Forge',
+  'Stealth',
+  'Martial'
 ];

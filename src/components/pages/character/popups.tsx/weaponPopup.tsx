@@ -25,7 +25,7 @@ export default function PopupEquipWeaponButton({
   updateInventoryState = () => {},
   characterKey = "Weapon1ID" as keyof CharacterBasetype,
   CharacterID = 1 as number,
-  currentWeaponId = 1 as number
+  currentWeaponId = 1 as number,
 }) {
   // Controls whether the Dialog is visible
   const [open, setOpen] = useState(false);

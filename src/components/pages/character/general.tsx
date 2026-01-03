@@ -26,7 +26,6 @@ interface Props {
 
 export default function CharacterGeneral({ character }: Props) {
 
-  
   const { General } = character;
 
   const currentHp = General.HitPoint - General.CurrentHPLose;
@@ -95,8 +94,33 @@ export default function CharacterGeneral({ character }: Props) {
               <span className="stat-value">{character.Defenses.ResIce}</span>
             </div>
         </div>
-
         <MoneyDisplay money={General.CurrentMoney}/>
+        <table className="general-table">
+          <thead>
+            <tr>
+              <th className="label-cell">Magic</th>
+              <th className="value-cell">Nature</th>
+              <th className="value-cell">Martial</th>
+              <th className="value-cell">Demonic</th>
+              <th className="value-cell">Stealth</th>
+              <th className="value-cell">Forge</th>
+              <th className="value-cell">Medicine</th>
+              <th className="value-cell">Cooking</th>
+            </tr>
+          </thead>
+          <tbody>
+              <tr>
+                <td className="value-cell">{character.Knowledge.Magic}</td>
+                <td className="value-cell">{character.Knowledge.Nature}</td>
+                <td className="value-cell">{character.Knowledge.Martial}</td>
+                <td className="value-cell">{character.Knowledge.Demonic}</td>
+                <td className="value-cell">{character.Knowledge.Stealth}</td>
+                <td className="value-cell">{character.Knowledge.Forge}</td>
+                <td className="value-cell">{character.Knowledge.Medecine}</td>
+                <td className="value-cell">{character.Knowledge.Cooking}</td>
+              </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   );

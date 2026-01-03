@@ -3,7 +3,8 @@ import React, { useState, useEffect } from 'react';
 
 // import functions
 import { fetchCharacter } from '../../../helpers/dataBase&API/characterAPI';
-import { calculateFullCharacter, transformPassive } from '../../../helpers/calculateCharacterData/characterPageHelper';
+import { calculateFullCharacter } from '../../../helpers/calculateCharacterData/characterPageHelper';
+import transformPassiveToDic from '../../../helpers/dictionnary/passiveDictionnaryHelper';
 import { calculateRemainingPassivePoint } from '../../../helpers/calculateCharacterData/calculateRemainingPoint';
 import { resetCharPassive } from '../../../helpers/dataBase&API/resetCharacter';
 
@@ -26,10 +27,10 @@ interface Props {
 export default function CharacterPassives({ character, updateCharacter }: Props) {
 
   const passives = [
-    {passivekey: "passive1ID", object: transformPassive(character.Passive.passive1)},
-    {passivekey: "passive2ID", object: transformPassive(character.Passive.passive2)},
-    {passivekey: "passive3ID", object: transformPassive(character.Passive.passive3)},
-    {passivekey: "passive4ID", object: transformPassive(character.Passive.passive4)},
+    {passivekey: "passive1ID", object: transformPassiveToDic(character.Passive.passive1)},
+    {passivekey: "passive2ID", object: transformPassiveToDic(character.Passive.passive2)},
+    {passivekey: "passive3ID", object: transformPassiveToDic(character.Passive.passive3)},
+    {passivekey: "passive4ID", object: transformPassiveToDic(character.Passive.passive4)},
   ];
 
 

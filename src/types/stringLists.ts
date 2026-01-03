@@ -10,6 +10,7 @@ export type Characteristic =
   | 'Power';
 
 export type BonusKey =
+  | 'None'
   | 'DefenseRange'
   | 'DefenseMelee'
   | 'ResPhysical'
@@ -37,7 +38,8 @@ export type BonusKey =
   | 'Medecine'
   | 'Cooking'
   | 'Forge'
-  | 'Stealth';
+  | 'Stealth'
+  | 'Martial';
 
 
 export type WeaponHand = 'OneHand' | 'TwoHands';
@@ -84,6 +86,29 @@ export type dataBaseCall =
   | 'Ring'
   | 'Necklace'
   | 'Shield'
+
+  export type Race =
+  | "Bandit"
+  | "Orkish"
+  | "ForestBeast"
+  | "Elemental"
+  | "Soldiers"
+  | "Undead"
+  | "Draconic"
+  | "Demons";
+
+  export const raceList = [
+    "All",
+    "Bandit",
+    "Orkish",
+    "ForestBeast",
+    "Elemental",
+    "Soldiers",
+    "Undead",
+    "Draconic",
+    "Demons"
+  ];
+  
 
   export type objectSubtype = WeaponCategory | equipmentType
 

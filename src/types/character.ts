@@ -1,6 +1,5 @@
 import {Characteristic,equipmentType, objectSubtype, BonusKey, WeaponHand, WeaponCategory, Element, ObjectMainType} from "./stringLists";
 
-
 export interface EquipmentType {
   
   id: number;
@@ -58,6 +57,7 @@ export interface EquipmentType {
   Cooking: number;
   Forge: number;
   Stealth: number;
+  Martial: number;
 
   // Miscellaneous
   OtherEffect: string;
@@ -106,7 +106,8 @@ export interface SkillBaseType {
   ManaCostRatio: number;
   ParentSkill: number;
   SkillLevel: number;
-  RequiredPassive: number;
+  RequiredKnowledge: BonusKey;
+  KnowledgeLevel: number;
 
   // Base stats
   BaseMinDam: number;
@@ -188,6 +189,7 @@ export interface PassiveType {
   Cooking: number;
   Forge: number;
   Stealth: number;
+  Martial: number;
 
   // Miscellaneous
   OtherEffect: string;
@@ -224,6 +226,7 @@ export interface CharacterBasetype {
   Demonic: number;
   Cooking: number;
   Nature: number;
+  Martial: number;
 
   Weapon1ID: number;
   Weapon2ID: number;
@@ -358,6 +361,7 @@ export interface CharacterFulltype {
     Demonic: number;
     Cooking: number;
     Nature: number;
+    Martial: number;
   };
 
   Weapon1: {

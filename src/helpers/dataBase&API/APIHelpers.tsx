@@ -1,5 +1,6 @@
 import { dataBaseCall, Characteristic } from '../../types/stringLists'
 import { InventoryItem, WeaponBaseType, EquipmentType, CharacterBasetype, PassiveType, SkillBaseType } from '../../types/character';
+import { Ennemy, Loot } from '../../types/ennemy';
 import { ObjectMainType } from '../../types/stringLists';
 
 type Updates = Partial<Omit<CharacterBasetype, 'id'>>;
@@ -161,4 +162,24 @@ export async function fetchAllSkills () : Promise<SkillBaseType[]> {
   return raw;
 }
 
+export async function fetchAllEnnemies () : Promise<Ennemy[]> {
 
+  const path = process.env.backEndAdress || 'http://localhost:3000';
+
+  const res = await fetch(`${path}/ennemies/all`);
+
+  if (!res.ok) {
+    throw new Error(`Failed to fetch all skills: ${res.status} ${res.statusText}`);
+  }
+
+  // parse the raw JSON
+  const raw = await res.json();
+  return raw;
+}
+
+export async function fetchLootByType(lootTypeId: number | string): Promise<Loot[]> {
+  const path = process.env.backEndAdress || "http://localhost:3000";
+  const res = await fetch(`${path}/loot/${lootTypeId}`);
+  if (!res.ok) throw new Error(`Failed to fetch loot type ${lootTypeId}: ${res.status} ${res.statusText}`);
+  return res.json();
+}

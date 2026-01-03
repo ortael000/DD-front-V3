@@ -74,7 +74,7 @@ export async function calculateFullCharacter(base: CharacterBasetype): Promise<C
 
         Defenses: {
           DefenseRange: 20 + calculateFlatBonus('DefenseRange', 0, Object.values(allEquipments), allWeapons, allPassive) + Math.floor(fullCharacteristics.Agility.Modifier/2 + fullCharacteristics.Perception.Modifier/2),
-          DefenseMelee: 20 + calculateFlatBonus('DefenseMelee', 0, Object.values(allEquipments), allWeapons, allPassive)+ Math.floor(fullCharacteristics.Dexterity.Modifier/2 + fullCharacteristics.Perception.Modifier/2),
+          DefenseMelee: 20 + calculateFlatBonus('DefenseMelee', 0, Object.values(allEquipments), allWeapons, allPassive)+ Math.floor(fullCharacteristics.Dexterity.Modifier/2 + fullCharacteristics.Agility.Modifier/2),
           ResPhysical: calculateFlatBonus('ResPhysical', 0, Object.values(allEquipments), allWeapons, allPassive) + Math.floor(fullCharacteristics.Constitution.Modifier/2),
           ResChi: calculateFlatBonus('ResChi', 0, Object.values(allEquipments), allWeapons, allPassive),
           ResFire: calculateFlatBonus('ResFire', 0, Object.values(allEquipments), allWeapons, allPassive),
@@ -93,6 +93,7 @@ export async function calculateFullCharacter(base: CharacterBasetype): Promise<C
             Demonic: calculateFlatBonus('Demonic', base.Demonic, Object.values(allEquipments), allWeapons, allPassive),
             Cooking: calculateFlatBonus('Cooking', base.Cooking, Object.values(allEquipments), allWeapons , allPassive),
             Nature: calculateFlatBonus('Nature', base.Nature, Object.values(allEquipments), allWeapons, allPassive),
+            Martial: calculateFlatBonus('Martial', base.Martial, Object.values(allEquipments), allWeapons, allPassive),
         }, 
         Weapon1: weaponsFull[0],
         Weapon2: weaponsFull[1],
@@ -166,16 +167,21 @@ function calculateFlatBonus (bonusKey :BonusKey, basecharacter: number, equipmen
     let passiveBonus = 0;
 
     equipments.forEach(equipment => {
-        if (equipment[bonusKey] !== undefined) {
+
+        if (bonusKey !== "None" && equipment[bonusKey] !== undefined) {
             equipmentBonus += equipment[bonusKey];
         }
     });
 
     passives.forEach(passiveSkill => {
-        if (passiveSkill[bonusKey] !== undefined) {
+        if (bonusKey !== "None" && passiveSkill[bonusKey] !== undefined) {
             passiveBonus += passiveSkill[bonusKey];
         }
     });
+
+    if (bonusKey === 'Martial') {
+        console.log("Calculating Martial bonus:", "Base:", basecharacter, "EquipmentBonus:", equipmentBonus, "PassiveBonus:", passiveBonus);
+    }
 
     return (basecharacter + equipmentBonus + passiveBonus)
 }

@@ -48,6 +48,22 @@ const res = await fetch(`${path}/character/${id}`)
   return raw
 }
 
+export async function fetchFullCharacter(id: number | string) {
+  
+  const path = process.env.backEndAdress || 'http://localhost:3000';
+  
+const res = await fetch(`${path}/character/full/${id}`)
+
+  if (!res.ok) {
+    throw new Error(`Failed to fetch character ${id}: ${res.status} ${res.statusText}`)
+  }
+
+  // parse the raw JSON
+    const raw = await res.json()
+  return raw
+}
+
+
 export async function createCharacter  (name : string, password: string) {
 
   console.log("Creating character:", name);

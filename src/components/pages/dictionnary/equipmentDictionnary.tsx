@@ -2,21 +2,21 @@ import React, { useState, useEffect } from 'react';
 import { FormControl, InputLabel, Select, MenuItem, Button, Box } from '@mui/material';
 
 import { EquipmentDisplayed } from '../../../types/character';
+import { EquipmentFilters } from '../../../types/dictionnaryFilter';
 
 import { ElementIcons, attackIcons, generalIcons, skillIcons, characteristicsIcons, defenseIcons } from '../../../assets/iconeList';
 
 import { equipmentTypeList } from '../../../data/initiateObject';
 
-
-
 import MoneyDisplay from '../character/smallComponent/money';
+
 
 interface Props {
   equipment: EquipmentDisplayed[];
 }
 
 const charList = [
-  "All",
+  "None",
   "DefenseMelee",
   "DefenseRange",
   "ResPhysical",
@@ -41,16 +41,38 @@ const EquipmentDisplayList: React.FC<Props> = ({ equipment }) => {
   const initialState = equipment.filter(item => item.Name !== "None");
 
   const [equipmentToBeDisplayed, setEquipmentToBeDisplayed] = useState<EquipmentDisplayed[]>(initialState);
+  const [currentFilters, setCurrentFilters] = useState<EquipmentFilters>({
+    name: "",
+    type: "All",
+    characteristic: "None",
+    bonusKey: "None",
+  });
 
-  const filterEquipmentByName = (name: string) => {
-    const filtered = equipment.filter(item => item.Name.toLowerCase().includes(name.toLowerCase()));
-    setEquipmentToBeDisplayed(filtered);
-  };
+ const filterEquipmentInDictionnary = (filterKey: keyof EquipmentFilters, filterValue: string) => {
 
-  const filterEquipmentByCharacteristic = (characteristic: string) => {
-    const filtered = equipment.filter(item => {
-      const valueChar = item.Characteristics[characteristic as keyof CharacteristicsType];
-      const valueDef = item.DefensiveStats[characteristic as keyof DefensiveStatsType];
+  console.log("filtering equipment by", filterKey, filterValue);
+
+  const newFilters = { ...currentFilters, [filterKey]: filterValue };
+
+  setCurrentFilters(newFilters);
+
+  console.log("current filters after update", newFilters);
+
+  let filteredList = initialState;
+  console.log("after initial state", filteredList);
+
+  filteredList = filteredList.filter(item => item.Name.toLowerCase().includes(newFilters.name.toLowerCase()))
+  console.log("after name filter", filteredList);
+
+  filteredList = newFilters.type === "All" ? filteredList : filteredList.filter(item => item.Subtype === newFilters.type)
+  console.log("after type filter", filteredList);
+
+  filteredList = filteredList.filter(item => {
+      const valueChar = item.Characteristics[newFilters.characteristic as keyof CharacteristicsType];
+      const valueDef = item.DefensiveStats[newFilters.characteristic as keyof DefensiveStatsType];
+      if (newFilters.characteristic === "None") {
+        return true;
+      }
       if (valueChar !== undefined && valueChar !== 0) {
         return true;
       }
@@ -59,18 +81,18 @@ const EquipmentDisplayList: React.FC<Props> = ({ equipment }) => {
       }
       return false;
     });
-    setEquipmentToBeDisplayed(filtered);
-  };
+  console.log("after characteristic filter", filteredList);
 
-  const filterEquipmentByKeyWord = (keyword: string) => {
-    const filtered = initialState.filter(item => item.positiveBonus.toLowerCase().includes(keyword.toLowerCase()));
-    setEquipmentToBeDisplayed(filtered);
-  };
+  filteredList = filteredList.filter(item => {
+    if (newFilters.bonusKey === "None") {
+      return true;
+    }
+    return item.positiveBonus.toLowerCase().includes(newFilters.bonusKey.toLowerCase());
+  });
+  console.log("after bonusKey filter", filteredList);
 
-  const filterEquipmentByType = (type: string) => {
-    const filtered = initialState.filter(item => item.Subtype === type);
-    setEquipmentToBeDisplayed(filtered);
-  };
+  setEquipmentToBeDisplayed(filteredList);
+};
 
   useEffect(() => {
     const transformed = equipment.filter(item => item.Name !== "None")
@@ -85,7 +107,7 @@ const EquipmentDisplayList: React.FC<Props> = ({ equipment }) => {
         <input
           type="text"
           placeholder="Filter by name..."
-          onChange={(e) => filterEquipmentByName(e.target.value)}
+          onChange={(e) => filterEquipmentInDictionnary('name', e.target.value)}
           className="filter-input"
         />
 
@@ -94,7 +116,7 @@ const EquipmentDisplayList: React.FC<Props> = ({ equipment }) => {
           <InputLabel id="char-select-label">Characteristic</InputLabel>
           <Select
             labelId="char-select-label"
-            onChange={(e) => filterEquipmentByCharacteristic(e.target.value)}
+            onChange={(e) => filterEquipmentInDictionnary('characteristic', e.target.value)}
             defaultValue=""
           >
             {charList.map((char) => (
@@ -109,7 +131,7 @@ const EquipmentDisplayList: React.FC<Props> = ({ equipment }) => {
           <InputLabel id="char-select-label">Type</InputLabel>
           <Select
             labelId="char-select-label"
-            onChange={(e) => filterEquipmentByType(e.target.value)}
+            onChange={(e) => filterEquipmentInDictionnary('type', e.target.value)}
             defaultValue=""
           >
             {equipmentTypeList.map((char) => (
@@ -124,7 +146,7 @@ const EquipmentDisplayList: React.FC<Props> = ({ equipment }) => {
         <input
           type="text"
           placeholder="Filter by key word..."
-          onChange={(e) => filterEquipmentByKeyWord(e.target.value)}
+          onChange={(e) => filterEquipmentInDictionnary('bonusKey', e.target.value)}
           className="filter-input"
         />
       </div>

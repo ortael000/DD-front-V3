@@ -14,7 +14,7 @@ import { fetchAllEquipment, fetchAllWeapons, fetchInventory, fetchPassive, fetch
 import { updateCharacterDB } from '../../../../helpers/dataBase&API/characterAPI';
 import { filterSelectionListByType, filterInventoryByName, filterEquipmentListBySubType, UpdateItemToInventory } from '../../../../helpers/calculateCharacterData/inventoryManagement';
 import { addOneItemToInventory, removeOneItemFromInventory } from '../../../../helpers/calculateCharacterData/inventoryManagement';
-import { findChildPassives } from '../../../../helpers/calculateCharacterData/findRelatedPassive';
+import { findChildPassives } from '../../../../helpers/calculateCharacterData/findChildSkill&Passive';
 
 import TextField from '@mui/material/TextField';
 
@@ -37,24 +37,23 @@ export default function PopupUpdateSkill({
 
   // Open the dialog
   const handleOpen = async () => {
-    console.log("Opening skill popup for characterKey:", characterKey, "and currentSkillId:", currentSkillId);  
     setOpen(true);
+
     const baseSkillList = await fetchAllSkills();
-    const allPassives = await fetchAllPassive();
-    const currentPassives : number[] = [fullCharacter.Passive.passive1.id, fullCharacter.Passive.passive2.id, fullCharacter.Passive.passive3.id, fullCharacter.Passive.passive4.id];
+    const currentKnowledge = fullCharacter.Knowledge;
 
     const selectionList = baseSkillList.filter(skill => {
 
-      const requiredPassiveIds = findChildPassives(skill.RequiredPassive, allPassives);
+      let meetsKnowledgeRequirement = false;
+      if (currentKnowledge[skill.RequiredKnowledge as keyof typeof currentKnowledge] >= skill.KnowledgeLevel) {
+        meetsKnowledgeRequirement = true;
+      }
 
-        console.log("Required passive IDs for skill", skill.id, "are", requiredPassiveIds);
-
-      // check if ANY of those IDs is in currentPassives
-      const meetsRequirement = requiredPassiveIds.some(element =>
-        currentPassives.includes(element)
-      );
-
-      return ((meetsRequirement || skill.RequiredPassive === 1) && skill.ParentSkill === currentSkillId);
+      if (meetsKnowledgeRequirement && skill.ParentSkill === currentSkillId) {
+        return true;
+      } else {
+        return false;
+      }
     });
 
 

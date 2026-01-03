@@ -6,6 +6,8 @@ import { FormControl, InputLabel, Select, MenuItem, Button, Box } from '@mui/mat
 
 import transformPassiveToDic from "../../../helpers/dictionnary/passiveDictionnaryHelper";
 
+import { findChildPassives } from '../../../helpers/calculateCharacterData/findChildSkill&Passive';
+
 interface Props {
   passives: PassiveType[];
 }
@@ -34,8 +36,9 @@ const charList = [
 const PassiveSkillDisplayList: React.FC<Props> = ({ passives }) => {
 
   const initialState = passives.map(transformPassiveToDic).filter(passive => passive.Name !== "None");
+  const firstPassiveList = initialState.filter(passive => passive.LevelRequired === 1);
 
-  const [passiveListDisplayed, setPassiveListDisplayed] = useState(initialState);
+  const [passiveListDisplayed, setPassiveListDisplayed] = useState(firstPassiveList);
 
   useEffect(() => {
     const transformed = passives.map(transformPassiveToDic).filter(passive => passive.Name !== "None");
@@ -57,8 +60,15 @@ const PassiveSkillDisplayList: React.FC<Props> = ({ passives }) => {
     setPassiveListDisplayed(filtered);
   };
 
+  const filterByParent = (parentId: number) => {
+    const childPassives = findChildPassives(parentId , passives);
+    const childPassivesToDisplay = childPassives.map(passiveId => transformPassiveToDic(passives.find(p => p.id === passiveId) as PassiveType));
+    setPassiveListDisplayed(childPassivesToDisplay);
+  };
+
   useEffect(() => {
-  const transformed = passives.map(transformPassiveToDic).filter(passive => passive.Name !== "None");
+  const transformed = passives.map(transformPassiveToDic).filter(passive =>  (passive.Name !== "None" && passive.LevelRequired === 1) );
+
   setPassiveListDisplayed(transformed);
   }, [passives]);
 
@@ -102,6 +112,9 @@ const PassiveSkillDisplayList: React.FC<Props> = ({ passives }) => {
           <div key={passive.Id} className="item-card">
             <div className="item-title">
               <h3>{passive.Name}</h3>
+               {passive.LevelRequired === 1 && (
+               <button onClick={() => filterByParent(passive.Id)} className="child-display-button"> Display childs </button>
+            )}
               <div className="item-type-value">
                 <p>Level: {passive.LevelRequired}</p>
                 <p>Parent: {passives.find(p => p.id === passive.ParentPassive)?.Name}</p>
