@@ -108,7 +108,7 @@ export const emptyEquipment : EquipmentDisplayed = {
 
 export const initialCharacterFull: CharacterFulltype = {
   General: {
-    Id: 0,
+    id: 0,
     Name: 'Select a character',
     XpPoint: 0,
     Level: 1,

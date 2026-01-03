@@ -57,7 +57,7 @@ export default function CharacterPassives({ character, updateCharacter }: Props)
             </div>
           )}
           Passives
-          <button className="reset-button" onClick={async () => { await resetCharPassive(character.General.Id); updateCharacter(); }}>reset</button>
+          <button className="reset-button" onClick={async () => { await resetCharPassive(character.General.id); updateCharacter(); }}>reset</button>
       </h2>
       <div className='tableContainer'> 
         

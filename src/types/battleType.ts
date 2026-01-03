@@ -1,51 +1,32 @@
 import { CharacterFulltype } from "./character";
-import type { Ennemy, Loot } from "./ennemy"; 
+import { Ennemy } from "./ennemy";
 
-export type ElementType = "Physical" | "Chi" | "Fire" | "Lightning" | "Ice" | "Mental";
-
-export type BattleSide = "party" | "monsters";
+export type BattleSide = "character" | "enemy";
 
 export type BattleEntity =
   | {
-      kind: "character";
-      side: BattleSide; // should be "party"
-      key: string;      // unique key for React state (ex: "c-12")
-      id: number;
+      instanceId: string;
+      sourceId: number;
+      side: "character";
+      character: CharacterFulltype;
       name: string;
+      currentHp: number;
       maxHp: number;
+      currentMana: number;
       maxMana: number;
-      hp: number;
-      mana: number;
-      full: CharacterFulltype;
+      initiative: number | null;
+      status: string;
     }
   | {
-      kind: "enemy";
-      side: BattleSide; // should be "monsters"
-      key: string;      // ex: "e-5"
-      id: number;
-      name: string;
-      maxHp: number;
-      maxMana: number;
-      hp: number;
-      mana: number;
+      instanceId: string;
+      sourceId: number;
+      side: "enemy";
       enemy: Ennemy;
+      name: string;
+      currentHp: number;
+      maxHp: number;
+      currentMana: number;
+      maxMana: number;
+      initiative: number | null;
+      status: string;
     };
-
-export type DamagePacket = {
-  amount: number; // raw damage before resist
-  element: ElementType;
-};
-
-export type BattleLogEvent = {
-  ts: number;
-  text: string;
-};
-
-export type LootResult = {
-  lootTypeId: string;
-  rolls: Array<{
-    row: Loot;
-    quantity: number;
-    won: boolean;
-  }>;
-};

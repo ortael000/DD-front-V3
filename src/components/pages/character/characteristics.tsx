@@ -35,7 +35,7 @@ export default function CharacterCharacteristics({ character, updateCharacter }:
     if (newRemainingPoints > 0) {
       // Allow adding points
       const currentValue = Characteristics[char].Base;
-      await updateCharacterDB(character.General.Id, { [char]: currentValue + 1 });
+      await updateCharacterDB(character.General.id, { [char]: currentValue + 1 });
       updateCharacter();
     } else {
       console.log("No remaining points to add.");
@@ -46,7 +46,7 @@ export default function CharacterCharacteristics({ character, updateCharacter }:
 
       console.log("updating temporary from current stat", Characteristics, char, delta);
       const currentValue = Characteristics[char].Temporary;
-      await updateCharacterDB(character.General.Id, { ['Temp' + char]: currentValue + delta });
+      await updateCharacterDB(character.General.id, { ['Temp' + char]: currentValue + delta });
       updateCharacter();
   };
 
@@ -64,7 +64,7 @@ export default function CharacterCharacteristics({ character, updateCharacter }:
               </div>
             )}
             Characteristics
-            <button className="reset-button" onClick={async () => { await resetCharCharacteristics(character.General.Id); updateCharacter(); }}>reset</button>
+            <button className="reset-button" onClick={async () => { await resetCharCharacteristics(character.General.id); updateCharacter(); }}>reset</button>
         </h2>
   
 

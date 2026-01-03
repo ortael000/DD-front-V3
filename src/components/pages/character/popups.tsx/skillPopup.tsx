@@ -101,7 +101,7 @@ export default function PopupUpdateSkill({
     } else {
         //here i want to update with selected Item but with quantity * -1
         console.log("Updating character with item:", selectedSkill, characterKey);
-        await updateCharacterDB(fullCharacter.General.Id, { [characterKey]: selectedSkill.id });
+        await updateCharacterDB(fullCharacter.General.id, { [characterKey]: selectedSkill.id });
     }
     updateCharacter();
     handleClose();

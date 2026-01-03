@@ -78,7 +78,7 @@ export default function CharacterEquipment({ character, updateCharacter, updateI
                     subtype={equipment.type}
                     characterKey={equipment.charKey as keyof CharacterBasetype}
                     currentEquipmentId= {equipment.object.ID}
-                    CharacterID={character.General.Id}
+                    CharacterID={character.General.id}
                   />
                 </td>
                 <td className="label-cell">{extractSlotName(equipment.charKey)}</td>

@@ -86,7 +86,7 @@ export default function PopupUpdatePassive({
     } else {
         //here i want to update with selected Item but with quantity * -1
         console.log("Updating character with item:", selectedPassive, characterKey);
-        await updateCharacterDB(fullCharacter.General.Id, { [characterKey]: selectedPassive.id });
+        await updateCharacterDB(fullCharacter.General.id, { [characterKey]: selectedPassive.id });
     }
     updateCharacter();
     handleClose();

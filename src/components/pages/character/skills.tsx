@@ -56,7 +56,7 @@ export default function CharacterSkill({ character, updateCharacter }: Props) {
             </div>
           )}
           Skills
-          <button className="reset-button" onClick={async () => { await resetCharSkills(character.General.Id); updateCharacter(); }}>reset</button>
+          <button className="reset-button" onClick={async () => { await resetCharSkills(character.General.id); updateCharacter(); }}>reset</button>
       </h2>
 
       <table className="general-table">

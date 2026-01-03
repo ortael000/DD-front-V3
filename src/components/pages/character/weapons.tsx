@@ -59,7 +59,7 @@ export default function CharacterWeapon({ character, updateCharacter, updateInve
                     updateInventoryState={updateInventoryState}
                     characterKey={weapon.charKey as keyof CharacterBasetype}
                     currentWeaponId= {weapon.object.id}
-                    CharacterID={character.General.Id}
+                    CharacterID={character.General.id}
                   />
                 </td>              
               <td className="value-cell">{weapon.object.Name}</td>
