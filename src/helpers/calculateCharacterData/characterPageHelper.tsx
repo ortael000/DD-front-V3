@@ -60,7 +60,7 @@ export async function calculateFullCharacter(base: CharacterBasetype): Promise<C
 
     const fullCharacter : CharacterFulltype  = {
         General: {
-            id: base.id,
+            Id: base.id,
             Name: base.Name,
             XpPoint: base.XpPoint,
             Level: findCharacterLevel(base.XpPoint).level,

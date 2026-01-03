@@ -263,7 +263,7 @@ currentMoney: number;
 export interface CharacterFulltype {
   
   General: {
-  id: number;
+  Id: number;
   Name: string;
   XpPoint: number;
   Level: number;

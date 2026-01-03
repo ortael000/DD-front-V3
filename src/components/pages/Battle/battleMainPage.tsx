@@ -6,7 +6,7 @@ import { fetchAllCharacter, fetchFullCharacter } from "../../../helpers/dataBase
 import { fetchAllEnnemies } from "../../../helpers/dataBase&API/APIHelpers";
 
 import AddCharacterToBattle from "./addCharacterToBattleButton";
-
+  
 import type { BattleEntity } from "../../../types/battleType";
 import type { CharacterFulltype, CharacterBasetype } from "../../../types/character";
 import type { Ennemy } from "../../../types/ennemy";

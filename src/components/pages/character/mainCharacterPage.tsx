@@ -153,7 +153,7 @@ const CharacterPage = () => {
             <CharacterSkill character={character} updateCharacter={updateCharacter}  />
             <CharacterEquipment character={character} updateCharacter={updateCharacter} inventory={inventory} updateInventoryState={updateInventoryState} />
             <CharacterPassives character={character} updateCharacter={updateCharacter} />
-            <CharacterInventory characterID={character.General.id} inventory={inventory} updateInventoryState={updateInventoryState} />
+            <CharacterInventory characterID={character.General.Id} inventory={inventory} updateInventoryState={updateInventoryState} />
       </div>
       )
     )

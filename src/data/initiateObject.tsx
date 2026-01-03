@@ -108,7 +108,7 @@ export const emptyEquipment : EquipmentDisplayed = {
 
 export const initialCharacterFull: CharacterFulltype = {
   General: {
-    id: 0,
+    Id: 0,
     Name: 'Select a character',
     XpPoint: 0,
     Level: 1,
@@ -299,3 +299,14 @@ export const knowledgeList = [
   'Stealth',
   'Martial'
 ];
+
+export const raceList = [
+    "Bandit",
+    "Orkish",
+    "ForestBeast",
+    "Elemental",
+    "Soldiers",
+    "Undead",
+    "Draconic",
+    "Demons"
+  ];
