@@ -1,77 +1,102 @@
-import React, { useEffect, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Button, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 
-
-import { CharacterFulltype, CharacterBasetype } from "../../../types/character";
-import { BattleEntity } from "../../../types/battleType"; 
-import { cpSync } from "fs";
+import type { Ennemy } from "../../../types/ennemy";
+import type { BattleEntity } from "../../../types/battleType";
+import { raceList } from "../../../data/initiateObject";
 
 interface Props {
-  fetchFullCharacter: (id: number | string) => Promise<CharacterFulltype>;
-  updateSelectedCharater: React.Dispatch<React.SetStateAction<BattleEntity[]>>;
-  battleParticipants: BattleEntity[];
-  characterBaseList: CharacterBasetype[];
+  updateSelectedEnemy: React.Dispatch<React.SetStateAction<BattleEntity[]>>;
+  enemyBaseList: Ennemy[];
 }
 
-export default function AddCharacterToBattle({fetchFullCharacter, updateSelectedCharater, battleParticipants, characterBaseList }: Props) {
+export default function AddEnemyToBattle({ updateSelectedEnemy, enemyBaseList }: Props) {
   
-    console.log(characterBaseList)
-    const [selectedId, setSelectedId] = useState<string>("");
+  const [selectedRace, setSelectedRace] = useState<string>("");
+  const [selectedEnemyId, setSelectedEnemyId] = useState<string>("");
 
+  const filteredEnemies = useMemo(() => {
+    if (!selectedRace) return [];
+    return enemyBaseList.filter((e: any) => (e?.Race ?? e?.race) === selectedRace);
+  }, [enemyBaseList, selectedRace]);
 
-  const addSelectedCharacter = async () => {
-    if (!selectedId) return;
+  const addSelectedEnemy = async () => {
+    if (!selectedRace || !selectedEnemyId) return;
 
-    const selectedIDAlreadyInBattle = battleParticipants.find((p) => p.sourceId === Number(selectedId) && p.side === "character");
-    console.log("Checking if character is already in battle:", selectedIDAlreadyInBattle);
+    const enemy = enemyBaseList.find((e: any) => String(e?.id ?? e?.Id) === selectedEnemyId);
+    if (!enemy) return;
 
-    if (selectedIDAlreadyInBattle === undefined) {
-            const full = await fetchFullCharacter(Number(selectedId));
-            console.log("Fetched full character data:", full);
-            const entity: BattleEntity = {
-            instanceId: crypto.randomUUID(),
-            sourceId: full.General.Id,
-            side: "character",
-            character: full,
-            name: full.General.Name,
-            currentHp: full.General.HitPoint - full.General.CurrentHPLose,
-            maxHp: full.General.HitPoint,
-            currentMana: full.General.Mana - full.General.CurrentManaLose,
-            maxMana: full.General.Mana,
-            initiative: null,
-            status: "",
-            };
+    const maxHp = (enemy as any).HitPoint ?? (enemy as any).HP ?? (enemy as any).hp ?? 0;
+    const currentHp =
+      (enemy as any).CurrentHp ?? (enemy as any).currentHp ?? (enemy as any).HP ?? (enemy as any).hp ?? maxHp;
 
-            updateSelectedCharater(battleParticipants => [...battleParticipants, entity]);
+    const maxMana = (enemy as any).Mana ?? (enemy as any).mana ?? 0;
+    const currentMana =
+      (enemy as any).CurrentMana ?? (enemy as any).currentMana ?? (enemy as any).Mana ?? (enemy as any).mana ?? maxMana;
 
-            console.log("Added character to battle:", battleParticipants);
-    } else {
-        console.log("Character already in battle:", selectedId);
-    }
+    const name = (enemy as any).Name ?? (enemy as any).name ?? "Enemy";
 
+    const entity: BattleEntity = {
+      instanceId: crypto.randomUUID(),
+      sourceId: Number((enemy as any).id ?? (enemy as any).Id),
+      side: "enemy",
+      enemy: enemy,
+      name,
+      currentHp,
+      maxHp,
+      currentMana,
+      maxMana,
+      initiative: null,
+      status: "",
+    };
 
+    updateSelectedEnemy((prev) => [...prev, entity]);
   };
 
   return (
     <div style={{ display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
-      <FormControl sx={{ minWidth: 260 }}>
-        <InputLabel id="battle-character-label">Character</InputLabel>
+      <FormControl sx={{ minWidth: 220 }}>
+        <InputLabel id="battle-race-label">Race</InputLabel>
         <Select
-          labelId="battle-character-label"
-          value={selectedId}
-          label="Character"
-          onChange={(e) => setSelectedId(String(e.target.value))}
+          labelId="battle-race-label"
+          value={selectedRace}
+          label="Race"
+          onChange={(e) => {
+            const race = String(e.target.value);
+            setSelectedRace(race);
+            setSelectedEnemyId("");
+          }}
         >
-          {characterBaseList.map((c) => (
-            <MenuItem key={c.id} value={String(c.id)}>
-              {c.Name}
+          {raceList.map((race) => (
+            <MenuItem key={race} value={race}>
+              {race}
             </MenuItem>
           ))}
         </Select>
       </FormControl>
 
-      <Button variant="contained" onClick={addSelectedCharacter} disabled={!selectedId}>
-        Add to battle
+      <FormControl sx={{ minWidth: 260 }} disabled={!selectedRace}>
+        <InputLabel id="battle-enemy-label">Enemy</InputLabel>
+        <Select
+          labelId="battle-enemy-label"
+          value={selectedEnemyId}
+          label="Enemy"
+          onChange={(e) => setSelectedEnemyId(String(e.target.value))}
+        >
+          {filteredEnemies.map((en: any) => {
+            const id = String(en?.id ?? en?.Id);
+            const label = en?.Name ?? en?.name ?? `Enemy ${id}`;
+            return (
+              <MenuItem key={id} value={id}>
+                {label}
+              </MenuItem>
+            );
+          })}
+        </Select>
+      </FormControl>
+
+      <Button variant="contained" onClick={addSelectedEnemy} disabled={!selectedRace || !selectedEnemyId}>
+        Add enemy
       </Button>
     </div>
   );

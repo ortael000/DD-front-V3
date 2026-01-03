@@ -6,6 +6,8 @@ import { fetchAllCharacter, fetchFullCharacter } from "../../../helpers/dataBase
 import { fetchAllEnnemies } from "../../../helpers/dataBase&API/APIHelpers";
 
 import AddCharacterToBattle from "./addCharacterToBattleButton";
+import AddEnemyToBattle from "./addEnnemiesToBattleButton";
+import BattleParticipantsList from "./battleParticipantList";
   
 import type { BattleEntity } from "../../../types/battleType";
 import type { CharacterFulltype, CharacterBasetype } from "../../../types/character";
@@ -41,6 +43,8 @@ export default function BattlePage() {
       <h2>Battle Main Page</h2>
       <div className="battle-setup-panel" style={{ border: '1px solid gray', padding: 12, marginBottom: 24 }}>
         <AddCharacterToBattle fetchFullCharacter={fetchFullCharacter} updateSelectedCharater={setBattleParticipants} battleParticipants={battleParticipants} characterBaseList={charactersBase} />
+        <AddEnemyToBattle updateSelectedEnemy={setBattleParticipants} enemyBaseList={ennemiesBase} />
+        <BattleParticipantsList battleParticipants={battleParticipants} />
         {/* Additional battle UI components would go here */}
       </div>
     </div>
