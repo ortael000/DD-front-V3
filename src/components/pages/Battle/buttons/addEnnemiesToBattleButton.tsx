@@ -1,9 +1,9 @@
 import React, { useMemo, useState } from "react";
 import { Button, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 
-import type { Ennemy } from "../../../types/ennemy";
-import type { BattleEntity } from "../../../types/battleType";
-import { raceList } from "../../../data/initiateObject";
+import type { Ennemy } from "../../../../types/ennemy";
+import type { BattleEntity } from "../../../../types/battleType";
+import { raceList } from "../../../../data/initiateObject";
 
 interface Props {
   setBattleParticipants: React.Dispatch<React.SetStateAction<BattleEntity[]>>;

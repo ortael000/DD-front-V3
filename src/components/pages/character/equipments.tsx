@@ -4,7 +4,6 @@ import Button from '@mui/material/Button';
 
 // import functions
 import { fetchCharacter } from '../../../helpers/dataBase&API/characterAPI';
-import { calculateFullCharacter } from '../../../helpers/calculateCharacterData/characterPageHelper';
 
 // import types
 import { CharacterBasetype, CharacterFulltype, EquipmentDisplayed, InventoryItem } from '../../../types/character';

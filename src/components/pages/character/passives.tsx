@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 
 // import functions
 import { fetchCharacter } from '../../../helpers/dataBase&API/characterAPI';
-import { calculateFullCharacter } from '../../../helpers/calculateCharacterData/characterPageHelper';
 import transformPassiveToDic from '../../../helpers/dictionnary/passiveDictionnaryHelper';
 import { calculateRemainingPassivePoint } from '../../../helpers/calculateCharacterData/calculateRemainingPoint';
 import { resetCharPassive } from '../../../helpers/dataBase&API/resetCharacter';

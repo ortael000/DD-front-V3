@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions, Typography } from "@mui/material";
-import { SkillBaseType } from "../../../types/character";
+import { SkillBaseType } from "../../../../types/character";
 
 interface Props {
     SkillName: string;

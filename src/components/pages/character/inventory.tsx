@@ -4,9 +4,6 @@ import Button from '@mui/material/Button';
 
 
 // import functions
-import { fetchInventory, updateInventoryDB } from '../../../helpers/dataBase&API/APIHelpers';
-import { fetchCharacter } from '../../../helpers/dataBase&API/characterAPI';
-import { calculateFullCharacter } from '../../../helpers/calculateCharacterData/characterPageHelper';
 import { UpdateItemToInventory, addOneItemToInventory, removeOneItemFromInventory, removeAllItemFromInventory } from '../../../helpers/calculateCharacterData/inventoryManagement';
 
 // import types

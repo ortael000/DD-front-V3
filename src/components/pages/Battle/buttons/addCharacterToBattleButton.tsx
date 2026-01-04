@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Button, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 
 
-import { CharacterFulltype, CharacterBasetype } from "../../../types/character";
-import { BattleEntity } from "../../../types/battleType"; 
+import { CharacterFulltype, CharacterBasetype } from "../../../../types/character";
+import { BattleEntity } from "../../../../types/battleType"; 
 import { cpSync } from "fs";
 
 interface Props {

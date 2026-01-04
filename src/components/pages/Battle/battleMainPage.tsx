@@ -6,8 +6,8 @@ import { Button, FormControl, InputLabel, MenuItem, Select } from "@mui/material
 import { fetchAllCharacter, fetchFullCharacter } from "../../../helpers/dataBase&API/characterAPI";
 import { fetchAllEnnemies } from "../../../helpers/dataBase&API/APIHelpers";
 
-import AddCharacterToBattle from "./addCharacterToBattleButton";
-import AddEnemyToBattle from "./addEnnemiesToBattleButton";
+import AddCharacterToBattle from "./buttons/addCharacterToBattleButton";
+import AddEnemyToBattle from "./buttons/addEnnemiesToBattleButton";
 import BattleParticipantsList from "./battleParticipantList";
   
 import type { BattleEntity } from "../../../types/battleType";

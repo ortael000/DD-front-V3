@@ -5,7 +5,6 @@ import { FormControl, InputLabel, Select, MenuItem, Button, Box } from '@mui/mat
 // import functions
 import {fetchInventory } from '../../../helpers/dataBase&API/APIHelpers';
 import { fetchCharacter } from '../../../helpers/dataBase&API/characterAPI';
-import { calculateFullCharacter } from '../../../helpers/calculateCharacterData/characterPageHelper';
 import { UpdateItemToInventory } from '../../../helpers/calculateCharacterData/inventoryManagement';
 import { fetchAllCharacter, fetchFullCharacter } from '../../../helpers/dataBase&API/characterAPI';
 
@@ -48,6 +47,7 @@ const CharacterPage = () => {
 
     const updateCharacter = async () => {
         const fullCharacter = await fetchFullCharacter(selectedId);
+        console.log("fetched full character:", fullCharacter);
         setCharacters(fullCharacter);
     };
 

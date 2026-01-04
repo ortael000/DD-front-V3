@@ -115,6 +115,8 @@ export const initialCharacterFull: CharacterFulltype = {
     XpToNextLevel: 0,
     HitPoint: 0,
     Mana: 0,
+    Initiative: 0,
+    Movement: 0,
     CurrentHPLose: 0,
     CurrentManaLose: 0,
     CurrentMoney: 0,

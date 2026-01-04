@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 
 // import functions
 import { fetchCharacter } from '../../../helpers/dataBase&API/characterAPI';
-import { calculateFullCharacter } from '../../../helpers/calculateCharacterData/characterPageHelper';
 
 // import types
 import { CharacterBasetype, CharacterFulltype } from '../../../types/character';
@@ -14,9 +13,8 @@ import MoneyDisplay from './smallComponent/money';
 
 import hitpointIcon  from '../../../assets/generalIcons/hitpoint.png'; // Import the icon to ensure it's included in the build
 import manaIcone from '../../../assets/generalIcons/mana.png'; // Import the mana icon
-import copperCoin from '../../../assets/generalIcons/copperCoin.png'; // Import the copper coin icon
-import silverCoin from '../../../assets/generalIcons/silverCoin.png'; // Import the silver coin icon
-import goldCoin from '../../../assets/generalIcons/goldCoin.png'; // Import the gold coin icon
+import initiative from '../../../assets/generalIcons/initiative.png'; // Import the initiative icon
+import movement from '../../../assets/generalIcons/movement.png'; // Import the movement icon
 
 import { defenseIcons } from '../../../assets/iconeList';
 
@@ -25,6 +23,8 @@ interface Props {
 }
 
 export default function CharacterGeneral({ character }: Props) {
+
+  console.log("Rendering CharacterGeneral", character);
 
   const { General } = character;
 
@@ -59,6 +59,21 @@ export default function CharacterGeneral({ character }: Props) {
             </div>
           </div>
         </div>
+        <div className="stat-row">
+          <div className="stat-item">
+            <img src={initiative} className="General-stat-icon" />
+            <div className="stat-value">
+              {General.Initiative}  
+            </div>
+          </div>
+          <div className="stat-item">
+            <img src={movement} className="General-stat-icon" />
+            <div className="stat-value">
+              {General.Movement}
+            </div>
+          </div>
+        </div>
+
 
         <div className='defense-row'>
             <div className="stat-item defense-item">

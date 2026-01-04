@@ -4,7 +4,6 @@ import { Button } from '@mui/material';
 
 // import functions
 import { fetchCharacter, updateCharacterDB } from '../../../helpers/dataBase&API/characterAPI';
-import { calculateFullCharacter } from '../../../helpers/calculateCharacterData/characterPageHelper';
 import { calculateRemainingCharPoint } from '../../../helpers/calculateCharacterData/calculateRemainingPoint'; 
 import { resetCharCharacteristics } from '../../../helpers/dataBase&API/resetCharacter';
 

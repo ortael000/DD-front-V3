@@ -17,6 +17,8 @@ import hitpointIcon  from './generalIcons/hitpoint.png'; // Import the icon to e
 import copperCoin from './generalIcons/copperCoin.png'; // Import the copper coin icon
 import silverCoin from './generalIcons/silverCoin.png'; // Import the silver coin icon
 import goldCoin from './generalIcons/goldCoin.png'; // Import the gold coin icon
+import initiative from './generalIcons/initiative.png'; // Import the initiative icon
+import movement from './generalIcons/movement.png'; // Import the movement icon
 
 import StrenghtIcone from './characteristicsIcons/Strength.png'; // Import the Strength icon
 import IntelligenceIcone from './characteristicsIcons/Intelligence.png'; // Import the Intelligence icon
@@ -64,6 +66,8 @@ export const skillIcons = {
 }
 
 export const generalIcons = {
+    initiative : initiative,
+    movement  : movement,
     hitPoint: hitpointIcon,
     mana : manaIcone,
     goldCoin : goldCoin,

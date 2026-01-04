@@ -273,6 +273,8 @@ export interface CharacterFulltype {
   CurrentHPLose: number;
   CurrentManaLose: number;
   CurrentMoney: number;
+  Initiative: number;
+  Movement: number;
   }
 
   Defenses: {

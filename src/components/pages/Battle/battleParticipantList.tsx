@@ -3,7 +3,8 @@ import { LinearProgress, Typography, Button } from "@mui/material";
 import type { BattleEntity } from "../../../types/battleType";
 import "../../CSS/smallComponent/battleParticipantList.css";
 import { defenseIcons } from "../../../assets/iconeList";
-import EnemySkillAttackButton from "./ennemyAttackButton"; 
+import EnemySkillAttackButton from "./buttons/ennemyAttackButton"; 
+import RemoveHpButton from "./buttons/removeHpButton";
 
 type Props = {
   battleParticipants: BattleEntity[];
@@ -29,39 +30,35 @@ function hpBarColor(p: number) {
 
 function getDefenses(p: BattleEntity) {
   if (p.side === "character") {
-    const d: any = (p as any).character?.Defenses;
+    const d = p.character.Defenses;
+
     return {
-      DefenseMelee: d?.DefenseMelee ?? 0,
-      DefenseRange: d?.DefenseRange ?? 0,
-      ResPhysical: d?.ResPhysical ?? 0,
-      ResChi: d?.ResChi ?? 0,
-      ResFire: d?.ResFire ?? 0,
-      ResLightning: d?.ResLightning ?? 0,
-      ResMental: d?.ResMental ?? 0,
-      ResIce: d?.ResIce ?? 0,
+      DefenseMelee: d.DefenseMelee,
+      DefenseRange: d.DefenseRange,
+      ResPhysical: d.ResPhysical,
+      ResChi: d.ResChi,
+      ResFire: d.ResFire,
+      ResLightning: d.ResLightning,
+      ResMental: d.ResMental,
+      ResIce: d.ResIce,
     };
   }
 
-  const e: any = (p as any).enemy;
-  const d =
-    e?.Defenses ??
-    e?.defenses ??
-    e?.DefensiveStats ??
-    e?.defensiveStats ??
-    e?.Defense ??
-    e?.defense;
+  // ⬇️ TypeScript now KNOWS this is the enemy branch
+  const d = p.enemy;
 
   return {
-    DefenseMelee: d?.DefenseMelee ?? d?.MeleeDefense ?? d?.defenseMelee ?? 0,
-    DefenseRange: d?.DefenseRange ?? d?.RangeDefense ?? d?.defenseRange ?? 0,
-    ResPhysical: d?.ResPhysical ?? d?.PhysicalRes ?? d?.resPhysical ?? 0,
-    ResChi: d?.ResChi ?? d?.ChiRes ?? d?.resChi ?? 0,
-    ResFire: d?.ResFire ?? d?.FireRes ?? d?.resFire ?? 0,
-    ResLightning: d?.ResLightning ?? d?.LightningRes ?? d?.resLightning ?? 0,
-    ResMental: d?.ResMental ?? d?.MentalRes ?? d?.resMental ?? 0,
-    ResIce: d?.ResIce ?? d?.IceRes ?? d?.resIce ?? 0,
+    DefenseMelee: d.DefenseMelee,
+    DefenseRange: d.DefenseRange,
+    ResPhysical: d.ResPhysical,
+    ResChi: d.ResChi,
+    ResFire: d.ResFire,
+    ResLightning: d.ResLightning,
+    ResMental: d.ResMental,
+    ResIce: d.ResIce,
   };
 }
+
 
 function getEnemySkills(p: BattleEntity) {
   if (p.side !== "enemy") return [];
@@ -227,10 +224,15 @@ export default function BattleParticipantsList({ battleParticipants, onRemove, r
             <div className="bp-right">
               <div className="bp-barBlock">
                 <div className="bp-barHeader">
-                  <span className="bp-barTitle">HP</span>
-                  <span className="bp-barValue">
+                <span className="bp-barTitle">HP</span>
+
+                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                    <span className="bp-barValue">
                     {participant.currentHp}/{participant.maxHp}
-                  </span>
+                    </span>
+
+                    <RemoveHpButton instanceId={participant.instanceId} currentHp={participant.currentHp} onRemoveHP={removeHP} />
+                </div>
                 </div>
                 <LinearProgress className="bp-bar" variant="determinate" value={hpPct} color={hpBarColor(hpPct)} />
               </div>
