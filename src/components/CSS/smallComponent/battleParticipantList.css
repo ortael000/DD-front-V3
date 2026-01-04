@@ -292,3 +292,36 @@
   background-color: #b01f1f !important;
   transform: translateY(-1px);
 }
+
+.bp-startBattleBtn {
+  background-color: #7a1212 !important;
+  color: #ffffff !important;
+
+  font-weight: 900;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+
+  padding: 10px 20px;
+  border-radius: 12px;
+
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+
+  transition:
+    background-color 120ms ease,
+    transform 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.bp-startBattleBtn:hover {
+  background-color: #b01f1f !important;
+  transform: translateY(-1px);
+}
+
+.bp-startBattleBtn:disabled {
+  background-color: #4a1a1a !important;
+  opacity: 0.6;
+  box-shadow: none;
+  transform: none;
+}

@@ -29,7 +29,7 @@ export default function RemoveHpButton({ instanceId, currentHp, onRemoveHP }: Pr
 
   return (
     <>
-      <Button size="small" variant="contained" onClick={() => setOpen(true)}>
+      <Button size="small" variant="contained" className="bp-removeBtn" onClick={() => setOpen(true)}>
         HP -
       </Button>
 

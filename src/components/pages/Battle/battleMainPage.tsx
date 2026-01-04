@@ -19,6 +19,24 @@ function clamp(n: number, min: number, max: number) {
   return Math.max(min, Math.min(max, n));
 }
 
+function rollD20() {
+  return Math.floor(Math.random() * 20) + 1;
+}
+
+function getCharacterInitiativeBonus(character: any): number {
+  const g = character?.General;
+
+  return (
+    g?.InitiativeBonus ??
+    g?.Initiative ??
+    g?.initiativeBonus ??
+    g?.initiative ??
+    0
+  );
+}
+
+
+
 export default function BattlePage() {
   /* Title: selection lists */
   const [charactersBase, setCharactersBase] = useState<CharacterBasetype[]>([]);
@@ -55,6 +73,24 @@ export default function BattlePage() {
     });
   }, []);
 
+  const startBattle = React.useCallback(() => {
+  setBattleParticipants((prev) => {
+    const withInit = prev.map((p) => {
+      const bonus = p.side === "character" ? getCharacterInitiativeBonus((p as any).character) : 0;
+      const init = rollD20() + bonus;
+
+      return { ...p, initiative: init };
+    });
+
+    withInit.sort((a, b) => {
+      const ai = a.initiative ?? -9999;
+      const bi = b.initiative ?? -9999;
+      return bi - ai;
+    });
+
+    return withInit;
+  });
+}, []);
 
   /* Title: load selection lists */
   useEffect(() => {
@@ -73,10 +109,20 @@ export default function BattlePage() {
       <div className="battle-setup-panel" style={{ border: '1px solid gray', padding: 12, marginBottom: 24 }}>
         <AddCharacterToBattle fetchFullCharacter={fetchFullCharacter} setBattleParticipants={setBattleParticipants} battleParticipants={battleParticipants} characterBaseList={charactersBase} />
         <AddEnemyToBattle setBattleParticipants={setBattleParticipants} enemyBaseList={ennemiesBase} />
-        <BattleParticipantsList battleParticipants={battleParticipants} onRemove={removeParticipant} removeMana={removeMana} removeHP={removeHP} />
+        <Button
+          variant="contained"
+          className="bp-startBattleBtn"
+          onClick={startBattle}
+          disabled={battleParticipants.length === 0}
+        >
+          Start Battle
+        </Button>    
         {/* Additional battle UI components would go here */}
       </div>
+      <BattleParticipantsList battleParticipants={battleParticipants} onRemove={removeParticipant} removeMana={removeMana} removeHP={removeHP} />
+
     </div>
   );
 
 }
+
