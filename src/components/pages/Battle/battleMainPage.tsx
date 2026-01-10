@@ -9,7 +9,7 @@ import { fetchAllEnnemies } from "../../../helpers/dataBase&API/APIHelpers";
 import AddCharacterToBattle from "./buttons/addCharacterToBattleButton";
 import AddEnemyToBattle from "./buttons/addEnnemiesToBattleButton";
 import BattleParticipantsList from "./battleParticipantList";
-import GenerateLootButton from "./buttons/generateLootButton";
+import GenerateLootButton from "./buttons/loots/generateLootButton";
   
 import type { BattleEntity } from "../../../types/battleType";
 import type { CharacterFulltype, CharacterBasetype } from "../../../types/character";

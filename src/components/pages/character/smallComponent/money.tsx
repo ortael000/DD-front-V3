@@ -1,39 +1,52 @@
+import React from 'react';
 
-// import library dependencies
-import React, { useState, useEffect } from 'react';
-
-
-import hitpointIcon  from '../../../../assets/generalIcons/hitpoint.png'; // Import the icon to ensure it's included in the build
-import manaIcone from '../../../../assets/generalIcons/mana.png'; // Import the mana icon
-import copperCoin from '../../../../assets/generalIcons/copperCoin.png'; // Import the copper coin icon
-import silverCoin from '../../../../assets/generalIcons/silverCoin.png'; // Import the silver coin icon
-import goldCoin from '../../../../assets/generalIcons/goldCoin.png'; // Import the gold coin icon
-
+import copperCoin from '../../../../assets/generalIcons/copperCoin.png';
+import silverCoin from '../../../../assets/generalIcons/silverCoin.png';
+import goldCoin from '../../../../assets/generalIcons/goldCoin.png';
 
 interface Props {
   money: number;
 }
 
 export default function MoneyDisplay({ money }: Props) {
-
   const gold = Math.floor(money / 400);
-  const silver = Math.floor((money - gold * 400) / 20)
+  const silver = Math.floor((money - gold * 400) / 20);
   const copper = money - (gold * 400 + silver * 20);
 
+  const rowStyle: React.CSSProperties = {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 12,
+  };
+
+  const itemStyle: React.CSSProperties = {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 6,
+  };
+
+  const iconStyle: React.CSSProperties = {
+    width: 18,
+    height: 18,
+    objectFit: 'contain',
+  };
+
   return (
-        <div className="stat-row money-row">
-          <div className="stat-item">
-            <img src =  {goldCoin} className="Coin-icon" />
-            <div className="stat-value gold">{gold}</div>
-          </div>
-          <div className="stat-item">
-            <img src =  {silverCoin} className="Coin-icon" />
-            <div className="stat-value silver">{silver}</div>
-          </div>
-          <div className="stat-item">
-            <img src =  {copperCoin} className="Coin-icon" />
-            <div className="stat-value copper">{copper}</div>
-          </div>
-        </div>
+    <div style={rowStyle}>
+      <div style={itemStyle}>
+        <img src={goldCoin} style={iconStyle} alt="Gold" />
+        <span style={{ color: '#d4af37', fontWeight: 700 }}>{gold}</span>
+      </div>
+
+      <div style={itemStyle}>
+        <img src={silverCoin} style={iconStyle} alt="Silver" />
+        <span style={{ color: '#c0c0c0', fontWeight: 700 }}>{silver}</span>
+      </div>
+
+      <div style={itemStyle}>
+        <img src={copperCoin} style={iconStyle} alt="Copper" />
+        <span style={{ color: '#b87333', fontWeight: 700 }}>{copper}</span>
+      </div>
+    </div>
   );
 }

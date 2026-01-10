@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@mui/material";
-import type { BattleEntity } from "../../../../types/battleType";
-import { fetchLootByType } from "../../../../helpers/dataBase&API/APIHelpers";
-import {MoneyDisplay} from "../../../pages/character/smallComponent/money";
+import type { BattleEntity } from "../../../../../types/battleType";
+import { fetchLootByType } from "../../../../../helpers/dataBase&API/APIHelpers";
+import MoneyDisplay from "../../../character/smallComponent/money";
+import AllocateLootButton from "./allocateLoot";
+import SplitXpButton from "./allocateXP";
+import { getArrayCharRef } from "../../../../../helpers/battleHelper/getArrayCharRef";
+
 
 interface LootObtainedItem {
   LootTypeName: string;
@@ -28,12 +32,16 @@ export default function GenerateLootButton({ battleParticipants }: Props) {
   const [openLoot, setOpenLoot] = useState(false);
   const [lootObtained, setLootObtained] = useState<LootObtainedItem[]>([]);
   const [totalMoneyEarned, setTotalMoneyEarned] = useState(0);
+  const [totalXpEarned, setTotalXpEarned] = useState(0);
 
   const generateLoots = async () => {
     const obtained: LootObtainedItem[] = [];
     let totalMoneyEarned2 = 0;
+    let totalXpEarned2 = 0;
 
     for (const participant of battleParticipants) {
+
+      
 
       if (participant.side !== "enemy") continue;
 
@@ -41,6 +49,8 @@ export default function GenerateLootButton({ battleParticipants }: Props) {
 
       const lootTypeId = enemy?.lootType ?? enemy?.LootType ?? enemy?.LootTypeId ?? participant?.lootType;
       const lootValue = enemy?.lootValue ?? enemy?.LootValue ?? participant?.lootValue ?? 100;
+      const xpValue = enemy?.xpValue ?? enemy?.XpValue ?? participant?.enemy.Xp ?? 0;
+      totalXpEarned2 += xpValue;
 
       if (lootTypeId === undefined || lootTypeId === null) continue;
 
@@ -52,11 +62,9 @@ export default function GenerateLootButton({ battleParticipants }: Props) {
         if (item.ObjectType === "money") {
           
           const randomNumber = Math.random() ;
-          console.log("Generating money loot for ", item.chance, " x 0.", lootValue , " roll: ", Math.floor(randomNumber*100)/100);
           const moneyEarned = Math.floor(
             (normalizeDropRate(item.chance) * randomNumber * lootValue) / 100
           );
-          console.log("Money  : ", moneyEarned);
 
           totalMoneyEarned2 += moneyEarned;
           continue; // ⬅️ skip everything below, go to next loot item
@@ -75,14 +83,17 @@ export default function GenerateLootButton({ battleParticipants }: Props) {
           });
         } 
       }
-      console.log("Total money earned so far: ", totalMoneyEarned2);
     }
 
     setTotalMoneyEarned(totalMoneyEarned2);
+    setTotalXpEarned(totalXpEarned2);
+
     setLootObtained(obtained);
     setOpenLoot(true);
+    console.log("Generated loot:", { obtained });
   };
 
+  
   const enemyCount = battleParticipants.filter((p) => p.side === "enemy").length;
 
   return (
@@ -102,7 +113,8 @@ export default function GenerateLootButton({ battleParticipants }: Props) {
         <DialogContent>
         {/* Money is always displayed */}
         <Typography sx={{ mb: 2, fontWeight: 600 }}>
-          Total money earned: {totalMoneyEarned}
+          <div> Total XP: {totalXpEarned}</div> <SplitXpButton xpValue={totalXpEarned} players={getArrayCharRef(battleParticipants)} />
+          <MoneyDisplay money={totalMoneyEarned} />
         </Typography>
 
         {/* Loot items */}
@@ -128,7 +140,9 @@ export default function GenerateLootButton({ battleParticipants }: Props) {
                 <div style={{ fontWeight: 900 }}>{l.ObjectName}</div>
                 <div style={{ opacity: 0.85 }}>{l.ObjectType}</div>
                 <div style={{ opacity: 0.85 }}>ID: {l.ObjectID}</div>
+                <AllocateLootButton lootName={l.ObjectName} lootType={l.ObjectType} lootId={l.ObjectID} players={getArrayCharRef(battleParticipants)} />
               </div>
+              
             ))}
           </div>
         )}

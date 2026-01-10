@@ -88,17 +88,14 @@ export async function createCharacter  (name : string, password: string) {
     });
 }
 
-export async function fetchAllCharacter () {
-
-  console.log("Fetching all characters");
+export async function fetchAllCharacter(): Promise<CharacterBasetype[]> {
   const path = process.env.backEndAdress || 'http://localhost:3000';
 
   const res = await fetch(`${path}/characters/all`);
-
   if (!res.ok) {
-    throw new Error(`Failed to fetch all characters: ${res.status} ${res.statusText}`);
+    throw new Error(`Failed to fetch all characters`);
   }
+
   const raw = await res.json();
-  console.log("Fetched characters:", raw);
-  return raw;
+  return raw as CharacterBasetype[];
 }

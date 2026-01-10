@@ -32,3 +32,8 @@ export type BattleEntity =
       lootType: number;
       lootValue: number;
     };
+
+export type PlayerRef = {
+  id: number;
+  Name: string;
+};
