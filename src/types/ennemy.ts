@@ -53,4 +53,5 @@ export interface Loot {
   ObjectID: number;
   ObjectName: string;
   chance: number;
+  
 }

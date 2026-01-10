@@ -29,4 +29,6 @@ export type BattleEntity =
       maxMana: number;
       initiative: number | null;
       status: string;
+      lootType: number;
+      lootValue: number;
     };

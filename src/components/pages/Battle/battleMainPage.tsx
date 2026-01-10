@@ -9,6 +9,7 @@ import { fetchAllEnnemies } from "../../../helpers/dataBase&API/APIHelpers";
 import AddCharacterToBattle from "./buttons/addCharacterToBattleButton";
 import AddEnemyToBattle from "./buttons/addEnnemiesToBattleButton";
 import BattleParticipantsList from "./battleParticipantList";
+import GenerateLootButton from "./buttons/generateLootButton";
   
 import type { BattleEntity } from "../../../types/battleType";
 import type { CharacterFulltype, CharacterBasetype } from "../../../types/character";
@@ -117,6 +118,7 @@ export default function BattlePage() {
         >
           Start Battle
         </Button>    
+        <GenerateLootButton battleParticipants={battleParticipants} />
         {/* Additional battle UI components would go here */}
       </div>
       <BattleParticipantsList battleParticipants={battleParticipants} onRemove={removeParticipant} removeMana={removeMana} removeHP={removeHP} />

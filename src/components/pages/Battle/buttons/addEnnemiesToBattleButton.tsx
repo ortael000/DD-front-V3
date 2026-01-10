@@ -36,6 +36,8 @@ export default function AddEnemyToBattle({ setBattleParticipants, enemyBaseList 
 
     const name = (enemy as any).Name ?? (enemy as any).name ?? "Enemy";
 
+    console.log("Adding enemy to battle:", enemy);
+
     const entity: BattleEntity = {
       instanceId: crypto.randomUUID(),
       sourceId: Number((enemy as any).id ?? (enemy as any).Id),
@@ -48,6 +50,8 @@ export default function AddEnemyToBattle({ setBattleParticipants, enemyBaseList 
       maxMana,
       initiative: null,
       status: "",
+      lootType: enemy.LootType,
+      lootValue: enemy.LootValue
     };
 
     setBattleParticipants((prev) => [...prev, entity]);
