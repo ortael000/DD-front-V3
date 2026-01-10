@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@mui/material";
-import type { BattleEntity } from "../../../../../types/battleType";
+import type { BattleEntity, LootObtainedItem } from "../../../../../types/battleType";
 import { fetchLootByType } from "../../../../../helpers/dataBase&API/APIHelpers";
 import MoneyDisplay from "../../../character/smallComponent/money";
 import AllocateLootButton from "./allocateLoot";
@@ -8,12 +8,6 @@ import SplitXpButton from "./allocateXP";
 import { getArrayCharRef } from "../../../../../helpers/battleHelper/getArrayCharRef";
 
 
-interface LootObtainedItem {
-  LootTypeName: string;
-  ObjectType: string;
-  ObjectID: number;
-  ObjectName: string;
-}
 
 interface Props {
   battleParticipants: BattleEntity[];
@@ -33,6 +27,12 @@ export default function GenerateLootButton({ battleParticipants }: Props) {
   const [lootObtained, setLootObtained] = useState<LootObtainedItem[]>([]);
   const [totalMoneyEarned, setTotalMoneyEarned] = useState(0);
   const [totalXpEarned, setTotalXpEarned] = useState(0);
+
+  const removeLootByInstanceId = (instanceId: string) => {
+  setLootObtained((prev) =>
+    prev.filter((loot) => loot.InstanceID !== instanceId)
+  );
+};
 
   const generateLoots = async () => {
     const obtained: LootObtainedItem[] = [];
@@ -76,6 +76,7 @@ export default function GenerateLootButton({ battleParticipants }: Props) {
 
         if (roll < scaledChance) {
           obtained.push({
+            InstanceID: participant.instanceId,
             LootTypeName: item.ObjectName,
             ObjectType: item.ObjectType,
             ObjectID: item.ObjectID,
@@ -140,7 +141,7 @@ export default function GenerateLootButton({ battleParticipants }: Props) {
                 <div style={{ fontWeight: 900 }}>{l.ObjectName}</div>
                 <div style={{ opacity: 0.85 }}>{l.ObjectType}</div>
                 <div style={{ opacity: 0.85 }}>ID: {l.ObjectID}</div>
-                <AllocateLootButton lootName={l.ObjectName} lootType={l.ObjectType} lootId={l.ObjectID} players={getArrayCharRef(battleParticipants)} />
+                <AllocateLootButton lootName={l.ObjectName} lootType={l.ObjectType} lootId={l.ObjectID} players={getArrayCharRef(battleParticipants)} onAllocated={() => removeLootByInstanceId(l.InstanceID)} />
               </div>
               
             ))}

@@ -37,3 +37,11 @@ export type PlayerRef = {
   id: number;
   Name: string;
 };
+
+export type LootObtainedItem = {
+  InstanceID: string;
+  LootTypeName: string;
+  ObjectType: string;
+  ObjectID: number;
+  ObjectName: string;
+};

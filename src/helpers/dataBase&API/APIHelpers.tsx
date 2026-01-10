@@ -2,14 +2,15 @@ import { dataBaseCall, Characteristic } from '../../types/stringLists'
 import { InventoryItem, WeaponBaseType, EquipmentType, CharacterBasetype, PassiveType, SkillBaseType } from '../../types/character';
 import { Ennemy, Loot } from '../../types/ennemy';
 import { ObjectMainType } from '../../types/stringLists';
+import { API_BASE_URL } from '../../config/api'; 
 
 type Updates = Partial<Omit<CharacterBasetype, 'id'>>;
 
 export async function fetchItem (type: ObjectMainType, id: number | string) {
 
-  const path = process.env.backEndAdress || 'http://localhost:3000';
+  const path = process.env.backEndAdress;
 
-  const res = await fetch(`${path}/${type}/${id}`);
+  const res = await fetch(`${API_BASE_URL}/${type}/${id}`);
 
   if (!res.ok) {
     throw new Error(`Failed to fetch ${type} ${id}: ${res.status} ${res.statusText}`)
@@ -22,9 +23,9 @@ export async function fetchItem (type: ObjectMainType, id: number | string) {
 
 export async function fetchPassive (id: number | string) {
 
-  const path = process.env.backEndAdress || 'http://localhost:3000';
+  const path = process.env.backEndAdress;
   
-const res = await fetch(`${path}/passive/${id}`)
+const res = await fetch(`${API_BASE_URL}/passive/${id}`)
 
   if (!res.ok) {
     throw new Error(`Failed to fetch passive ${id}: ${res.status} ${res.statusText}`)
@@ -37,9 +38,9 @@ const res = await fetch(`${path}/passive/${id}`)
 
 export async function fetchSkill (id: number | string) {
 
-  const path = process.env.backEndAdress || 'http://localhost:3000';
+  const path = process.env.backEndAdress;
   
-const res = await fetch(`${path}/skill/${id}`)
+const res = await fetch(`${API_BASE_URL}/skill/${id}`)
 
   if (!res.ok) {
     throw new Error(`Failed to fetch skill ${id}: ${res.status} ${res.statusText}`)
@@ -51,8 +52,8 @@ const res = await fetch(`${path}/skill/${id}`)
 }
 
 export async function fetchArrayOfObjects (ids: (number | string)[], databaseName: dataBaseCall) {
-  const path = process.env.backEndAdress || 'http://localhost:3000';
-  const url = `${path}/${databaseName}?ids=${ids.join(',')}`;
+  const path = process.env.backEndAdress;
+  const url = `${API_BASE_URL}/${databaseName}?ids=${ids.join(',')}`;
   console.log(`Fetching objects from ${url}`);
 
   const res = await fetch(url);
@@ -67,9 +68,9 @@ export async function fetchArrayOfObjects (ids: (number | string)[], databaseNam
 }
 
 export async function fetchInventory(characterID: number | string) {
-  const path = process.env.backEndAdress || 'http://localhost:3000';
+  const path = process.env.backEndAdress;
   
-  const res = await fetch(`${path}/inventory/${characterID}`);
+  const res = await fetch(`${API_BASE_URL}/inventory/${characterID}`);
 
   if (!res.ok) {
     throw new Error(`Failed to fetch inventory for character ${characterID}: ${res.status} ${res.statusText}`);
@@ -87,12 +88,17 @@ export async function updateInventoryDB (inventoryUpdate : InventoryItem) {
 
   console.log("Updating inventory with:", inventoryUpdate);
 
-  const path = process.env.backEndAdress || 'http://localhost:3000';
-  fetch(`${path}/inventoryupdate`, {
+  const path = process.env.backEndAdress;
+  fetch(`${API_BASE_URL}/inventoryupdate`, {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({
-    inventoryUpdate
+    CharacterID: inventoryUpdate.CharacterID,
+    ObjectType: inventoryUpdate.ObjectType,
+    ObjectSubType: inventoryUpdate.ObjectSubType,
+    ObjectID: inventoryUpdate.ObjectID,
+    Name: inventoryUpdate.Name,
+    Quantity: inventoryUpdate.Quantity
     })
   })
   .then(res => res.json())
@@ -104,9 +110,9 @@ export async function updateInventoryDB (inventoryUpdate : InventoryItem) {
 
 export async function fetchAllWeapons () : Promise<WeaponBaseType[]> {
 
-  const path = process.env.backEndAdress || 'http://localhost:3000';
+  const path = process.env.backEndAdress;
   
-const res = await fetch(`${path}/weapons/all`)
+const res = await fetch(`${API_BASE_URL}/weapons/all`)
 
   if (!res.ok) {
     throw new Error(`Failed to fetch all weapons: ${res.status} ${res.statusText}`)
@@ -119,9 +125,9 @@ const res = await fetch(`${path}/weapons/all`)
 
 export async function fetchAllEquipment () : Promise<EquipmentType[]> {
 
-  const path = process.env.backEndAdress || 'http://localhost:3000';
+  const path = process.env.backEndAdress;
   
-const res = await fetch(`${path}/equipments/all`)
+const res = await fetch(`${API_BASE_URL}/equipments/all`)
 
   if (!res.ok) {
     throw new Error(`Failed to fetch all equipments: ${res.status} ${res.statusText}`)
@@ -134,9 +140,9 @@ const res = await fetch(`${path}/equipments/all`)
 
 export async function fetchAllPassive () : Promise<PassiveType[]> {
 
-  const path = process.env.backEndAdress || 'http://localhost:3000';
+  const path = process.env.backEndAdress;
 
-  const res = await fetch(`${path}/passives/all`);
+  const res = await fetch(`${API_BASE_URL}/passives/all`);
 
   if (!res.ok) {
     throw new Error(`Failed to fetch all passives: ${res.status} ${res.statusText}`);
@@ -149,9 +155,9 @@ export async function fetchAllPassive () : Promise<PassiveType[]> {
 
 export async function fetchAllSkills () : Promise<SkillBaseType[]> {
 
-  const path = process.env.backEndAdress || 'http://localhost:3000';
+  const path = process.env.backEndAdress;
 
-  const res = await fetch(`${path}/skills/all`);
+  const res = await fetch(`${API_BASE_URL}/skills/all`);
 
   if (!res.ok) {
     throw new Error(`Failed to fetch all skills: ${res.status} ${res.statusText}`);
@@ -164,9 +170,9 @@ export async function fetchAllSkills () : Promise<SkillBaseType[]> {
 
 export async function fetchAllEnnemies () : Promise<Ennemy[]> {
 
-  const path = process.env.backEndAdress || 'http://localhost:3000';
+  const path = process.env.backEndAdress;
 
-  const res = await fetch(`${path}/ennemies/all`);
+  const res = await fetch(`${API_BASE_URL}/ennemies/all`);
 
   if (!res.ok) {
     throw new Error(`Failed to fetch all skills: ${res.status} ${res.statusText}`);
@@ -178,8 +184,8 @@ export async function fetchAllEnnemies () : Promise<Ennemy[]> {
 }
 
 export async function fetchLootByType(lootTypeId: number | string): Promise<Loot[]> {
-  const path = process.env.backEndAdress || "http://localhost:3000";
-  const res = await fetch(`${path}/loot/${lootTypeId}`);
+  const path = process.env.backEndAdress;
+  const res = await fetch(`${API_BASE_URL}/loot/${lootTypeId}`);
   if (!res.ok) throw new Error(`Failed to fetch loot type ${lootTypeId}: ${res.status} ${res.statusText}`);
   return res.json();
 }

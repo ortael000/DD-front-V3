@@ -16,9 +16,10 @@ interface Props {
   lootType: string; // e.g. "equipment", "weapon", "accessory"
   lootId: number;   // ObjectID
   players: PlayerRef[]; // ONLY battle participants (already filtered by parent)
+  onAllocated: () => void; // called after successful allocation
 }
 
-export default function AllocateLootButton({ lootName, lootType, lootId, players }: Props) {
+export default function AllocateLootButton({ lootName, lootType, lootId, players, onAllocated }: Props) {
   const [open, setOpen] = useState(false);
   const [allocatingTo, setAllocatingTo] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -39,7 +40,7 @@ export default function AllocateLootButton({ lootName, lootType, lootId, players
 
       // Give +1 of that loot to that player's inventory
       await addOneItemToInventory(playerId, lootType as any, lootId);
-
+      onAllocated()
       setOpen(false);
     } catch (e: any) {
       console.error(e);
