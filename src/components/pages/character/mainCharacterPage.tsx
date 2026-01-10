@@ -59,8 +59,6 @@ const CharacterPage = () => {
         Name: char.Name
       }));
       setCharacterIdList(newCharactersIDList);
-      console.log('fetched charList:', newCharactersIDList);
-      console.log ("is no character loaded?", noCharacterLoaded);
     };
     loadCharacterList();
   }, []);
@@ -108,7 +106,6 @@ const CharacterPage = () => {
               </Button>
                   
                   <CreateCharacterButton onCreated={(payload) => {
-                      console.log("Character created:", payload);
                   }} 
                   setCharacterIdList={setCharacterIdList} 
                   />

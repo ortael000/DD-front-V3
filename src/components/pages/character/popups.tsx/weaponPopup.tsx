@@ -39,7 +39,6 @@ export default function PopupEquipWeaponButton({
     setOpen(true);
     const newSelectionList = inventory.filter(item => item.ObjectType === "weapon");
     setSelectionList(newSelectionList);
-    console.log("Opening the equipmentmanagement for ", characterKey, " with current equipment being ", currentWeaponId , "and removeCurrentItem", removeCurrentItem);
   };
 
   // Close the dialog and reset selection
@@ -53,8 +52,6 @@ export default function PopupEquipWeaponButton({
   const handleItemPickChange = (event : any ) => {
 
     const selectedId = Number(event.target.value);
-    console.log("Selected item ID:", selectedId);
-    console.log("Selection list:", selectionList);
 
     const selectedItemCopy : InventoryItem | undefined = selectionList.find(item => item.ObjectID === selectedId);
 
@@ -70,25 +67,19 @@ export default function PopupEquipWeaponButton({
         setSelectedItem(selectedItemCopy);
         setRemoveCurrentItem(false);
     }
-    console.log("Selected item:", selectedItem);
   };
 
   // Call the parent callback with the selected value, then close
   const handleConfirm = async () => {
 
-    console.log("HandleConfirm start with selectedItem: ", selectedItem, "characterId", CharacterID, "and removeCurrentItem", removeCurrentItem);
-
     if (!selectedItem) {
         if (removeCurrentItem && currentWeaponId !== 1) {
-            console.log("Removing current item:", characterKey);
             await updateCharacterDB(CharacterID, { [characterKey]: 1 });
             await addOneItemToInventory(CharacterID, "weapon", currentWeaponId);
         } else {
-            console.log("No item selected, nothing to update.");
         }
     } else {
         //here i want to update with selected Item but with quantity * -1
-        console.log("Updating character with item:", selectedItem, characterKey);
         await updateCharacterDB(CharacterID, { [characterKey]: selectedItem.ObjectID });
         await removeOneItemFromInventory(CharacterID, selectedItem.ObjectType, selectedItem.ObjectID);
 

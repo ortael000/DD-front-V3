@@ -24,8 +24,6 @@ interface Props {
 
 export default function CharacterGeneral({ character }: Props) {
 
-  console.log("Rendering CharacterGeneral", character);
-
   const { General } = character;
 
   const currentHp = General.HitPoint - General.CurrentHPLose;
