@@ -2,6 +2,9 @@
 
 # dependencies
 /node_modules
+dist
+*.sqlite
+*.db
 /.pnp
 .pnp.js
 
