@@ -1,6 +1,7 @@
 import { dataBaseCall, Characteristic } from '../../types/stringLists'
 import { InventoryItem, WeaponBaseType, EquipmentType, CharacterBasetype, PassiveType, SkillBaseType } from '../../types/character';
 import { ObjectMainType } from '../../types/stringLists';
+import { API_BASE_URL } from '../../config/api'; 
 
 type Updates = Partial<Omit<CharacterBasetype, 'id'>>;
 
@@ -8,7 +9,7 @@ export async function updateCharacterDB (charID: number, updates: Updates): Prom
 
   console.log("Updating character:", charID, updates);
 
-  const path = process.env.backEndAdress || 'http://localhost:3000';
+  const path = API_BASE_URL;
 
   const requestBody = {
     id: charID,
@@ -35,7 +36,7 @@ export async function updateCharacterDB (charID: number, updates: Updates): Prom
 
 export async function fetchCharacter(id: number | string) {
   
-  const path = process.env.backEndAdress || 'http://localhost:3000';
+  const path = API_BASE_URL;
   
 const res = await fetch(`${path}/character/${id}`)
 
@@ -50,7 +51,7 @@ const res = await fetch(`${path}/character/${id}`)
 
 export async function fetchFullCharacter(id: number | string) {
   
-  const path = process.env.backEndAdress || 'http://localhost:3000';
+  const path = API_BASE_URL;
   
 const res = await fetch(`${path}/character/full/${id}`)
 
@@ -68,7 +69,7 @@ export async function createCharacter  (name : string, password: string) {
 
   console.log("Creating character:", name);
 
-  const path = process.env.backEndAdress || 'http://localhost:3000';
+  const path = API_BASE_URL;
 
   const requestBody = {
     name: name,
@@ -89,7 +90,7 @@ export async function createCharacter  (name : string, password: string) {
 }
 
 export async function fetchAllCharacter(): Promise<CharacterBasetype[]> {
-  const path = process.env.backEndAdress || 'http://localhost:3000';
+  const path = API_BASE_URL;
 
   const res = await fetch(`${path}/characters/all`);
   if (!res.ok) {

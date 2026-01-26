@@ -1,7 +1,6 @@
-export const API_BASE_URL = process.env.REACT_APP_BACKEND_URL;
+const rawBase =
+  process.env.REACT_APP_BACKEND_ADDRESS ||
+  "http://localhost:3000";
 
-if (!API_BASE_URL) {
-  throw new Error(
-    "REACT_APP_BACKEND_URL is not defined. Check your .env files."
-  );
-}
+// remove trailing slash if user wrote "https://x.com/"
+export const API_BASE_URL = rawBase.replace(/\/+$/, "");
