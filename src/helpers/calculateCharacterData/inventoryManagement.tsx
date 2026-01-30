@@ -5,12 +5,13 @@ import {Characteristic, BonusKey, WeaponCategory, Element, equipmentType, Object
 
 import { fetchPassive, fetchSkill, fetchInventory, fetchItem } from "../dataBase&API/APIHelpers";
 import { updateCharacterDB } from "../dataBase&API/characterAPI";
+import { API_BASE_URL } from '../../config/api'; 
 
 export async function UpdateItemToInventory(item: InventoryItem): Promise<any> {
 
   console.log("UpdateItemToInventory...", item);
 
-  const path = process.env.backEndAdress || 'http://localhost:3000';
+  const path = API_BASE_URL;
 
 
   return fetch(`${path}/inventoryupdate`, {
