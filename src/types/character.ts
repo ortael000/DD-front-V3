@@ -508,5 +508,6 @@ export interface InventoryItem {
   ObjectID: number;
   Name: string ;
   Quantity: number;
+  Text? : string;
 }
 

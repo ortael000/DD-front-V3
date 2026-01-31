@@ -10,6 +10,7 @@ import { CharacterBasetype, CharacterFulltype } from '../../../types/character';
 // import objects
 import { initialCharacterBase, initialCharacterFull } from '../../../data/initiateObject';
 import MoneyDisplay from './smallComponent/money';
+import UpdateMoney from './smallComponent/updateMoney';
 
 import hitpointIcon  from '../../../assets/generalIcons/hitpoint.png'; // Import the icon to ensure it's included in the build
 import manaIcone from '../../../assets/generalIcons/mana.png'; // Import the mana icon
@@ -20,9 +21,10 @@ import { defenseIcons } from '../../../assets/iconeList';
 
 interface Props {
   character: CharacterFulltype;
+  updateCharacter: () => void;
 }
 
-export default function CharacterGeneral({ character }: Props) {
+export default function CharacterGeneral({ character, updateCharacter }: Props) {
 
   const { General } = character;
 
@@ -107,7 +109,7 @@ export default function CharacterGeneral({ character }: Props) {
               <span className="stat-value">{character.Defenses.ResIce}</span>
             </div>
         </div>
-        <MoneyDisplay money={General.CurrentMoney}/>
+        
         <table className="general-table">
           <thead>
             <tr>
@@ -134,6 +136,11 @@ export default function CharacterGeneral({ character }: Props) {
               </tr>
           </tbody>
         </table>
+        <div className="general-subtitle" >  
+          <MoneyDisplay money={General.CurrentMoney}/> 
+          <UpdateMoney characterId={General.Id} currentMoney={General.CurrentMoney} updateCharacter={updateCharacter} />
+        </div>
+       
       </div>
     </div>
   );

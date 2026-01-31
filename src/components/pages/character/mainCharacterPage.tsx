@@ -144,7 +144,7 @@ const CharacterPage = () => {
                     Load Character
                 </Button>
             </div>
-            <CharacterGeneral character={character} />
+            <CharacterGeneral character={character} updateCharacter ={updateCharacter}/>
             <CharacterCharacteristics character={character} updateCharacter ={updateCharacter} />
             <CharacterWeapon character={character} updateCharacter={updateCharacter} inventory={inventory} updateInventoryState={updateInventoryState} />
             <CharacterSkill character={character} updateCharacter={updateCharacter}  />

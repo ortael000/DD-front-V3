@@ -15,6 +15,7 @@ import { filterSelectionListByType, filterInventoryByName, addOneItemToInventory
 import TextField from '@mui/material/TextField';
 
 import { InventoryItem } from '../../../../types/character';
+import { buildNonZeroStatsString } from '../../../../helpers/calculateCharacterData/characterPageHelper';
 
 export default function PopupSelectItemButton({
   label = 'Choose',
@@ -23,6 +24,7 @@ export default function PopupSelectItemButton({
   currentInventory = [] as InventoryItem[],
   CharacterID = 1 as number
 }) {
+
   // Controls whether the Dialog is visible
   const [open, setOpen] = useState(false);
 
@@ -30,6 +32,8 @@ export default function PopupSelectItemButton({
   const [BaseList, setBaseList] = useState<InventoryItem[]>([]);
   const [selectionList, setSelectionList] = useState<InventoryItem[]>([]);
   const [searchText, setSearchText] = useState('');
+
+  const [bonusString, setBonusString] = useState('');
 
   const [typeFilters, setTypeFilters] = useState({
     weapon: false,
@@ -40,9 +44,11 @@ export default function PopupSelectItemButton({
   // Open the dialog
   const handleOpen = () => {
     setOpen(true);
-    const fetchData = async () => {
+    const mapObjectToInventoryType = async () => {
+
       const weapons = await fetchAllWeapons();
       const equipment = await fetchAllEquipment();
+
 
       const weaponInventoryList = weapons.map(item => ({
         CharacterID: CharacterID,
@@ -51,6 +57,7 @@ export default function PopupSelectItemButton({
         ObjectID: item.id,
         Name: item.Name,
         Quantity: 1,
+        Text: buildNonZeroStatsString(item)
       }));
 
       const equipmentInventoryList = equipment.map(item => ({
@@ -59,7 +66,8 @@ export default function PopupSelectItemButton({
         ObjectSubType: item.Subtype,
         ObjectID: item.id,
         Name: item.Name,
-        Quantity: 1
+        Quantity: 1,
+        Text: buildNonZeroStatsString(item)
       }));
 
       const combinedList = [...weaponInventoryList, ...equipmentInventoryList];
@@ -68,7 +76,7 @@ export default function PopupSelectItemButton({
 
       setBaseList(combinedList as InventoryItem[]);
     };
-    fetchData();
+    mapObjectToInventoryType();
   };
 
   // Close the dialog and reset selection
@@ -78,7 +86,7 @@ const handleClose = () => {
 };
 
   // Update state when user picks a different MenuItem
-  const handleItemPickChange = (event : any ) => {
+  const handleItemPickChange = async (event : any ) => {
 
     const compositeKey = event.target.value ;
     const [selectedType, idStr] = compositeKey.split("-")
@@ -101,11 +109,13 @@ const handleClose = () => {
             ObjectSubType: selectedItem.ObjectSubType,
             ObjectID: selectedItem.ObjectID,
             Name: selectedItem.Name,
-            Quantity: currentQuantity + 1
+            Quantity: currentQuantity + 1,
+            Text: selectedItem.Text
         }
-        console.log("Updating selected item:", selectedItemUpdate);
       setSelected(selectedItemUpdate);
-    }
+
+
+  };
   };
 
   const handleTextFilterChange = (textSearched: string) => {
@@ -229,9 +239,9 @@ const handleClose = () => {
                 <em>None</em>
               </MenuItem>
             </Select>
+             <div> Bonus: {selected ? selected.Text : "None"} </div>
           </FormControl>
         </DialogContent>
-
         <DialogActions>
           {/* Cancel simply closes without confirming */}
           <Button onClick={handleClose}>Cancel</Button>
@@ -249,3 +259,4 @@ const handleClose = () => {
     </>
   );
 }
+

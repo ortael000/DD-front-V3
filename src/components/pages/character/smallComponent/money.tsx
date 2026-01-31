@@ -4,6 +4,8 @@ import copperCoin from '../../../../assets/generalIcons/copperCoin.png';
 import silverCoin from '../../../../assets/generalIcons/silverCoin.png';
 import goldCoin from '../../../../assets/generalIcons/goldCoin.png';
 
+import { updateCharacterDB } from '../../../../helpers/dataBase&API/characterAPI';
+
 interface Props {
   money: number;
 }
@@ -50,3 +52,5 @@ export default function MoneyDisplay({ money }: Props) {
     </div>
   );
 }
+
+

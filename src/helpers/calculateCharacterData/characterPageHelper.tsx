@@ -365,3 +365,10 @@ function calculateMaxMana(base: CharacterBasetype, fullCharacteristics: Characte
     + calculateFlatBonus('Mana', 0, equipments, weapons, passives)
   );
 }
+
+export function buildNonZeroStatsString(obj: any): string {
+  return Object.entries(obj)
+    .filter(([, value]) => typeof value === "number" && value !== 0)
+    .map(([key, value]) => `"${key}": ${value}`)
+    .join(" / ");
+}
