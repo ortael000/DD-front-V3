@@ -15,6 +15,8 @@ import { initialCharacterBase, initialCharacterFull } from '../../../data/initia
 // import icons
 import { ElementIcons, attackIcons, generalIcons, skillIcons } from '../../../assets/iconeList';
 
+import ItemCardPopup from './smallComponent/itemCardPopup';
+
 import PopupUpdateSkill from './popups.tsx/skillPopup';
 
 interface Props {
@@ -87,7 +89,7 @@ export default function CharacterSkill({ character, updateCharacter }: Props) {
                   />
                 )}             
               </td>                
-              <td className="value-cell">{skill.object.name}</td>
+              <td className="value-cell"><ItemCardPopup type="skill" item={skill.object} label={skill.object.name} /></td>    
               <td className="value-cell">{skill.object.type}</td>
               <td className="value-cell"><img src={ElementIcons[skill.object.element as keyof typeof ElementIcons]}  className="attack-icon" /></td>
               <td className="value-cell">{skill.object.manaCost}</td>

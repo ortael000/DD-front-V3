@@ -39,11 +39,12 @@ export async function addOneItemToInventory(charId: number, objType: ObjectMainT
     ObjectSubType: "Armor",
     ObjectID: ObjectID,
     Name: "",
-    Quantity: currentQuantity + 1
+    Quantity: currentQuantity + 1,
+    Item: null,
   };
 
   const ItemFetch = await fetchItem(objType, ObjectID);
-  updatedItem = { ...updatedItem, Name: ItemFetch.Name, ObjectSubType: ItemFetch.Subtype };
+  updatedItem = { ...updatedItem, Name: ItemFetch.Name, ObjectSubType: ItemFetch.Subtype, Item: ItemFetch };
 
   return await UpdateItemToInventory(updatedItem);
 }

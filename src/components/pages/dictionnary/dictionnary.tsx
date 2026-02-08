@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { FormControl, InputLabel, Select, MenuItem, Button, Box } from '@mui/material';
-import { EquipmentDisplayed, PassiveDisplayed, PassiveType, SkillBaseType, WeaponBaseType } from '../../../types/character';
+import { EquipmentDisplayed, PassiveDisplayed, PassiveType, SkillBaseType, WeaponBaseType, EquipmentType} from '../../../types/character';
 import { Ennemy } from '../../../types/ennemy';
 import { fetchAllEquipment, fetchAllPassive, fetchAllSkills, fetchAllWeapons, fetchAllEnnemies } from '../../../helpers/dataBase&API/APIHelpers';
 
@@ -19,7 +19,7 @@ import passives from '../character/passives';
 export const DictionnaryPage = ( ) => {
 
     const [selectedDisplay, setSelectedDisplay] = useState("")
-    const [equipmentData, setEquipmentData] = useState<EquipmentDisplayed[]>([]);
+    const [equipmentData, setEquipmentData] = useState<EquipmentType[]>([]);
     const [passiveData, setPassiveData] = useState<PassiveType[]>([]);
     const [weaponsData, setWeaponsData] = useState<WeaponBaseType[]>([]);
     const [skillsData, setSkillsData] = useState<SkillBaseType[]>([]);
@@ -35,7 +35,7 @@ export const DictionnaryPage = ( ) => {
     const changeToEquipment = async () => {
         setSelectedDisplay("equipment");
         const data = await fetchAllEquipment();
-        setEquipmentData(data.map(transformEquipment));
+        setEquipmentData(data);
     };
 
     const changeToWeapons = async () => {
@@ -58,7 +58,7 @@ export const DictionnaryPage = ( ) => {
 
     const returnedComponent = () => {
         if (selectedDisplay === "equipment") {
-            return <EquipmentDisplayList equipment={equipmentData as EquipmentDisplayed[]} />;
+            return <EquipmentDisplayList equipment={equipmentData as EquipmentType[]} />;
         } else if (selectedDisplay === "passive") {
             return <PassiveDisplayList passives={passiveData as PassiveType[]} />;
         }

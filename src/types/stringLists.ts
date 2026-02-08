@@ -113,3 +113,5 @@ export type dataBaseCall =
   export type objectSubtype = WeaponCategory | equipmentType
 
   export type ObjectMainType = "weapon" | "equipment" | "accessory"
+
+  export type ItemMainType = "weapon" | "equipment" | "skill" | "passive" | "accessory";

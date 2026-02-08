@@ -22,6 +22,8 @@ import { CharacterBasetype, SkillDisplayed, SkillBaseType, CharacterFulltype } f
 import { equipmentType } from '../../../../types/stringLists';
 import { emptyEquipment } from '../../../../data/initiateObject';
 
+import SkillCard from '../../dictionnary/component/skillCard';
+
 export default function PopupUpdateSkill({
   updateCharacter = () => {},
   characterKey = "Weapon1ID" as keyof CharacterBasetype,
@@ -115,10 +117,16 @@ export default function PopupUpdateSkill({
       </Button>
 
       {/* The dialog that contains the select dropdown */}
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog open={open} onClose={handleClose} maxWidth="lg" fullWidth>
         <DialogTitle>Equip or update a skill</DialogTitle>
 
-        <DialogContent>
+        <DialogContent           
+        dividers
+          sx={{
+            overflowX: 'auto',
+            overflowY: 'auto',
+            maxWidth: '100%',
+          }}>
 
           {/* Full-width form control for proper layout */}
           <FormControl fullWidth margin="dense">
@@ -155,6 +163,8 @@ export default function PopupUpdateSkill({
             </Select>
           </FormControl>
         </DialogContent>
+
+        <SkillCard skill={selectedSkill as SkillBaseType} />
 
         <DialogActions>
           {/* Cancel simply closes without confirming */}

@@ -1,0 +1,40 @@
+.item-card-popup-trigger {
+  /* remove button look */
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  appearance: none;
+  -webkit-appearance: none;
+
+  /* behave like inline text */
+  display: inline;
+  line-height: inherit;
+  vertical-align: baseline;
+
+  /* inherit ALL typography */
+  font: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  font-style: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+
+  /* inherit color rules from table */
+  color: inherit;
+
+  cursor: pointer;
+}
+
+/* highlight only on hover */
+.item-card-popup-trigger:hover {
+  text-decoration: underline;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+/* keep keyboard accessibility */
+.item-card-popup-trigger:focus-visible {
+  outline: 2px solid rgba(0, 0, 0, 0.4);
+  outline-offset: 2px;
+}

@@ -14,8 +14,13 @@ import { fetchAllEquipment, fetchAllWeapons } from '../../../../helpers/dataBase
 import { filterSelectionListByType, filterInventoryByName, addOneItemToInventory } from '../../../../helpers/calculateCharacterData/inventoryManagement';
 import TextField from '@mui/material/TextField';
 
+import { transformEquipment } from '../../../../helpers/calculateCharacterData/characterPageHelper';
+
 import { InventoryItem } from '../../../../types/character';
 import { buildNonZeroStatsString } from '../../../../helpers/calculateCharacterData/characterPageHelper';
+
+import EquipmentCard from '../../dictionnary/component/equipmentCard';
+import WeaponCard from '../../dictionnary/component/weaponCard';
 
 export default function PopupSelectItemButton({
   label = 'Choose',
@@ -57,7 +62,8 @@ export default function PopupSelectItemButton({
         ObjectID: item.id,
         Name: item.Name,
         Quantity: 1,
-        Text: buildNonZeroStatsString(item)
+        Text: buildNonZeroStatsString(item),
+        Item: item
       }));
 
       const equipmentInventoryList = equipment.map(item => ({
@@ -67,7 +73,8 @@ export default function PopupSelectItemButton({
         ObjectID: item.id,
         Name: item.Name,
         Quantity: 1,
-        Text: buildNonZeroStatsString(item)
+        Text: buildNonZeroStatsString(item),
+        Item: item
       }));
 
       const combinedList = [...weaponInventoryList, ...equipmentInventoryList];
@@ -110,7 +117,8 @@ const handleClose = () => {
             ObjectID: selectedItem.ObjectID,
             Name: selectedItem.Name,
             Quantity: currentQuantity + 1,
-            Text: selectedItem.Text
+            Text: selectedItem.Text,
+            Item: selectedItem.Item
         }
       setSelected(selectedItemUpdate);
 
@@ -160,10 +168,22 @@ const handleClose = () => {
       </Button>
 
       {/* The dialog that contains the select dropdown */}
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog
+          open={open}
+          onClose={handleClose}
+          maxWidth="lg"
+          fullWidth
+        >
         <DialogTitle>Add a new item</DialogTitle>
 
-        <DialogContent>
+        <DialogContent
+          dividers
+          sx={{
+            overflowX: 'auto',
+            overflowY: 'auto',
+            maxWidth: '100%',
+          }}
+        >
 
           
           <div className="type-filters">  {/* Filters for inventory items */}
@@ -239,7 +259,18 @@ const handleClose = () => {
                 <em>None</em>
               </MenuItem>
             </Select>
-             <div> Bonus: {selected ? selected.Text : "None"} </div>
+             <div style={{ marginTop: 12 }}>
+              {!selected || !selected.Item ? (
+                <div>None</div>
+              ) : selected.ObjectType === "weapon" ? (
+                // adjust prop name if your WeaponCard expects something else
+                <WeaponCard weapon={selected.Item} />
+              ) : selected.ObjectType === "equipment" ? (
+                <EquipmentCard equipment={selected.Item} />
+              ) : (
+                <div>None</div>
+              )}
+            </div>
           </FormControl>
         </DialogContent>
         <DialogActions>

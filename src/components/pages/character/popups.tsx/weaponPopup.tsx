@@ -16,9 +16,11 @@ import { filterSelectionListByType, filterInventoryByName, filterEquipmentListBy
 import { addOneItemToInventory, removeOneItemFromInventory } from '../../../../helpers/calculateCharacterData/inventoryManagement';
 import TextField from '@mui/material/TextField';
 
-import { InventoryItem, CharacterBasetype } from '../../../../types/character';
+import { InventoryItem, CharacterBasetype, WeaponBaseType } from '../../../../types/character';
 import { equipmentType } from '../../../../types/stringLists';
 import { emptyEquipment } from '../../../../data/initiateObject';
+
+import WeaponCard from '../../dictionnary/component/weaponCard';
 
 export default function PopupEquipWeaponButton({
   updateCharacter = () => {},
@@ -67,6 +69,7 @@ export default function PopupEquipWeaponButton({
         setSelectedItem(selectedItemCopy);
         setRemoveCurrentItem(false);
     }
+    console.log("Selected item:", selectedItemCopy);
   };
 
   // Call the parent callback with the selected value, then close
@@ -130,6 +133,8 @@ export default function PopupEquipWeaponButton({
             </Select>
           </FormControl>
         </DialogContent>
+
+        <WeaponCard weapon={selectedItem?.Item} />
 
         <DialogActions>
           {/* Cancel simply closes without confirming */}

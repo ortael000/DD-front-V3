@@ -7,6 +7,7 @@ import { FormControl, InputLabel, Select, MenuItem, Button, Box } from '@mui/mat
 import transformPassiveToDic from "../../../helpers/dictionnary/passiveDictionnaryHelper";
 
 import { findChildPassives } from '../../../helpers/calculateCharacterData/findChildSkill&Passive';
+import PassiveCard from './component/passiveCard';
 
 interface Props {
   passives: PassiveType[];
@@ -35,39 +36,52 @@ const charList = [
 
 const PassiveSkillDisplayList: React.FC<Props> = ({ passives }) => {
 
-  const initialState = passives.map(transformPassiveToDic).filter(passive => passive.Name !== "None");
-  const firstPassiveList = initialState.filter(passive => passive.LevelRequired === 1);
+  const initialState = passives.filter(passive => passive.Name !== "None");
+  const firstPassiveList = initialState.filter(passive => passive.ParentPassive === 1);
 
   const [passiveListDisplayed, setPassiveListDisplayed] = useState(firstPassiveList);
 
   useEffect(() => {
-    const transformed = passives.map(transformPassiveToDic).filter(passive => passive.Name !== "None");
-    setPassiveListDisplayed(transformed);
+    const transformed = passives.filter(passive => passive.Name !== "None");
+    setPassiveListDisplayed(transformed); 
   }, [passives]);
 
   const filterPassivesByName = (name: string) => {
     const filtered = passives.filter(passive => passive.Name.toLowerCase().includes(name.toLowerCase()));
-    setPassiveListDisplayed(filtered.map(transformPassiveToDic));
+    setPassiveListDisplayed(filtered);
   };
 
   const filterPassivesByCharacteristic = (characteristic: string) => {
     const filtered = passives.filter(passive => passive[characteristic as keyof PassiveType] !== 0);
-    setPassiveListDisplayed(filtered.map(transformPassiveToDic));
+    setPassiveListDisplayed(filtered);
   };
 
   const filterPassiveByKeyWord = (keyword: string) => {
-    const filtered = initialState.filter(passive => passive.positiveBonus.toLowerCase().includes(keyword.toLowerCase()));
+    const lowerKeyword = keyword.toLowerCase();
+
+    const filtered = initialState.filter((passive) =>
+      Object.entries(passive).some(([key, value]) =>
+        key.toLowerCase().includes(lowerKeyword) ||
+        (typeof value === "string" && value.toLowerCase().includes(lowerKeyword))
+      )
+    );
+
     setPassiveListDisplayed(filtered);
   };
 
   const filterByParent = (parentId: number) => {
     const childPassives = findChildPassives(parentId , passives);
-    const childPassivesToDisplay = childPassives.map(passiveId => transformPassiveToDic(passives.find(p => p.id === passiveId) as PassiveType));
+    const childPassivesToDisplay = childPassives.map(passiveId => (passives.find(p => p.id === passiveId) as PassiveType));
     setPassiveListDisplayed(childPassivesToDisplay);
   };
 
+  const resetFilters = () => {
+    const transformed = passives.filter(passive => passive.Name !== "None");
+    setPassiveListDisplayed(transformed);
+  }
+
   useEffect(() => {
-  const transformed = passives.map(transformPassiveToDic).filter(passive =>  (passive.Name !== "None" && passive.LevelRequired === 1) );
+  const transformed = passives.filter(passive =>  (passive.Name !== "None" && passive.LevelRequired === 1) );
 
   setPassiveListDisplayed(transformed);
   }, [passives]);
@@ -75,7 +89,6 @@ const PassiveSkillDisplayList: React.FC<Props> = ({ passives }) => {
   return (
     <div className="equipment-dictionnary">
       <div className="filters">
-        {/* input to filter passive by name */}
         <input
           type="text"
           placeholder="Filter by name..."
@@ -83,7 +96,6 @@ const PassiveSkillDisplayList: React.FC<Props> = ({ passives }) => {
           className="filter-input"
         />
 
-        {/* input to filter passive by characteristic (selection list from charList) */}
         <FormControl sx={{ minWidth: 200 }}>
           <InputLabel id="char-select-label">Characteristic</InputLabel>
           <Select
@@ -99,63 +111,44 @@ const PassiveSkillDisplayList: React.FC<Props> = ({ passives }) => {
           </Select>
         </FormControl>
 
-        {/* input to filter passive by characteristic (free input) */}
         <input
           type="text"
           placeholder="Filter by key word..."
           onChange={(e) => filterPassiveByKeyWord(e.target.value)}
           className="filter-input"
         />
-      </div>
-      <div className="equipment-list">
-        {passiveListDisplayed.map((passive) => (
-          <div key={passive.Id} className="item-card">
-            <div className="item-title">
-              <h3>{passive.Name}</h3>
-               {passive.LevelRequired === 1 && (
-               <button onClick={() => filterByParent(passive.Id)} className="child-display-button"> Display childs </button>
-            )}
-              <div className="item-type-value">
-                <p>Level: {passive.LevelRequired}</p>
-                <p>Parent: {passives.find(p => p.id === passive.ParentPassive)?.Name}</p>
-              </div>
-            </div>
 
-            <table className="general-table sub-table">
-              <thead>
-                <tr>
-                  {Object.entries(passive.Characteristics).map(([key, value]) =>
-                    (typeof value === "number" && value !== 0) ? (
-                      <th key={key} className="label-cell">
-                        <img
-                          src={allIcons[key as keyof typeof allIcons]}
-                          className="attack-icon"
-                        />
-                      </th>
-                    ) : null
-                  )}
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  {Object.entries(passive.Characteristics).map(([key, value]) =>
-                    (typeof value === "number" && value !== 0) ? <td key={key}>{value}</td> : null
-                  )}
-                </tr>
-              </tbody>
-            </table>
-            <div className="additionalEffects">
-              <div className="positive-bonus">{passive.positiveBonus}</div>
-              <div className="negative-bonus">{passive.negativeBonus}</div>
-              <div className="other-effect">{passive.otherEffect}</div>
-            </div>
+        <Button
+          variant="contained"
+          onClick={resetFilters}
+          className="reset-button"
+        >
+          Reset Filters
+        </Button>
+
+      </div>
+
+      <div className="equipment-list">
+        {passiveListDisplayed.map((passive) => {
+          const parentPassive = passives.find(p => p.id === passive.ParentPassive)?.Name;
+          return (
+          <div key={passive.id} className='item-card-container'>
+            <button
+              onClick={() => filterByParent(passive.id)}
+              className="child-display-button"
+            >
+              Display childs
+            </button>
+            <PassiveCard passive={passive} parentName={parentPassive} />
           </div>
-        ))}
+          )
+        }
+        )}
       </div>
     </div>
+          
   );
 };
-
 export default PassiveSkillDisplayList;
 
 

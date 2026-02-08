@@ -1,12 +1,12 @@
 import { dataBaseCall, Characteristic } from '../../types/stringLists'
 import { InventoryItem, WeaponBaseType, EquipmentType, CharacterBasetype, PassiveType, SkillBaseType } from '../../types/character';
 import { Ennemy, Loot } from '../../types/ennemy';
-import { ObjectMainType } from '../../types/stringLists';
+import { ObjectMainType, ItemMainType } from '../../types/stringLists';
 import { API_BASE_URL } from '../../config/api'; 
 
 type Updates = Partial<Omit<CharacterBasetype, 'id'>>;
 
-export async function fetchItem (type: ObjectMainType, id: number | string) {
+export async function fetchItem (type: ItemMainType, id: number | string) {
 
   const res = await fetch(`${API_BASE_URL}/${type}/${id}`);
 

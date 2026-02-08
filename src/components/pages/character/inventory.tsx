@@ -12,6 +12,7 @@ import { CharacterBasetype, CharacterFulltype, InventoryItem} from '../../../typ
 // import objects
 import { initialCharacterBase, initialCharacterFull } from '../../../data/initiateObject';
 import PopupSelectItemButton from './popups.tsx/inventoryPopup';
+import ItemCardPopup from './smallComponent/itemCardPopup';
 
 interface Props {
   characterID: number;
@@ -67,7 +68,7 @@ export default function CharacterInventory({ characterID, inventory, updateInven
             {inventory.map((item) => (
               <tr key={item.ObjectID}>
                 <td className="label-cell small-text-cell">{item.ObjectType}</td>
-                <td className="label-cell small-text-cell">{item.Name}</td>
+                <td className="label-cell small-text-cell"><ItemCardPopup type={item.ObjectType} item={item} label={item.Name} /></td>
                 <td className="value-cell small-text-cell">{item.Quantity}</td>
                 <td className="action-cell">
                   <Button

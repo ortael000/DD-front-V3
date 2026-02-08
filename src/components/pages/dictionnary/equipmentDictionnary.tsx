@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FormControl, InputLabel, Select, MenuItem, Button, Box } from '@mui/material';
 
-import { EquipmentDisplayed } from '../../../types/character';
+import { EquipmentDisplayed, EquipmentType } from '../../../types/character';
 import { EquipmentFilters } from '../../../types/dictionnaryFilter';
 
 import { ElementIcons, attackIcons, generalIcons, skillIcons, characteristicsIcons, defenseIcons } from '../../../assets/iconeList';
@@ -9,10 +9,11 @@ import { ElementIcons, attackIcons, generalIcons, skillIcons, characteristicsIco
 import { equipmentTypeList } from '../../../data/initiateObject';
 
 import MoneyDisplay from '../character/smallComponent/money';
-
+import EquipmentCard from './component/equipmentCard';
+import { transformEquipment } from '../../../helpers/calculateCharacterData/characterPageHelper';
 
 interface Props {
-  equipment: EquipmentDisplayed[];
+  equipment: EquipmentType[];
 }
 
 const charList = [
@@ -40,7 +41,7 @@ const EquipmentDisplayList: React.FC<Props> = ({ equipment }) => {
 
   const initialState = equipment.filter(item => item.Name !== "None");
 
-  const [equipmentToBeDisplayed, setEquipmentToBeDisplayed] = useState<EquipmentDisplayed[]>(initialState);
+  const [equipmentToBeDisplayed, setEquipmentToBeDisplayed] = useState<EquipmentType[]>(initialState);
   const [currentFilters, setCurrentFilters] = useState<EquipmentFilters>({
     name: "",
     type: "All",
@@ -67,27 +68,22 @@ const EquipmentDisplayList: React.FC<Props> = ({ equipment }) => {
   filteredList = newFilters.type === "All" ? filteredList : filteredList.filter(item => item.Subtype === newFilters.type)
   console.log("after type filter", filteredList);
 
-  filteredList = filteredList.filter(item => {
-      const valueChar = item.Characteristics[newFilters.characteristic as keyof CharacteristicsType];
-      const valueDef = item.DefensiveStats[newFilters.characteristic as keyof DefensiveStatsType];
-      if (newFilters.characteristic === "None") {
-        return true;
-      }
-      if (valueChar !== undefined && valueChar !== 0) {
-        return true;
-      }
-      if (valueDef !== undefined && valueDef !== 0) {
-        return true;
-      }
-      return false;
-    });
+  filteredList = filteredList.filter((item) => { 
+    if (newFilters.characteristic === "None") {
+      return true;
+    }
+    const charValue = item[newFilters.characteristic];
+    return charValue !== undefined && charValue > 0;
+  });
+
   console.log("after characteristic filter", filteredList);
 
   filteredList = filteredList.filter(item => {
     if (newFilters.bonusKey === "None") {
       return true;
     }
-    return item.positiveBonus.toLowerCase().includes(newFilters.bonusKey.toLowerCase());
+    const displayedItem = transformEquipment(item);
+    return displayedItem.positiveBonus.toLowerCase().includes(newFilters.bonusKey.toLowerCase());
   });
   console.log("after bonusKey filter", filteredList);
 
@@ -152,50 +148,8 @@ const EquipmentDisplayList: React.FC<Props> = ({ equipment }) => {
       </div>
           <div className="equipment-list">
       {equipmentToBeDisplayed.map((item) => {
-        return (
-          <div key={item.ID} className="item-card">
-            <div className="item-title">
-              <h3>{item.Name}</h3>
-              <div className="item-type-value">
-                <p>{item.Subtype}</p>
-                <MoneyDisplay money={item.Value}/>
-              </div>
-             
-            </div>
-            <table className="general-table sub-table">
-              <thead>
-                <tr>
-                  <th className="value-cell"><img src={defenseIcons.DefenseMelee} className="attack-icon" /></th>
-                  <th className="value-cell"><img src={defenseIcons.DefenseRange} className="attack-icon" /></th>
-                  <th className="value-cell"><img src={defenseIcons.ResPhysical} className="attack-icon" /></th>
-                  <th className="spacer-cell"></th>
-                  {Object.entries(item.Characteristics).map(([key, value]) =>
-                    value !== 0 ? (
-                      <th key={key} className="label-cell">
-                        <img src={characteristicsIcons[key as keyof typeof characteristicsIcons]} className="attack-icon" />
-                      </th>
-                    ) : null
-                  )}
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>{item.DefensiveStats.DefenseMelee}</td>
-                  <td>{item.DefensiveStats.DefenseRange}</td>
-                  <td>{item.DefensiveStats.ResPhysical}</td>
-                  <td className="spacer-cell"></td>
-                  {Object.entries(item.Characteristics).map(([key, value]) =>
-                    value !== 0 ? <td key={key}>{value}</td> : null
-                  )}
-                </tr>
-              </tbody>
-            </table>
-          <div className="additionalEffects">
-            <div className="positive-bonus">{item.positiveBonus}</div>
-            <div className="negative-bonus">{item.negativeBonus}</div>
-          </div>
-        </div>
-      )})}
+        return <EquipmentCard key={item.id} equipment={item} />
+      })}
     </div>
     </div>
   );

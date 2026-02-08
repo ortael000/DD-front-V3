@@ -268,3 +268,8 @@
   height: 16px; /* Adjust height as needed */
 }
 
+.item-card-container {
+  margin-top: 20px;
+  margin-bottom: 20px ;
+}
+

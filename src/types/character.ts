@@ -509,5 +509,6 @@ export interface InventoryItem {
   Name: string ;
   Quantity: number;
   Text? : string;
+  Item: any; // This can hold the actual item data (WeaponBaseType, EquipmentType, etc.) for easier access when needed
 }
 

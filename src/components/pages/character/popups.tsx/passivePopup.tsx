@@ -20,6 +20,8 @@ import { CharacterBasetype, SkillDisplayed, PassiveType, CharacterFulltype } fro
 import { equipmentType } from '../../../../types/stringLists';
 import { emptyEquipment } from '../../../../data/initiateObject';
 
+import PassiveCard from '../../dictionnary/component/passiveCard';
+
 export default function PopupUpdatePassive({
   updateCharacter = () => {},
   characterKey = "Weapon1ID" as keyof CharacterBasetype,
@@ -140,6 +142,7 @@ export default function PopupUpdatePassive({
             </Select>
           </FormControl>
         </DialogContent>
+        <PassiveCard passive={selectedPassive as PassiveType} />
 
         <DialogActions>
           {/* Cancel simply closes without confirming */}
