@@ -7,6 +7,7 @@ import {fetchInventory } from '../../../helpers/dataBase&API/APIHelpers';
 import { fetchCharacter } from '../../../helpers/dataBase&API/characterAPI';
 import { UpdateItemToInventory } from '../../../helpers/calculateCharacterData/inventoryManagement';
 import { fetchAllCharacter, fetchFullCharacter } from '../../../helpers/dataBase&API/characterAPI';
+import { downloadCharacterCsvWithInventory } from '../../../helpers/dataBase&API/fetchCharacterAndDlCsv';
 
 // import types
 import { CharacterBasetype, CharacterFulltype, InventoryItem } from '../../../types/character';
@@ -24,9 +25,11 @@ import CharacterEquipment from './equipments';
 import CharacterPassives from './passives';
 import CharacterInventory from './inventory';
 import CreateCharacterButton from './popups.tsx/createCharacterPopUp';
+import ImportCharacterCsvButton from './smallComponent/importCharacterButton';
 
 // import styles
 import '../../CSS/muiComponent.css';
+
 
 // Define props structure
 interface characterProps {
@@ -104,7 +107,9 @@ const CharacterPage = () => {
               >
                       Load Character
               </Button>
-                  
+              
+              <ImportCharacterCsvButton />
+
                   <CreateCharacterButton onCreated={(payload) => {
                   }} 
                   setCharacterIdList={setCharacterIdList} 
@@ -143,6 +148,15 @@ const CharacterPage = () => {
                 >
                     Load Character
                 </Button>
+
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  onClick={() => downloadCharacterCsvWithInventory(selectedId)}
+                >
+                  Export CSV
+                </Button>
+
             </div>
             <CharacterGeneral character={character} updateCharacter ={updateCharacter}/>
             <CharacterCharacteristics character={character} updateCharacter ={updateCharacter} />
