@@ -21,7 +21,7 @@ interface Props {
 }
 
 export default function CharacterInventory({ characterID, inventory, updateInventoryState }: Props) {
-
+  console.log("CharacterInventory rendered with inventory:", inventory);
   if (!inventory || inventory.length === 0) {
     return (
       <div className="character-section">

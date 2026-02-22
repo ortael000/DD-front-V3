@@ -6,6 +6,7 @@ import WeaponCard from "../../dictionnary/component/weaponCard";
 import EquipmentCard from "../../dictionnary/component/equipmentCard";
 import PassiveCard from "../../dictionnary/component/passiveCard";
 import SkillCard from "../../dictionnary/component/skillCard";
+import AccessoryCard from "../../dictionnary/component/accessoryCard";
 
 import { fetchItem } from "../../../../helpers/dataBase&API/APIHelpers";
 
@@ -21,7 +22,6 @@ type Props = {
 
 export default function ItemCardPopup({ type, item, label }: Props) {
 
-  console.log("ItemCardPopup rendered with a :",type, " item is:", item);
   const [open, setOpen] = useState(false);
 
   // ✅ This is the object that will actually be rendered in the popup.
@@ -56,11 +56,16 @@ export default function ItemCardPopup({ type, item, label }: Props) {
         const skill = await fetchItem("skill", item.Id);
         fullObj = skill;
       }
+      if (type === "accessory" && item?.ObjectID != null) {
+        const accessory = await fetchItem("accessory", item.ObjectID);
+        fullObj = accessory;
+      }
     } catch (err) {
       // If fetch fails, we still show the given item
+     
       fullObj = item ?? null;
     }
-
+   console.log("ItemCardPopup handleOpen fetched fullObj:", fullObj);
     setItemToDisplay(fullObj);
     setOpen(true);
   };
@@ -83,6 +88,8 @@ export default function ItemCardPopup({ type, item, label }: Props) {
         return <PassiveCard passive={obj} />;
       case "skill":
         return <SkillCard skill={obj} />;
+      case "accessory":
+        return <AccessoryCard accessory={obj} />;
       default:
         return null;
     }

@@ -8,6 +8,9 @@ type Updates = Partial<Omit<CharacterBasetype, 'id'>>;
 
 export async function fetchItem (type: ItemMainType, id: number | string) {
 
+  console.log(`Fetching item of type ${type} with id ${id} from API...`);
+  console.log('using URL:', `${API_BASE_URL}/${type}/${id}`);
+
   const res = await fetch(`${API_BASE_URL}/${type}/${id}`);
 
   if (!res.ok) {
@@ -174,4 +177,34 @@ export async function fetchLootByType(lootTypeId: number | string): Promise<Loot
   const res = await fetch(`${API_BASE_URL}/loot/${lootTypeId}`);
   if (!res.ok) throw new Error(`Failed to fetch loot type ${lootTypeId}: ${res.status} ${res.statusText}`);
   return res.json();
+}
+
+export async function fetchAllAccessories () : Promise<any[]> {
+
+  const res = await fetch(`${API_BASE_URL}/accessories/all`);
+
+  if (!res.ok) {
+    throw new Error(`Failed to fetch all accessories: ${res.status} ${res.statusText}`);
+  }
+
+  // parse the raw JSON
+  const raw = await res.json();
+  return raw;
+}
+
+export async function fetchAccessoriesByIDs (ids: number[]) : Promise<any[]> {
+
+const response = await fetch("http://localhost:3000/accessories/by-ids", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    ids: [1, 3, 7]
+  })
+});
+
+const data = await response.json();
+console.log(data);
+return data;
 }

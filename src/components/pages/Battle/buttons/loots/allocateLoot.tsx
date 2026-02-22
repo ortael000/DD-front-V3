@@ -34,6 +34,8 @@ export default function AllocateLootButton({ lootName, lootType, lootId, players
   }, [players]);
 
   const allocateToPlayer = async (playerId: number) => {
+
+    console.log(`Allocating ${lootName} (type: ${lootType}, id: ${lootId}) to player ${playerId}`);
     try {
       setError(null);
       setAllocatingTo(playerId);
