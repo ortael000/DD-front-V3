@@ -1,11 +1,12 @@
 import { CharacterFulltype } from "./character";
 import { Ennemy } from "./ennemy";
 
-export type BattleSide = "character" | "enemy";
+export type BattleSide = "character" | "enemy" | "summon";
 
 export type BattleEntity =
   | {
       instanceId: string;
+      orderId: number;
       sourceId: number;
       side: "character";
       character: CharacterFulltype;
@@ -19,8 +20,25 @@ export type BattleEntity =
     }
   | {
       instanceId: string;
+      orderId: number;
       sourceId: number;
       side: "enemy";
+      enemy: Ennemy;
+      name: string;
+      currentHp: number;
+      maxHp: number;
+      currentMana: number;
+      maxMana: number;
+      initiative: number | null;
+      status: string;
+      lootType: number;
+      lootValue: number;
+    }
+  |  {
+      instanceId: string;
+      orderId: number;
+      sourceId: number;
+      side: "summon";
       enemy: Ennemy;
       name: string;
       currentHp: number;

@@ -30,6 +30,7 @@ export default function AddCharacterToBattle({fetchFullCharacter, setBattleParti
             console.log("Fetched full character data:", full);
             const entity: BattleEntity = {
             instanceId: crypto.randomUUID(),
+            orderId: battleParticipants.filter(p => p.side === "character").length + 1,
             sourceId: full.General.Id,
             side: "character",
             character: full,

@@ -9,9 +9,10 @@ interface Props {
   setBattleParticipants: React.Dispatch<React.SetStateAction<BattleEntity[]>>;
   enemyBaseList: Ennemy[];
   currentNumberOfEnemies: number;
+  currentBattleParticipants: BattleEntity[];
 }
 
-export default function AddEnemyToBattle({ setBattleParticipants, enemyBaseList, currentNumberOfEnemies }: Props) {
+export default function AddSummonToBattle({ setBattleParticipants, enemyBaseList, currentNumberOfEnemies, currentBattleParticipants }: Props) {
   
   const [selectedRace, setSelectedRace] = useState<string>("");
   const [selectedEnemyId, setSelectedEnemyId] = useState<string>("");
@@ -43,7 +44,7 @@ export default function AddEnemyToBattle({ setBattleParticipants, enemyBaseList,
       instanceId: crypto.randomUUID(),
       orderId: currentNumberOfEnemies + 1,
       sourceId: Number((enemy as any).id ?? (enemy as any).Id),
-      side: "enemy",
+      side: "summon",
       enemy: enemy,
       name,
       currentHp,
@@ -103,7 +104,7 @@ export default function AddEnemyToBattle({ setBattleParticipants, enemyBaseList,
       </FormControl>
 
       <Button variant="contained" onClick={addSelectedEnemy} disabled={!selectedRace || !selectedEnemyId}>
-        Add enemy
+        Add Summon
       </Button>
     </div>
   );

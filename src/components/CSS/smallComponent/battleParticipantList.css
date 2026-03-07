@@ -325,3 +325,11 @@
   box-shadow: none;
   transform: none;
 }
+
+.bp-summon {
+  border: 1px solid rgba(150, 100, 255, 0.6);
+}
+
+.bp-name-summon {
+  color: rgb(170, 130, 255);
+}

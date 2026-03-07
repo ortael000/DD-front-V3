@@ -8,17 +8,13 @@ import { fetchAllEnnemies } from "../../../helpers/dataBase&API/APIHelpers";
 
 import AddCharacterToBattle from "./buttons/addCharacterToBattleButton";
 import AddEnemyToBattle from "./buttons/addEnnemiesToBattleButton";
+import AddSummonToBattle from "./buttons/addSummonToBattleButton";
 import BattleParticipantsList from "./battleParticipantList";
 import GenerateLootButton from "./buttons/loots/generateLootButton";
   
 import type { BattleEntity } from "../../../types/battleType";
 import type { CharacterFulltype, CharacterBasetype } from "../../../types/character";
 import type { Ennemy } from "../../../types/ennemy";
-
-
-function clamp(n: number, min: number, max: number) {
-  return Math.max(min, Math.min(max, n));
-}
 
 function rollD20() {
   return Math.floor(Math.random() * 20) + 1;
@@ -109,7 +105,9 @@ export default function BattlePage() {
       <h2>Battle Main Page</h2>
       <div className="battle-setup-panel" style={{ border: '1px solid gray', padding: 12, marginBottom: 24 }}>
         <AddCharacterToBattle fetchFullCharacter={fetchFullCharacter} setBattleParticipants={setBattleParticipants} battleParticipants={battleParticipants} characterBaseList={charactersBase} />
-        <AddEnemyToBattle setBattleParticipants={setBattleParticipants} enemyBaseList={ennemiesBase} />
+        <AddEnemyToBattle setBattleParticipants={setBattleParticipants} enemyBaseList={ennemiesBase} currentNumberOfEnemies={battleParticipants.filter(p => p.side === "enemy").length} />
+        <AddSummonToBattle setBattleParticipants={setBattleParticipants} enemyBaseList={ennemiesBase} currentNumberOfEnemies={battleParticipants.filter(p => p.side === "summon").length} currentBattleParticipants={battleParticipants} />
+        
         <Button
           variant="contained"
           className="bp-startBattleBtn"
