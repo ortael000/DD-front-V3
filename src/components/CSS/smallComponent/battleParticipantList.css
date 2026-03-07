@@ -333,3 +333,22 @@
 .bp-name-summon {
   color: rgb(170, 130, 255);
 }
+
+.enemyOrderNumber {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 18px;
+  height: 18px;
+
+  margin-right: 6px;
+
+  background-color: #c62828;
+  color: white;
+
+  font-size: 11px;
+  font-weight: 800;
+
+  border-radius: 3px;
+}

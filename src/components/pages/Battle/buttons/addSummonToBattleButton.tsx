@@ -16,13 +16,14 @@ export default function AddSummonToBattle({ setBattleParticipants, enemyBaseList
   
   const [selectedRace, setSelectedRace] = useState<string>("");
   const [selectedEnemyId, setSelectedEnemyId] = useState<string>("");
+  const [selectedCharacterID, setSelectedCharacterID] = useState<string>("");
 
   const filteredEnemies = useMemo(() => {
     if (!selectedRace) return [];
     return enemyBaseList.filter((e: any) => (e?.Race ?? e?.race) === selectedRace);
   }, [enemyBaseList, selectedRace]);
 
-  const addSelectedEnemy = async () => {
+  const addSelectedSummon = async () => {
     if (!selectedRace || !selectedEnemyId) return;
 
     const enemy = enemyBaseList.find((e: any) => String(e?.id ?? e?.Id) === selectedEnemyId);
@@ -57,12 +58,43 @@ export default function AddSummonToBattle({ setBattleParticipants, enemyBaseList
       lootValue: enemy.LootValue
     };
 
-    setBattleParticipants((prev) => [...prev, entity]);
+    setBattleParticipants((prev) => {
+      const summonerIndex = prev.findIndex(
+        (participant) =>
+          participant.side === "character" &&
+          String(participant.sourceId) === selectedCharacterID
+      );
+
+      if (summonerIndex === -1) {
+        return [...prev, entity];
+      }
+
+      const updated = [...prev];
+      updated.splice(summonerIndex + 1, 0, entity);
+      return updated;
+    });
     console.log("Added enemy to battle:", entity);
   };
 
   return (
     <div style={{ display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
+      
+      <FormControl sx={{ minWidth: 260 }} disabled={!selectedRace}>
+        <InputLabel id="battle-enemy-label">Summoner</InputLabel>
+        <Select
+          labelId="battle-enemy-label"
+          value={selectedCharacterID}
+          label="Enemy"
+          onChange={(e) => setSelectedCharacterID(String(e.target.value))}
+        >
+          {currentBattleParticipants.filter(p => p.side === "character").map((char) => (
+            <MenuItem key={char.instanceId} value={char.sourceId}>
+              {char.name}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>      
+      
       <FormControl sx={{ minWidth: 220 }}>
         <InputLabel id="battle-race-label">Race</InputLabel>
         <Select
@@ -103,7 +135,7 @@ export default function AddSummonToBattle({ setBattleParticipants, enemyBaseList
         </Select>
       </FormControl>
 
-      <Button variant="contained" onClick={addSelectedEnemy} disabled={!selectedRace || !selectedEnemyId}>
+      <Button variant="contained" onClick={addSelectedSummon} disabled={!selectedRace || !selectedEnemyId}>
         Add Summon
       </Button>
     </div>

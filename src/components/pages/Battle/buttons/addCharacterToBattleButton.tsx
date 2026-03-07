@@ -23,7 +23,6 @@ export default function AddCharacterToBattle({fetchFullCharacter, setBattleParti
     if (!selectedId) return;
 
     const selectedIDAlreadyInBattle = battleParticipants.find((p) => p.sourceId === Number(selectedId) && p.side === "character");
-    console.log("Checking if character is already in battle:", selectedIDAlreadyInBattle);
 
     if (selectedIDAlreadyInBattle === undefined) {
             const full = await fetchFullCharacter(Number(selectedId));
@@ -45,9 +44,7 @@ export default function AddCharacterToBattle({fetchFullCharacter, setBattleParti
 
             setBattleParticipants(battleParticipants => [...battleParticipants, entity]);
 
-            console.log("Added character to battle:", battleParticipants);
     } else {
-        console.log("Character already in battle:", selectedId);
     }
 
 

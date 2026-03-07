@@ -31,7 +31,7 @@ export default function BattleParticipantEnemyCard({ participant, onRemove, remo
           </button>
 
           <div className={`bp-name bp-name-enemy`}>
-            {participant.orderId} {participant.name}
+            <span className="ennemyOrderNumber"> {participant.orderId}  </span>  {participant.name}
           </div>
         </div>
 

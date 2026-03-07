@@ -28,7 +28,7 @@ export default function BattleParticipantSummonCard({ participant, onRemove, rem
           </button>
 
           <div className={`bp-name bp-name-summon`}>
-            {participant.orderId} {participant.name}
+             {participant.name}
           </div>
         </div>
 

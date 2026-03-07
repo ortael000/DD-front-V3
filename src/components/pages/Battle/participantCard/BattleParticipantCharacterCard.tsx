@@ -27,7 +27,7 @@ export default function BattleParticipantCharacterCard({ participant, onRemove, 
           </button>
 
           <div className={`bp-name bp-name-hero`}>
-            {participant.orderId} {participant.name}
+            {participant.name}
           </div>
         </div>
 
