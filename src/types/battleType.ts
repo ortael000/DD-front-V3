@@ -62,4 +62,5 @@ export type LootObtainedItem = {
   ObjectType: string;
   ObjectID: number;
   ObjectName: string;
+  lootId: string;
 };

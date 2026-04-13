@@ -10,12 +10,13 @@ import EnemySkillAttackButton from "../buttons/ennemyAttackButton";
 
 type Props = {
   participant: Extract<BattleEntity, { side: "enemy" }>;
+  currentBattleParticipants: BattleEntity[];
   onRemove: (instanceId: string) => void;
   removeMana: (instanceId: string, manaCost: number) => void;
   removeHP: (instanceId: string, damage: number) => void;
 };
 
-export default function BattleParticipantEnemyCard({ participant, onRemove, removeMana, removeHP }: Props) {
+export default function BattleParticipantEnemyCard({ participant, currentBattleParticipants,onRemove, removeMana, removeHP }: Props) {
   const hpPct = percent(participant.currentHp, participant.maxHp);
   const manaPct = percent(participant.currentMana, participant.maxMana);
 
@@ -31,7 +32,7 @@ export default function BattleParticipantEnemyCard({ participant, onRemove, remo
           </button>
 
           <div className={`bp-name bp-name-enemy`}>
-            <span className="ennemyOrderNumber"> {participant.orderId}  </span>  {participant.name}
+            <span className="bp-order"> {participant.orderId}  </span>  {participant.name}
           </div>
         </div>
 
@@ -88,6 +89,7 @@ export default function BattleParticipantEnemyCard({ participant, onRemove, remo
               instanceId={participant.instanceId}
               currentMana={participant.currentMana}
               removeMana={removeMana}
+              currentBattleParticipants={currentBattleParticipants}
             />
           ))}
         </div>

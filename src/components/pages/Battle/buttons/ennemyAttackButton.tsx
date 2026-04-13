@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions, Typography } from "@mui/material";
 import { SkillBaseType } from "../../../../types/character";
+import { BattleEntity } from "../../../../types/battleType";
+import { attackIcons } from "../../../../assets/iconeList";
+
 
 interface Props {
     SkillName: string;
@@ -12,6 +15,7 @@ interface Props {
     instanceId: string;
     currentMana: number;
     removeMana: (instanceId: string, manaCost: number) => void;
+    currentBattleParticipants: BattleEntity[];
 }
 
 function rollD20() {
@@ -23,7 +27,7 @@ function rollBetween(min: number, max: number) {
   const high = Math.max(min, max);
   return Math.floor(Math.random() * (high - low + 1)) + low;
 }
-export default function EnemySkillAttackButton({ SkillName, SkillCost, SkillTouchChance, SkillMinDamage, SkillMaxDamage, SkillOtherEffect, instanceId, currentMana, removeMana }: Props) {
+export default function EnemySkillAttackButton({ SkillName, SkillCost, SkillTouchChance, SkillMinDamage, SkillMaxDamage, SkillOtherEffect, instanceId, currentMana, removeMana, currentBattleParticipants }: Props) {
 
 
   const [open, setOpen] = useState(false);
@@ -76,7 +80,11 @@ export default function EnemySkillAttackButton({ SkillName, SkillCost, SkillTouc
         <DialogContent>
 
           <Typography sx={{ fontWeight: 900, mb: 1 }}>
-            {SkillName} reach a {hitTotal} hit score for {damage} damages!
+            {SkillName} Get : 
+            <img src={attackIcons.minDamage} className="attack-icon" /> 
+            <span className="battleDamageScore"> {damage} </span> 
+             <img src={attackIcons.precision} className="attack-icon" />
+             <span className="battleHitScore"> {hitTotal} </span>
           </Typography>
 
           {SkillOtherEffect ? (

@@ -44,6 +44,7 @@ export default function BattleParticipantsList({
               <BattleParticipantEnemyCard
                 key={participant.instanceId}
                 participant={participant as Extract<BattleEntity, { side: "enemy" }>}
+                currentBattleParticipants={battleParticipants}
                 onRemove={onRemove}
                 removeMana={removeMana}
                 removeHP={removeHP}

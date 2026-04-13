@@ -21,6 +21,7 @@
               <h3>{weapon.Name}</h3>
               <div className="item-type-value">
                 <p>{weapon.Hand + "-" + weapon.Subtype} </p>
+                <MoneyDisplay money={Math.floor(weapon.Value /3)} />
               </div>
              
             </div>

@@ -71,6 +71,7 @@ export default function BattlePage() {
   }, []);
 
   const startBattle = React.useCallback(() => {
+    console.log("Starting battle with participants:", battleParticipants);
   setBattleParticipants((prev) => {
     const withInit = prev.map((p) => {
       const bonus = p.side === "character" ? getCharacterInitiativeBonus((p as any).character) : 0;
