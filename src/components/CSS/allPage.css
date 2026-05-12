@@ -4,15 +4,41 @@
 /* 1. Import medieval-style font */
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap');
 
+/* Mobile-first responsive variables */
+:root {
+  /* Mobile defaults */
+  --page-padding-top: 70px;
+  --page-horizontal-padding: 1rem;
+  --title-font-size: 2.5rem;
+  --title-margin: 0.75rem 0;
+  
+  /* Tablet adjustments */
+  @media (min-width: 600px) {
+    --page-padding-top: 75px;
+    --page-horizontal-padding: 1.5rem;
+    --title-font-size: 3.5rem;
+    --title-margin: 1rem 0;
+  }
+  
+  /* Desktop adjustments */
+  @media (min-width: 1024px) {
+    --page-padding-top: 80px;
+    --page-horizontal-padding: 2rem;
+    --title-font-size: 5rem;
+    --title-margin: 1rem 0;
+  }
+}
 
 .pageComponent {
-    padding-top: 80px;
+    padding-top: var(--page-padding-top);
+    padding-left: var(--page-horizontal-padding);
+    padding-right: var(--page-horizontal-padding);
 }
 
 /* 2. Core title styling */
 .pageTitle {
-font-family: 'Cinzel', serif;
-  font-size: 5rem;
+  font-family: 'Cinzel', serif;
+  font-size: var(--title-font-size);
   color: #ddb122; /* rich gold tone */
   
   /* subtle emboss and shine */
@@ -20,12 +46,19 @@ font-family: 'Cinzel', serif;
     2px 2px 3px rgba(0, 0, 0, 0.6),   /* deep shadow */
     0 -1px 1px rgba(255, 255, 255, 0.5); /* light highlight */
   
-  margin: 1rem 0;
+  margin: var(--title-margin);
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .App-header {
-  padding: 1rem;
+  padding: 0.75rem;
   text-align: center;
   display: flex;
   justify-content: flex-start;
+  flex-wrap: wrap;
+  
+  @media (max-width: 600px) {
+    padding: 0.5rem;
+  }
 }
