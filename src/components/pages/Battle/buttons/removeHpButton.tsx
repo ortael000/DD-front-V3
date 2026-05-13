@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField } from "@mui/material";
 
+import { updateCharacterDB } from "../../../../helpers/dataBase&API/characterAPI";
+
 interface Props {
+  side: "character" | "enemy" | "summon";
+  maxHP: number;
+  sourceID: number;
   instanceId: string;
   currentHp: number;
   onRemoveHP: (instanceId: string, hpLoss: number) => void;
@@ -11,7 +16,7 @@ function clamp(n: number, min: number, max: number) {
   return Math.max(min, Math.min(max, n));
 }
 
-export default function RemoveHpButton({ instanceId, currentHp, onRemoveHP }: Props) {
+export default function RemoveHpButton({ side, maxHP, sourceID, instanceId, currentHp, onRemoveHP }: Props) {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState<string>("");
 
@@ -21,6 +26,12 @@ export default function RemoveHpButton({ instanceId, currentHp, onRemoveHP }: Pr
 
     const hpLoss = clamp(Math.floor(amount), 0, currentHp);
     if (hpLoss <= 0) return;
+
+    if (side === "character") {
+      updateCharacterDB(sourceID, {
+        currentHPLose: (maxHP - currentHp) + hpLoss,
+      } as any);
+    }
 
     onRemoveHP(instanceId, hpLoss);
     setOpen(false);

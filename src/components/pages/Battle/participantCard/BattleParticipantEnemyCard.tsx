@@ -4,7 +4,7 @@ import type { BattleEntity } from "../../../../types/battleType";
 import "../../../CSS/smallComponent/battleParticipantList.css";
 import { defenseIcons } from "../../../../assets/iconeList"; 
 import RemoveHpButton from "../buttons/removeHpButton";
-import { getDefenses, percent, hpBarColor, getEnemySkills } from "../../../../helpers/battleHelper/battleParticipantUI";
+import { getDefenses, percent, hpBarColor, getSkills } from "../../../../helpers/battleHelper/battleParticipantUI";
 import EnemySkillAttackButton from "../buttons/ennemyAttackButton";
 
 
@@ -21,7 +21,10 @@ export default function BattleParticipantEnemyCard({ participant, currentBattleP
   const manaPct = percent(participant.currentMana, participant.maxMana);
 
   const def = getDefenses(participant);
-  const enemySkills = getEnemySkills(participant);
+  const enemySkills = getSkills(participant);
+  console.log("Enemy Skills:", enemySkills);
+
+  console.log("Enemy Skills:", enemySkills);
 
   return (
     <div className={`bp-card bp-enemy`}>
@@ -111,8 +114,11 @@ export default function BattleParticipantEnemyCard({ participant, currentBattleP
               </span>
 
               <RemoveHpButton
+                sourceID={participant.sourceId}
+                side="enemy"
                 instanceId={participant.instanceId}
                 currentHp={participant.currentHp}
+                maxHP={participant.maxHp}
                 onRemoveHP={removeHP}
               />
             </div>

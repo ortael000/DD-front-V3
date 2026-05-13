@@ -54,41 +54,57 @@ export type EnemySkill = {
   SkillOtherEffect?: string;
 };
 
-export function getEnemySkills(p: BattleEntity): EnemySkill[] {
-  if (p.side !== "enemy") return [];
+export function getSkills(p: BattleEntity): EnemySkill[] {
+  if (p.side === "character") {
+    return [
+      p.character.Skill1,
+      p.character.Skill2,
+      p.character.Skill3,
+      p.character.Skill4,
+      p.character.Skill5,
+      p.character.Skill6,
+    ]
+      .map((skill) => ({
+        SkillName: skill?.name,
+        SkillCost: skill?.manaCost,
+        SkillTouchChance: skill?.precision,
+        SkillElement: skill?.element,
+        SkillMinDamage: skill?.minDamage,
+        SkillMaxDamage: skill?.maxDamage,
+        SkillOtherEffect: skill?.additionalEffect,
+      }))
+      .filter((s) => s.SkillName && s.SkillName !== "None");
+  }
 
-  // keep your current shape, but isolate the "any" here
-  const e: any = (p as any).enemy;
+  const e = p.enemy;
 
-  const s1: EnemySkill = {
-    SkillName: e?.Skill1Name,
-    SkillCost: e?.Skill1Cost,
-    SkillTouchChance: e?.Skill1TouchChance,
-    SkillElement: e?.Skill1Element,
-    SkillMinDamage: e?.Skill1MinDamage,
-    SkillMaxDamage: e?.Skill1MaxDamage,
-    SkillOtherEffect: e?.Skill1OtherEffect,
-  };
-
-  const s2: EnemySkill = {
-    SkillName: e?.Skill2Name,
-    SkillCost: e?.Skill2Cost,
-    SkillTouchChance: e?.Skill2TouchChance,
-    SkillElement: e?.Skill2Element,
-    SkillMinDamage: e?.Skill2MinDamage,
-    SkillMaxDamage: e?.Skill2MaxDamage,
-    SkillOtherEffect: e?.Skill2OtherEffect,
-  };
-
-  const s3: EnemySkill = {
-    SkillName: e?.Skill3Name,
-    SkillCost: e?.Skill3Cost,
-    SkillTouchChance: e?.Skill3TouchChance,
-    SkillElement: e?.Skill3Element,
-    SkillMinDamage: e?.Skill3MinDamage,
-    SkillMaxDamage: e?.Skill3MaxDamage,
-    SkillOtherEffect: e?.Skill3OtherEffect,
-  };
-
-  return [s1, s2, s3].filter((s) => s?.SkillName); // only keep defined skills
+  return [
+    {
+      SkillName: e.Skill1Name,
+      SkillCost: e.Skill1Cost,
+      SkillTouchChance: e.Skill1TouchChance,
+      SkillElement: e.Skill1Element,
+      SkillMinDamage: e.Skill1MinDamage,
+      SkillMaxDamage: e.Skill1MaxDamage,
+      SkillOtherEffect: e.Skill1OtherEffect,
+    },
+    {
+      SkillName: e.Skill2Name,
+      SkillCost: e.Skill2Cost,
+      SkillTouchChance: e.Skill2TouchChance,
+      SkillElement: e.Skill2Element,
+      SkillMinDamage: e.Skill2MinDamage,
+      SkillMaxDamage: e.Skill2MaxDamage,
+      SkillOtherEffect: e.Skill2OtherEffect,
+    },
+    {
+      SkillName: e.Skill3Name,
+      SkillCost: e.Skill3Cost,
+      SkillTouchChance: e.Skill3TouchChance,
+      SkillElement: e.Skill3Element,
+      SkillMinDamage: e.Skill3MinDamage,
+      SkillMaxDamage: e.Skill3MaxDamage,
+      SkillOtherEffect: e.Skill3OtherEffect,
+    },
+  ].filter((s) => s.SkillName && s.SkillName !== "None");
 }

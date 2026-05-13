@@ -19,6 +19,8 @@ import movement from '../../../assets/generalIcons/movement.png'; // Import the 
 
 import { defenseIcons } from '../../../assets/iconeList';
 
+import RestButton from './smallComponent/restButton';
+
 interface Props {
   character: CharacterFulltype;
   updateCharacter: () => void;
@@ -58,7 +60,9 @@ export default function CharacterGeneral({ character, updateCharacter }: Props) 
               {currentMana} / {General.Mana}
             </div>
           </div>
+          <RestButton character={character} updateCharacter={updateCharacter} />
         </div>
+
         <div className="stat-row">
           <div className="stat-item">
             <img src={initiative} className="General-stat-icon" />
@@ -73,7 +77,6 @@ export default function CharacterGeneral({ character, updateCharacter }: Props) 
             </div>
           </div>
         </div>
-
 
         <div className='defense-row'>
             <div className="stat-item defense-item">

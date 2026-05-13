@@ -4,7 +4,7 @@ import type { BattleEntity } from "../../../../types/battleType";
 import "../../../CSS/smallComponent/battleParticipantList.css";
 import { defenseIcons } from "../../../../assets/iconeList"; 
 import RemoveHpButton from "../buttons/removeHpButton";
-import { getDefenses, percent, hpBarColor } from "../../../../helpers/battleHelper/battleParticipantUI";
+import { getDefenses, percent, hpBarColor, getSkills } from "../../../../helpers/battleHelper/battleParticipantUI";
 
 type Props = {
   participant: Extract<BattleEntity, { side: "character" }>;
@@ -16,6 +16,8 @@ export default function BattleParticipantCharacterCard({ participant, onRemove, 
   const hpPct = percent(participant.currentHp, participant.maxHp);
   const manaPct = percent(participant.currentMana, participant.maxMana);
 
+  const skills = getSkills(participant);
+  console.log("Character Skills:", skills);
   const def = getDefenses(participant);
 
   return (
@@ -88,8 +90,11 @@ export default function BattleParticipantCharacterCard({ participant, onRemove, 
               </span>
 
               <RemoveHpButton
+                sourceID={participant.sourceId}
+                side="character"
                 instanceId={participant.instanceId}
                 currentHp={participant.currentHp}
+                maxHP={participant.maxHp}
                 onRemoveHP={removeHP}
               />
             </div>

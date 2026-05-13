@@ -66,6 +66,17 @@ const CharacterPage = () => {
     loadCharacterList();
   }, []);
 
+  
+    useEffect(() => {
+      if (noCharacterLoaded) return;
+
+      const interval = setInterval(() => {
+        updateCharacter();
+      }, 10000);
+
+      return () => clearInterval(interval);
+    }, [selectedId, noCharacterLoaded]);
+
     const updateInventoryState = async () => {
         try {
           const inventoryData = await fetchInventory(selectedId);

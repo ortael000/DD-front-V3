@@ -4,20 +4,23 @@ import type { BattleEntity } from "../../../../types/battleType";
 import "../../../CSS/smallComponent/battleParticipantList.css";
 import { defenseIcons } from "../../../../assets/iconeList";
 import RemoveHpButton from "../buttons/removeHpButton";
-import { percent, hpBarColor } from "../../../../helpers/battleHelper/battleParticipantUI"; 
+import { percent, hpBarColor, getSkills } from "../../../../helpers/battleHelper/battleParticipantUI";
+import EnemySkillAttackButton from "../buttons/ennemyAttackButton"; 
 
 type Props = {
   participant: Extract<BattleEntity, { side: "summon" }>;
+  currentBattleParticipants: BattleEntity[];
   onRemove: (instanceId: string) => void;
   removeMana: (instanceId: string, manaCost: number) => void;
   removeHP: (instanceId: string, damage: number) => void;
 };
 
-export default function BattleParticipantSummonCard({ participant, onRemove, removeHP }: Props) {
+export default function BattleParticipantSummonCard({ participant, currentBattleParticipants, onRemove, removeMana, removeHP }: Props) {
   const hpPct = percent(participant.currentHp, participant.maxHp);
   const manaPct = percent(participant.currentMana, participant.maxMana);
 
   const d = participant.enemy;
+  const summonSkills = getSkills(participant);
 
   return (
     <div className={`bp-card bp-summon`}>
@@ -71,6 +74,24 @@ export default function BattleParticipantSummonCard({ participant, onRemove, rem
         </div>
 
         {participant.status ? <div className="bp-status">{participant.status}</div> : null}
+
+        <div className="bp-attacksRow">
+          {summonSkills.slice(0, 3).map((s, idx) => (
+            <EnemySkillAttackButton
+              key={`${participant.instanceId}-skill-${idx}`}
+              SkillName={s.SkillName ?? "Unknown"}
+              SkillCost={s.SkillCost ?? 0}
+              SkillTouchChance={s.SkillTouchChance ?? 0}
+              SkillMinDamage={s.SkillMinDamage ?? 0}
+              SkillMaxDamage={s.SkillMaxDamage ?? 0}
+              SkillOtherEffect={s.SkillOtherEffect ?? ""}
+              instanceId={participant.instanceId}
+              currentMana={participant.currentMana}
+              removeMana={removeMana}
+              currentBattleParticipants={currentBattleParticipants}
+            />
+          ))}
+        </div>
       </div>
 
       <div className="bp-mid">
@@ -89,8 +110,11 @@ export default function BattleParticipantSummonCard({ participant, onRemove, rem
               </span>
 
               <RemoveHpButton
+                sourceID={participant.sourceId}
+                side="summon"
                 instanceId={participant.instanceId}
                 currentHp={participant.currentHp}
+                maxHP={participant.maxHp}
                 onRemoveHP={removeHP}
               />
             </div>
