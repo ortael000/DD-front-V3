@@ -258,7 +258,6 @@ export const equipmentTypeList = [
   'Belt',
   'Gauntlet',
   'Helmet',
-  'Pants',
   'Ring',
   'Necklace',
   'Shield'

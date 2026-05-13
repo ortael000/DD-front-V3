@@ -55,10 +55,13 @@ const WeaponDisplayList: React.FC<Props> = ({ weapons }) => {
 
     console.log("after all filters", filteredList);
 
-
-
     setWeaponsToBeDisplayed(filteredList);
   };
+
+  const sortWeaponsByValue = () => {
+    const sortedList = [...weaponsToBeDisplayed].sort((a, b) => a.Value - b.Value);
+    setWeaponsToBeDisplayed(sortedList);
+  }
 
   useEffect(() => {
     const transformed = weapons.filter(item => item.Name !== "None")
@@ -122,6 +125,10 @@ const WeaponDisplayList: React.FC<Props> = ({ weapons }) => {
             ))}
           </Select>
         </FormControl>
+
+        <Button onClick={() => sortWeaponsByValue()}>
+          sort by value
+        </Button>        
 
       </div>
           <div className="equipment-list">

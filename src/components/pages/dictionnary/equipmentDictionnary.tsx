@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FormControl, InputLabel, Select, MenuItem, Button, Box } from '@mui/material';
 
-import { EquipmentDisplayed, EquipmentType } from '../../../types/character';
+import { EquipmentType } from '../../../types/character';
 import { EquipmentFilters } from '../../../types/dictionnaryFilter';
 
 import { ElementIcons, attackIcons, generalIcons, skillIcons, characteristicsIcons, defenseIcons } from '../../../assets/iconeList';
@@ -31,10 +31,6 @@ const charList = [
   "Power",
 ];
 
-
-
-type CharacteristicsType = EquipmentDisplayed["Characteristics"];
-type DefensiveStatsType = EquipmentDisplayed["DefensiveStats"];
 
 const EquipmentDisplayList: React.FC<Props> = ({ equipment }) => {
 
@@ -89,6 +85,11 @@ const EquipmentDisplayList: React.FC<Props> = ({ equipment }) => {
 
   setEquipmentToBeDisplayed(filteredList);
 };
+
+  const sortEquipmentByValue = () => {
+    const sortedList = [...equipmentToBeDisplayed].sort((a, b) => a.Value - b.Value);
+    setEquipmentToBeDisplayed(sortedList);
+  };
 
   useEffect(() => {
     const transformed = equipment.filter(item => item.Name !== "None")
@@ -145,6 +146,10 @@ const EquipmentDisplayList: React.FC<Props> = ({ equipment }) => {
           onChange={(e) => filterEquipmentInDictionnary('bonusKey', e.target.value)}
           className="filter-input"
         />
+
+        <Button onClick={() => sortEquipmentByValue()}>
+          sort by value
+        </Button>
       </div>
           <div className="equipment-list">
       {equipmentToBeDisplayed.map((item) => {
