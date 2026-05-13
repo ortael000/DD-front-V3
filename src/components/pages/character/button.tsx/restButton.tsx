@@ -4,6 +4,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
+import { generalIcons } from '../../../../assets/iconeList';
 
 import { updateCharacterDB } from '../../../../helpers/dataBase&API/characterAPI';
 import { CharacterFulltype } from '../../../../types/character';
@@ -52,8 +53,8 @@ export default function RestButton({ character, updateCharacter }: Props) {
 
   return (
     <>
-      <Button variant="contained" onClick={handleRest} size="small">
-        Rest
+      <Button variant="contained" onClick={handleRest} style={{ width: '20px', height: '20px' }}>
+        <img src={generalIcons.rest} alt="Rest" style={{ width: '30px', height: '30px' }} />
       </Button>
 
       <Dialog open={open} onClose={handleClose}>

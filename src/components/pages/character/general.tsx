@@ -22,7 +22,7 @@ import ManageManaButton from './button.tsx/manageManaButton';
 
 import { defenseIcons } from '../../../assets/iconeList';
 
-import RestButton from './smallComponent/restButton';
+import RestButton from './button.tsx/restButton';
 
 interface Props {
   character: CharacterFulltype;

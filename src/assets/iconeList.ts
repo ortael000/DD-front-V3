@@ -19,6 +19,7 @@ import silverCoin from './generalIcons/silverCoin.png'; // Import the silver coi
 import goldCoin from './generalIcons/goldCoin.png'; // Import the gold coin icon
 import initiative from './generalIcons/initiative.png'; // Import the initiative icon
 import movement from './generalIcons/movement.png'; // Import the movement icon
+import rest from './generalIcons/rest.png'; // Import the rest icon
 
 import StrenghtIcone from './characteristicsIcons/Strength.png'; // Import the Strength icon
 import IntelligenceIcone from './characteristicsIcons/Intelligence.png'; // Import the Intelligence icon
@@ -72,7 +73,8 @@ export const generalIcons = {
     mana : manaIcone,
     goldCoin : goldCoin,
     silverCoin: silverCoin,
-    copperCoin: copperCoin
+    copperCoin: copperCoin,
+    rest : rest,
 }
 
 export const characteristicsIcons = {
