@@ -2,7 +2,7 @@ import { dataBaseCall, Characteristic } from '../../types/stringLists'
 import { InventoryItem, WeaponBaseType, EquipmentType, CharacterBasetype, PassiveType, SkillBaseType } from '../../types/character';
 import { Ennemy, Loot } from '../../types/ennemy';
 import { ObjectMainType, ItemMainType } from '../../types/stringLists';
-import { API_BASE_URL } from "./apiBase";
+import { API_BASE_URL } from '../../config/api'; 
 
 type Updates = Partial<Omit<CharacterBasetype, 'id'>>;
 
@@ -194,7 +194,7 @@ export async function fetchAllAccessories () : Promise<any[]> {
 
 export async function fetchAccessoriesByIDs (ids: number[]) : Promise<any[]> {
 
-const response = await fetch(`${API_BASE_URL}/accessories/by-ids`, {
+const response = await fetch("http://localhost:3000/accessories/by-ids", {
   method: "POST",
   headers: {
     "Content-Type": "application/json"

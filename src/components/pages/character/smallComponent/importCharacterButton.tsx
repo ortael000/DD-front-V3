@@ -19,11 +19,7 @@ function parseBlock(block: string) {
 }
 
 async function addInventoryRow(row: any) {
-  
-  const base =
-  process.env.REACT_APP_BACKEND_URL?.replace(/\/$/, "") ||
-  "http://localhost:3000";
-
+  const base = (process.env.backEndAdress as string) || "http://localhost:3000";
   const res = await fetch(`${base}/inventoryupdate`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
