@@ -17,6 +17,9 @@ import manaIcone from '../../../assets/generalIcons/mana.png'; // Import the man
 import initiative from '../../../assets/generalIcons/initiative.png'; // Import the initiative icon
 import movement from '../../../assets/generalIcons/movement.png'; // Import the movement icon
 
+import ManageHPButton from './button.tsx/manageHPButton';
+import ManageManaButton from './button.tsx/manageManaButton';
+
 import { defenseIcons } from '../../../assets/iconeList';
 
 import RestButton from './smallComponent/restButton';
@@ -49,13 +52,13 @@ export default function CharacterGeneral({ character, updateCharacter }: Props) 
       <div className="general-stats">
         <div className="stat-row">
           <div className="stat-item">
-            <img src =  {hitpointIcon} className="General-stat-icon" />
+            <ManageHPButton character={character} updateCharacter={updateCharacter} />  
             <div className="stat-value">
               {currentHp} / {General.HitPoint}
             </div>
           </div>
           <div className="stat-item">
-            <img src =  {manaIcone} className="General-stat-icon" />
+            <ManageManaButton character={character} updateCharacter={updateCharacter} />
             <div className="stat-value">
               {currentMana} / {General.Mana}
             </div>

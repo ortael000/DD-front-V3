@@ -18,6 +18,7 @@ import { ElementIcons, attackIcons, generalIcons, skillIcons } from '../../../as
 import ItemCardPopup from './smallComponent/itemCardPopup';
 
 import PopupUpdateSkill from './popups.tsx/skillPopup';
+import UseSkillButton from './button.tsx/useSkillButton';
 
 interface Props {
   character: CharacterFulltype;
@@ -80,6 +81,7 @@ export default function CharacterSkill({ character, updateCharacter }: Props) {
           {skills.map((skill) => (
             <tr >
               <td className="label-cell">
+                  <UseSkillButton skill={skill.object} character={character} updateCharacter={updateCharacter} />
                   {remainingPoints > 0 && (
                   <PopupUpdateSkill
                   updateCharacter={updateCharacter}
