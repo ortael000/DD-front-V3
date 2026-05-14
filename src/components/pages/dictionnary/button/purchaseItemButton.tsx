@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
+import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 import {
   Alert,
   Button,
@@ -129,11 +129,11 @@ const PurchaseItemButton: React.FC<Props> = ({
       <Tooltip title={`Purchase ${itemName}`}>
         <IconButton
           aria-label={`Purchase ${itemName}`}
-          color="primary"
           size="small"
           onClick={openDialog}
+          sx={{ color: "#b8860b" }}
         >
-          <AccountBalanceWalletIcon fontSize="small" />
+          <ShoppingBagIcon fontSize="small" />
         </IconButton>
       </Tooltip>
 
