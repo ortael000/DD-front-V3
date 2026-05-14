@@ -5,6 +5,8 @@ import { EquipmentDisplayed, EquipmentType } from '../../../../types/character';
 import { ElementIcons, attackIcons, generalIcons, skillIcons, characteristicsIcons, defenseIcons } from '../../../../assets/iconeList';
 import MoneyDisplay from '../../character/smallComponent/money';
 
+import PurchaseItemButton from '../button/purchaseItemButton';
+
 import { transformEquipment } from '../../../../helpers/calculateCharacterData/characterPageHelper';
 
 interface Props {
@@ -27,6 +29,14 @@ const EquipmentCard: React.FC<Props> = ({ equipment }) => {
                 <div className="item-type-value">
                   <p>{equipmentDisplayed.Subtype}</p>
                   <MoneyDisplay money={equipmentDisplayed.Value}/>
+                  <PurchaseItemButton 
+                    itemType="equipment"
+                    itemSubtype={equipmentDisplayed.Subtype}
+                    itemID={equipmentDisplayed.ID}
+                    itemName={equipmentDisplayed.Name}
+                    itemValue={equipmentDisplayed.Value}
+                    itemFull={equipmentDisplayed}
+                  />
                 </div>
               
               </div>

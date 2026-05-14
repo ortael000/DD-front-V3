@@ -4,7 +4,7 @@
  import { WeaponBaseType } from '../../../../types/character';
  import { ElementIcons, attackIcons, generalIcons, skillIcons, characteristicsIcons, defenseIcons } from '../../../../assets/iconeList';
  import MoneyDisplay from '../../character/smallComponent/money';
- 
+ import PurchaseItemButton from '../button/purchaseItemButton';
  
  
  interface Props {
@@ -22,6 +22,14 @@
               <div className="item-type-value">
                 <p>{weapon.Hand + "-" + weapon.Subtype} </p>
                 <MoneyDisplay money={Math.floor(weapon.Value /3)} />
+                  <PurchaseItemButton 
+                    itemType="weapon"
+                    itemSubtype={weapon.Subtype}
+                    itemID={weapon.id}
+                    itemName={weapon.Name}
+                    itemValue={weapon.Value}
+                    itemFull={weapon}
+                  />                
               </div>
              
             </div>
